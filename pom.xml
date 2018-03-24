@@ -10,7 +10,17 @@
         <version>1.5.7.RELEASE</version>
     </parent>
 
-    <modules><module>demo</module></modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <modules>
+        <module>demo</module>
+        <module>entity</module>
+    </modules>
 
     <groupId>com.github.soonboylena</groupId>
     <artifactId>activiti</artifactId>

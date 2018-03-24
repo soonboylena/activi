@@ -5,6 +5,15 @@
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="申请">
       <documentation id="_3_D_1"><![CDATA[申请]]></documentation>
+      <extensionElements>
+        <activiti:formProperty id="userId" name="用户id" readable="true" required="true" type="string" variable="userId" writable="false">
+          <activiti:value/>
+        </activiti:formProperty>
+        <activiti:formProperty id="userNm" name="用户名" readable="true" required="true" type="string" writable="true">
+          <activiti:value/>
+        </activiti:formProperty>
+        <activiti:formProperty id="applyTime" name="申请时间" readable="true" required="true" type="date" writable="true"/>
+      </extensionElements>
     </userTask>
     <userTask activiti:exclusive="true" id="_4" name="领导审批"/>
     <sequenceFlow id="_5" sourceRef="_2" targetRef="_3"/>
@@ -17,11 +26,11 @@
       <bpmndi:BPMNShape bpmnElement="_2" id="Shape-_2">
         <omgdc:Bounds height="32.0" width="32.0" x="195.0" y="185.0"/>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="32.0" width="32.0" x="7.0" y="2.0"/>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_3" id="Shape-_3">
-        <omgdc:Bounds height="55.0" width="85.0" x="350.0" y="190.0"/>
+        <omgdc:Bounds height="55.0" width="85.0" x="310.0" y="170.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
@@ -40,13 +49,13 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_2" targetElement="_3">
         <omgdi:waypoint x="227.0" y="201.0"/>
-        <omgdi:waypoint x="350.0" y="217.5"/>
+        <omgdi:waypoint x="310.0" y="197.5"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="_3" targetElement="_4">
-        <omgdi:waypoint x="435.0" y="217.5"/>
+        <omgdi:waypoint x="395.0" y="197.5"/>
         <omgdi:waypoint x="465.0" y="207.5"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
