@@ -1,0 +1,1 @@
+package com.github.soonboylena.activiti.vModel.uiComponent;import com.github.soonboylena.activiti.vModel.Dwc;/** * Created with IntelliJ IDEA. * Description: * Project Name:    spring-boot-admin * UserEntity:            sunb * Date:            2017-10-25 * Time:            14:42 */public interface UiItem extends Dwc {}

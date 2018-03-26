@@ -1,5 +1,8 @@
 package com.github.soonboylena.activiti;
 
+import com.github.soonboylena.entity.config.ConfigureHolder;
+import com.github.soonboylena.entity.config.builder.ConfigureBuilder;
+import com.github.soonboylena.entity.config.builder.XmlConfigureBuilder;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.identity.Group;
@@ -21,6 +24,11 @@ public class ActivitiApplication {
 
     }
 
+    @Bean
+    public ConfigureHolder configureHolder() {
+        ConfigureBuilder builder = new XmlConfigureBuilder();
+        return builder.build("classpath:entity.xml");
+    }
 
     @Bean
     CommandLineRunner init(final RuntimeService runtimeService) {

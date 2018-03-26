@@ -10,4 +10,6 @@ public interface ConfigureHolder {
     Map<String, MetaItem> getMetaItems();
 
     Map<String, MetaForm> getMetaForms();
+
+    MetaForm getMetaForm(String formKey);
 }

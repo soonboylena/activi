@@ -44,4 +44,9 @@ public class MemoryConfigHolder implements ConfigureHolder {
             this.metaForms.put(form.getKey(), form);
         }
     }
+
+    @Override
+    public MetaForm getMetaForm(String formKey) {
+        return metaForms.get(formKey);
+    }
 }
