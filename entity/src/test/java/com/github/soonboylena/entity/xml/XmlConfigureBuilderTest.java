@@ -1,16 +1,15 @@
 package com.github.soonboylena.entity.xml;
 
-import com.github.soonboylena.entity.config.MemoryConfigHolder;
-import org.dom4j.DocumentException;
+import com.github.soonboylena.entity.config.ConfigureHolder;
+import com.github.soonboylena.entity.config.builder.ConfigureBuilder;
+import com.github.soonboylena.entity.config.builder.XmlConfigureBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
 public class XmlConfigureBuilderTest {
 
-    private XmlConfigureBuilder configureBuilder;
+    private ConfigureBuilder configureBuilder;
 
     @Before
     public void init() {
@@ -18,8 +17,8 @@ public class XmlConfigureBuilderTest {
     }
 
     @Test
-    public void build() throws IOException, DocumentException {
-        MemoryConfigHolder build = configureBuilder.build("classpath:entity.xml");
+    public void build() {
+        ConfigureHolder build = configureBuilder.build("classpath:entity.xml");
         Assert.assertNotNull(build);
         Assert.assertNotNull(build.getMetaItems());
         Assert.assertNotEquals("item定义不为空", build.getMetaItems().size(), 0);

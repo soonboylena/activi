@@ -1,5 +1,6 @@
 package com.github.soonboylena.entity.xml;
 
+import com.github.soonboylena.entity.support.XmlConfigureReader;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.junit.Test;

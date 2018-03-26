@@ -1,6 +1,6 @@
 package com.github.soonboylena.entity.config;
 
-import com.github.soonboylena.entity.config.exception.KeyDuplicateException;
+import com.github.soonboylena.entity.exceptions.KeyDuplicateException;
 import com.github.soonboylena.entity.core.MetaForm;
 import com.github.soonboylena.entity.core.MetaItem;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class MemoryConfigHolder {
+public class MemoryConfigHolder implements ConfigureHolder {
 
     private Map<String, MetaItem> metaItems = new HashMap<>();
     private Map<String, MetaForm> metaForms = new HashMap<>();

@@ -1,25 +1,36 @@
-package com.github.soonboylena.entity.xml;
+package com.github.soonboylena.entity.config.builder;
 
 import com.github.soonboylena.entity.config.MemoryConfigHolder;
-import com.github.soonboylena.entity.config.exception.ConfigBuildException;
 import com.github.soonboylena.entity.core.MetaForm;
 import com.github.soonboylena.entity.core.MetaItem;
+import com.github.soonboylena.entity.exceptions.ConfigBuildException;
+import com.github.soonboylena.entity.support.XmlConfigureReader;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class XmlConfigureBuilder {
+public class XmlConfigureBuilder implements ConfigureBuilder {
 
+    private static Logger logger = LoggerFactory.getLogger(XmlConfigureBuilder.class);
 
-    public MemoryConfigHolder build(String location) throws IOException, DocumentException {
+    @Override
+    public MemoryConfigHolder build(String location) throws ConfigBuildException {
 
         XmlConfigureReader reader = new XmlConfigureReader();
-        Document xmlDocument = reader.read(location);
+        Document xmlDocument = null;
+        try {
+            xmlDocument = reader.read(location);
+        } catch (IOException | DocumentException e) {
+            logger.error("读取xml文件时发生异常。{}", e.getMessage());
+            throw new ConfigBuildException(e);
+        }
 
         Element rootElement = xmlDocument.getRootElement();
 

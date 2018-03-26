@@ -1,4 +1,4 @@
-package com.github.soonboylena.entity.config.exception;
+package com.github.soonboylena.entity.exceptions;
 
 public class KeyDuplicateException extends RuntimeException {
 

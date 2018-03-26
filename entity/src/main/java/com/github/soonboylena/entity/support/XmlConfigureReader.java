@@ -1,4 +1,4 @@
-package com.github.soonboylena.entity.xml;
+package com.github.soonboylena.entity.support;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
