@@ -10,6 +10,7 @@ import org.activiti.engine.identity.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
@@ -17,6 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
+@EnableAutoConfiguration(exclude = {
+        org.activiti.spring.boot.RestApiAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class,
+        org.activiti.spring.boot.SecurityAutoConfiguration.class,
+        org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration.class
+})
 public class ActivitiApplication {
 
     public static void main(String[] args) {

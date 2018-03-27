@@ -2,22 +2,23 @@ package com.github.soonboylena.entity.core;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MetaForm {
+public class MetaForm implements IMeta {
 
     private String key;
-    private Map<String, MetaItem> fields = new HashMap<>();
+    private Map<String, MetaField> fields = new LinkedHashMap<>();
 
-    public void addField(MetaItem metaItem) {
-        fields.put(metaItem.getKey(), metaItem);
+    public void addField(MetaField metaField) {
+        fields.put(metaField.getKey(), metaField);
     }
 
-    public Collection<MetaItem> getFields() {
+    public Collection<MetaField> getFields() {
         return fields.values();
     }
 
-    public void setFields(Map<String, MetaItem> fields) {
+    public void setFields(Map<String, MetaField> fields) {
         this.fields = fields;
     }
 

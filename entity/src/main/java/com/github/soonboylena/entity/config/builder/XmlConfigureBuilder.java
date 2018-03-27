@@ -1,6 +1,7 @@
 package com.github.soonboylena.entity.config.builder;
 
 import com.github.soonboylena.entity.config.MemoryConfigHolder;
+import com.github.soonboylena.entity.core.MetaField;
 import com.github.soonboylena.entity.core.MetaForm;
 import com.github.soonboylena.entity.core.MetaItem;
 import com.github.soonboylena.entity.exceptions.ConfigBuildException;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 public class XmlConfigureBuilder implements ConfigureBuilder {
@@ -35,9 +37,9 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         Element rootElement = xmlDocument.getRootElement();
 
         MemoryConfigHolder holder = new MemoryConfigHolder();
-        Element entities = rootElement.element("entities");
-        if (entities != null) {
-            List<Element> elements = entities.elements("item");
+        Element xmlItems = rootElement.element("items");
+        if (xmlItems != null) {
+            List<Element> elements = xmlItems.elements("item");
             List<MetaItem> items = elements.stream().map(this::readItem).collect(Collectors.toList());
             holder.addMetaItems(items);
         }
@@ -60,13 +62,26 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
 
         List fields = formElement.elements("field");
         for (Object field : fields) {
+
             Element xmlField = (Element) field;
+            // 处理ref属性；关联到一个item
             String ref = xmlField.attributeValue("ref");
             MetaItem metaItem = metaItems.get(ref);
             if (metaItem == null) {
                 throw new ConfigBuildException("没有找到ref: [" + ref + "]的指定的item。");
             }
-            form.addField(metaItem);
+            // 处理field自己的属性
+            MetaField metaField = new MetaField(metaItem);
+            String readonly = xmlField.attributeValue("readonly");
+            // readonly
+            Boolean bReadOnly = Boolean.valueOf(readonly);
+            metaField.setReadOnly(bReadOnly);
+            // required
+            String required = xmlField.attributeValue("required");
+            Boolean bRequired = Boolean.valueOf(required);
+            metaField.setRequired(bRequired);
+
+            form.addField(metaField);
         }
         return form;
     }

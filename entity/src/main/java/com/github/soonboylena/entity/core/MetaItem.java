@@ -3,7 +3,7 @@ package com.github.soonboylena.entity.core;
 import lombok.Data;
 
 @Data
-public class MetaItem {
+public class MetaItem implements IMetaInput {
 
     private String key;
     private String name;

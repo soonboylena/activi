@@ -23,7 +23,7 @@ public class MemoryConfigHolder implements ConfigureHolder {
         for (MetaItem metaItem : metaItems) {
 
             if (this.metaItems.get(metaItem.getKey()) != null) {
-                throw new KeyDuplicateException("entities.item", metaItem.getKey());
+                throw new KeyDuplicateException("items.item", metaItem.getKey());
             }
             this.metaItems.put(metaItem.getKey(), metaItem);
         }
@@ -39,7 +39,7 @@ public class MemoryConfigHolder implements ConfigureHolder {
 
         for (MetaForm form : forms) {
             if (this.metaItems.get(form.getKey()) != null) {
-                throw new KeyDuplicateException("entities.item", form.getKey());
+                throw new KeyDuplicateException("items.item", form.getKey());
             }
             this.metaForms.put(form.getKey(), form);
         }

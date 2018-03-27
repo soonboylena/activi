@@ -1,13 +1,14 @@
-package com.github.soonboylena.activiti.component.layout;
+package com.github.soonboylena.activiti.component.layout.converter;
 
+import com.github.soonboylena.activiti.component.layout.ConverterManager;
+import com.github.soonboylena.activiti.component.layout.RowBreaker;
 import com.github.soonboylena.activiti.vModel.UiObject;
 import com.github.soonboylena.activiti.vModel.uiComponent.Column;
 import com.github.soonboylena.activiti.vModel.uiComponent.Row;
 import com.github.soonboylena.activiti.vModel.uiComponent.Section;
+import com.github.soonboylena.entity.core.IMeta;
+import com.github.soonboylena.entity.core.MetaField;
 import com.github.soonboylena.entity.core.MetaForm;
-import com.github.soonboylena.entity.core.MetaItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class SimpleLayoutResolver implements LayoutResolver {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class FormConverter implements UIConverter {
 
     @Autowired
-    private ItemConverters itemConverters;
+    ConverterManager converterManager;
+
 
     // 将unit个栅格作为一个单元处理
     private int unit;
@@ -39,17 +39,18 @@ public class SimpleLayoutResolver implements LayoutResolver {
 
     private List<RowBreaker> breakers = new ArrayList<>();
 
-    public SimpleLayoutResolver() {
-//        breakers.add(new DateRowBreaker());
-//        breakers.add(new SelectItemRowBreaker());
+    @Override
+    public boolean support(IMeta metaItem) {
+        return metaItem instanceof MetaForm;
     }
 
-
     @Override
-    public UiObject arrangeAsForm(MetaForm metaForm) {
+    public UiObject convert(IMeta meta) {
+
+        MetaForm metaForm = (MetaForm) meta;
 
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
-        Collection<MetaItem> fields = metaForm.getFields();
+        Collection<MetaField> fields = metaForm.getFields();
 
         Section s = new Section();
         if (fields == null || fields.isEmpty()) {
@@ -63,7 +64,7 @@ public class SimpleLayoutResolver implements LayoutResolver {
         int cursor = 0;
 
 
-        for (MetaItem metaField : fields) {
+        for (MetaField metaField : fields) {
 
             // 设定每个项目宽度是1。 需要的话可以单独处理这个值
             int span = 1;
@@ -94,10 +95,9 @@ public class SimpleLayoutResolver implements LayoutResolver {
         return false;
     }
 
-    private UiObject swapWithCol(MetaItem metaField, int cursor, int span) {
+    private UiObject swapWithCol(MetaField metaField, int cursor, int span) {
         Column c = new Column(0, span * unit);
-        c.addContent(itemConverters.convert(metaField));
+        c.addContent(converterManager.convert(metaField));
         return c;
     }
-
 }

@@ -14,12 +14,12 @@ public class WebLayoutBuilder {
     private ConfigureHolder holder;
 
     @Autowired
-    private SimpleLayoutResolver resolver;
+    private ConverterManager converterManager;
 
     public Section buildForm(String formKey) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
-        UiObject uiObject = resolver.arrangeAsForm(metaForm);
+        UiObject uiObject = converterManager.convert(metaForm);
         return (Section) uiObject;
     }
 }
