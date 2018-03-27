@@ -1,6 +1,7 @@
 package com.github.soonboylena.activiti.component.layout;
 
 import com.github.soonboylena.activiti.vModel.UiObject;
+import com.github.soonboylena.activiti.vModel.uiComponent.Form;
 import com.github.soonboylena.activiti.vModel.uiComponent.Section;
 import com.github.soonboylena.entity.config.ConfigureHolder;
 import com.github.soonboylena.entity.core.MetaForm;
@@ -16,10 +17,9 @@ public class WebLayoutBuilder {
     @Autowired
     private ConverterManager converterManager;
 
-    public Section buildForm(String formKey) {
+    public Form buildForm(String formKey) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
-        UiObject uiObject = converterManager.convert(metaForm);
-        return (Section) uiObject;
+        return (Form) converterManager.convert(metaForm);
     }
 }

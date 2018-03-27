@@ -4,6 +4,7 @@ import com.github.soonboylena.activiti.component.layout.ConverterManager;
 import com.github.soonboylena.activiti.component.layout.RowBreaker;
 import com.github.soonboylena.activiti.vModel.UiObject;
 import com.github.soonboylena.activiti.vModel.uiComponent.Column;
+import com.github.soonboylena.activiti.vModel.uiComponent.Form;
 import com.github.soonboylena.activiti.vModel.uiComponent.Row;
 import com.github.soonboylena.activiti.vModel.uiComponent.Section;
 import com.github.soonboylena.entity.core.IMeta;
@@ -52,7 +53,7 @@ public class FormConverter implements UIConverter {
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
         Collection<MetaField> fields = metaForm.getFields();
 
-        Section s = new Section();
+        Form s = new Form(metaForm.getKey());
         if (fields == null || fields.isEmpty()) {
             return s;
         }
