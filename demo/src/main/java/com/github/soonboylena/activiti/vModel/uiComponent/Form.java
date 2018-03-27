@@ -6,7 +6,7 @@ import lombok.Data;
 
 public class Form extends AbstractDwc<FormDefinition> {
 
-    private final static String type = "Form";
+    private final static String type = "mForm";
 
     public Form(String model) {
         FormDefinition definition = new FormDefinition();
