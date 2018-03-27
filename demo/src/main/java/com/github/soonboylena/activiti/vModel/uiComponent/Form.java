@@ -11,6 +11,7 @@ public class Form extends AbstractDwc<FormDefinition> {
     public Form(String model) {
         FormDefinition definition = new FormDefinition();
         definition.setModel(model);
+        setDefine(definition);
     }
 
     @Override
