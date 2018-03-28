@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -25,35 +26,35 @@ public class UrlObject {
 
     private static Logger logger = LoggerFactory.getLogger(UrlObject.class);
 
-    String url;
-    String method;
-    Map<String, Object> pathParams;
-    Map<String, Object> queryParams;
-    Map<String, Object> body;
+    protected String url;
+    protected HttpMethod method;
+    protected Map<String, Object> pathParams;
+    protected Map<String, Object> queryParams;
+    protected Map<String, Object> body;
 
     public UrlObject(String url, Map<String, Object> pathParams) {
-        this(url, pathParams, "GET");
+        this(url, pathParams, HttpMethod.GET);
     }
 
     public UrlObject(String urlString) {
         this.url = urlString;
-        this.method = "GET";
+        this.method = HttpMethod.GET;
     }
 
-    public UrlObject(String url, Map<String, Object> pathParams, String urlMethod) {
+    public UrlObject(String url, Map<String, Object> pathParams, HttpMethod urlMethod) {
         this(url, urlMethod, pathParams, null);
     }
 
-    public UrlObject(String url, String urlMethod, Map<String, Object> pathParams, Map<String, Object> body) {
+    public UrlObject(String url, HttpMethod urlMethod, Map<String, Object> pathParams, Map<String, Object> body) {
         this(url, urlMethod, pathParams, null, body);
     }
 
     public UrlObject(String url, Map<String, Object> pathParams, Map<String, Object> queryParamMap) {
-        this(url, "GET", pathParams, queryParamMap, null);
+        this(url, HttpMethod.GET, pathParams, queryParamMap, null);
     }
 
     public UrlObject(String url, String method, Map<String, Object> pathParams) {
-        this(url, method, pathParams, null);
+        this(url, HttpMethod.GET, pathParams, null);
 
     }
 
@@ -79,8 +80,8 @@ public class UrlObject {
 
     public String asUrlString() {
 
-        if ("post".equalsIgnoreCase(method)) {
-            logger.warn("正在将post请求转成一个url。这将会做为get处理");
+        if (method != HttpMethod.GET) {
+            logger.warn("正在将请求转成一个url。这将会做为get处理");
         }
 
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();

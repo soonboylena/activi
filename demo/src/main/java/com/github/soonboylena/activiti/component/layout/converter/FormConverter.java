@@ -25,8 +25,7 @@ public class FormConverter implements UIConverter {
     /**
      * 一行有几个组件
      */
-    @Value("${layout.simple.rows:3}")
-    private int colsInRow;
+    private int colsInRow = 4;
 
 
     //栅格布局宽度
@@ -51,7 +50,7 @@ public class FormConverter implements UIConverter {
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
         Collection<MetaField> fields = metaForm.getMetas();
 
-        Form s = new Form(metaForm.getKey());
+        Form s = new Form(metaForm.getKey(), metaForm.getCaption());
         if (fields == null || fields.isEmpty()) {
             return s;
         }

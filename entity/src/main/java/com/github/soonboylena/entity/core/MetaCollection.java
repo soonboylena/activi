@@ -1,12 +1,14 @@
 package com.github.soonboylena.entity.core;
 
 import com.github.soonboylena.entity.exceptions.KeyDuplicateException;
+import lombok.Data;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class MetaCollection<T extends IMeta> implements IMeta {
+@Data
+public abstract class MetaCollection<T extends IMeta> implements IMetaInput {
 
     private String key;
 

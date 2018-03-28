@@ -59,6 +59,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
     private MetaForm readForm(Element formElement, Map<String, MetaItem> metaItems) {
         MetaForm form = new MetaForm();
         form.setKey(formElement.attributeValue("key"));
+        form.setCaption(formElement.attributeValue("caption"));
 
         List fields = formElement.elements("field");
         for (Object field : fields) {

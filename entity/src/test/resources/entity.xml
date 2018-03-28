@@ -6,12 +6,12 @@
         <item key="item4" name="field4" caption="字段4" description="字段4" type="string"/>
     </items>
     <forms>
-        <form key="form1">
+        <form key="form1" caption="测试form1">
             <field ref="item1"/>
             <field ref="item2" readonly="true"/>
             <field ref="item3" required="true"/>
         </form>
-        <form key="form2">
+        <form key="form2" caption="测试form2">
             <field ref="item3"/>
             <field ref="item4"/>
         </form>
