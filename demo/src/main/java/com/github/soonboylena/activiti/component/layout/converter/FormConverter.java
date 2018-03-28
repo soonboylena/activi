@@ -7,23 +7,17 @@ import com.github.soonboylena.activiti.vModel.uiComponent.Column;
 import com.github.soonboylena.activiti.vModel.uiComponent.Form;
 import com.github.soonboylena.activiti.vModel.uiComponent.Row;
 import com.github.soonboylena.activiti.vModel.uiComponent.Section;
-import com.github.soonboylena.entity.core.IMeta;
-import com.github.soonboylena.entity.core.MetaField;
-import com.github.soonboylena.entity.core.MetaForm;
+import com.github.soonboylena.entity.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.*;
 
-@Component
 public class FormConverter implements UIConverter {
 
-    @Autowired
-    ConverterManager converterManager;
-
+    private ConverterManager converterManager;
 
     // 将unit个栅格作为一个单元处理
     private int unit;
@@ -40,6 +34,10 @@ public class FormConverter implements UIConverter {
 
     private List<RowBreaker> breakers = new ArrayList<>();
 
+    public FormConverter(ConverterManager converterManager) {
+        this.converterManager = converterManager;
+    }
+
     @Override
     public boolean support(IMeta metaItem) {
         return metaItem instanceof MetaForm;
@@ -51,7 +49,7 @@ public class FormConverter implements UIConverter {
         MetaForm metaForm = (MetaForm) meta;
 
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
-        Collection<MetaField> fields = metaForm.getFields();
+        Collection<MetaField> fields = metaForm.getMetas();
 
         Form s = new Form(metaForm.getKey());
         if (fields == null || fields.isEmpty()) {
@@ -86,6 +84,29 @@ public class FormConverter implements UIConverter {
         return s;
     }
 
+    @Override
+    public FormEntity read(IMeta meta, Object map) {
+
+        if (!(map instanceof Map)) {
+            throw new IllegalArgumentException("类型不正确。类型需要是Map的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
+        }
+
+        Objects.requireNonNull(meta);
+        MetaForm metaForm = (MetaForm) meta;
+        Collection<MetaField> metas = metaForm.getMetas();
+
+        Map<String, Object> _map = (Map<String, Object>) map;
+
+        FormEntity formEntity = new FormEntity(metaForm);
+        for (MetaField metaField : metas) {
+            String key = metaField.getKey();
+            Object o = _map.get(key);
+            formEntity.addEntity(converterManager.read(metaField, o));
+        }
+
+        return formEntity;
+    }
+
     private boolean isBreakPoint(int totalIndex, int cursor, int span, int colsInRow, MetaForm metaForm) {
 
         for (RowBreaker breaker : breakers) {
@@ -101,4 +122,5 @@ public class FormConverter implements UIConverter {
         c.addContent(converterManager.convert(metaField));
         return c;
     }
+
 }

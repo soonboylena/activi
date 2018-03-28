@@ -10,4 +10,8 @@ public class KeyDuplicateException extends RuntimeException {
         this.xpath = xpath;
         this.key = key;
     }
+
+    public KeyDuplicateException(String message) {
+        super(message);
+    }
 }

@@ -81,7 +81,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             Boolean bRequired = Boolean.valueOf(required);
             metaField.setRequired(bRequired);
 
-            form.addField(metaField);
+            form.addMeta(metaField);
         }
         return form;
     }

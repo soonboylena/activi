@@ -2,7 +2,7 @@ package com.github.soonboylena.activiti.support;
 
 public enum WebItemType {
 
-    StringType("string", "mInput");
+    StringType("string", "nInput");
 
     private String literal;
     private String webType;
