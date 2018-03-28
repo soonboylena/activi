@@ -33,7 +33,7 @@ public class UrlObject {
     protected Map<String, Object> body;
 
     public UrlObject(String url, Map<String, Object> pathParams) {
-        this(url, pathParams, HttpMethod.GET);
+        this(url, HttpMethod.GET, pathParams, null, null);
     }
 
     public UrlObject(String urlString) {
@@ -41,42 +41,11 @@ public class UrlObject {
         this.method = HttpMethod.GET;
     }
 
-    public UrlObject(String url, Map<String, Object> pathParams, HttpMethod urlMethod) {
-        this(url, urlMethod, pathParams, null);
+
+    public UrlObject(String url, HttpMethod method) {
+        this(url, method, null, null, null);
     }
 
-    public UrlObject(String url, HttpMethod urlMethod, Map<String, Object> pathParams, Map<String, Object> body) {
-        this(url, urlMethod, pathParams, null, body);
-    }
-
-    public UrlObject(String url, Map<String, Object> pathParams, Map<String, Object> queryParamMap) {
-        this(url, HttpMethod.GET, pathParams, queryParamMap, null);
-    }
-
-    public UrlObject(String url, String method, Map<String, Object> pathParams) {
-        this(url, HttpMethod.GET, pathParams, null);
-
-    }
-
-    public UrlObject putQueryPair(String queryKey, String queryValue) {
-        putQueryPair(queryKey, queryValue, true);
-        return this;
-    }
-
-    public UrlObject putQueryPair(String queryKey, String queryValue, boolean required) {
-        Objects.requireNonNull(queryKey);
-        if (required) {
-            Objects.requireNonNull(queryValue, "UrlObject的查询参数的值不能为空或null。key：" + queryKey);
-        }
-        if (queryParams == null) {
-            queryParams = new HashMap<>(5);
-        }
-
-        if (StringUtils.isNotBlank(queryValue)) {
-            queryParams.put(queryKey, queryValue);
-        }
-        return this;
-    }
 
     public String asUrlString() {
 

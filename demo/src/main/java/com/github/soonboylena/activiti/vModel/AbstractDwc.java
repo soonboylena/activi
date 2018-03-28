@@ -21,9 +21,6 @@ public abstract class AbstractDwc<D extends IUiDefinition> implements Dwc, Seria
     @JsonProperty(value = "ui_define", index = 4)
     private D define;
 
-    @JsonProperty(value = "ui_form", index = 3)
-    private String form;
-
     public AbstractDwc() {
         // 影响缓存 id 设为空
 //        this.id = StringTools.randomStr6();
@@ -67,21 +64,11 @@ public abstract class AbstractDwc<D extends IUiDefinition> implements Dwc, Seria
     }
 
     @Override
-    public String getForm() {
-        return form;
-    }
-
-    public void setForm(String form) {
-        this.form = form;
-    }
-
-    @Override
     public String toString() {
         return "AbstractDwc{" +
                 "id='" + id + '\'' +
                 ", contents=" + contents +
                 ", define=" + define +
-                ", form='" + form + '\'' +
                 '}';
     }
 }

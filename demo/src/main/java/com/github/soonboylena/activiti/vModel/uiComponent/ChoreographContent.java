@@ -3,7 +3,7 @@ package com.github.soonboylena.activiti.vModel.uiComponent;
 import com.github.soonboylena.activiti.vModel.AbstractDwc;
 import com.github.soonboylena.activiti.vModel.IUiDefinition;
 import com.github.soonboylena.activiti.vModel.UiObject;
-import com.github.soonboylena.activiti.vModel.uiAction.ClientAction;
+import com.github.soonboylena.activiti.vModel.uiAction.LinkAction;
 import com.github.soonboylena.activiti.vModel.uiAction.UrlObject;
 import lombok.Data;
 
@@ -48,7 +48,7 @@ public class ChoreographContent extends AbstractDwc<ChoreographContentDefine> {
         getDefine().setTableData(tableData);
     }
 
-    public void setJobEditUrl(ClientAction jobEditUrl) {
+    public void setJobEditUrl(LinkAction jobEditUrl) {
         getDefine().setAction(jobEditUrl);
     }
 
@@ -76,7 +76,7 @@ class ChoreographContentDefine implements IUiDefinition {
     // table的数据
     private List<Map<String, Map<String, String>>> tableData;
     // 任务编排按钮按下
-    private ClientAction action;
+    private LinkAction action;
     // table是否可以编辑
     private String tableStatus;
     // table里边列是否可以编辑

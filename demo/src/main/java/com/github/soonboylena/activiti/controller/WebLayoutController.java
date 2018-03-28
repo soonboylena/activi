@@ -4,6 +4,8 @@ import com.github.soonboylena.activiti.service.WebFormService;
 import com.github.soonboylena.activiti.service.WebLayoutService;
 import com.github.soonboylena.activiti.support.UrlManager;
 import com.github.soonboylena.activiti.vModel.UiObject;
+import com.github.soonboylena.activiti.vModel.uiAction.SubmitAction;
+import com.github.soonboylena.activiti.vModel.uiComponent.Button;
 import com.github.soonboylena.activiti.vModel.uiComponent.Form;
 import com.github.soonboylena.activiti.vModel.uiComponent.Page;
 import com.github.soonboylena.activiti.vModel.uiComponent.UrlSection;
@@ -11,6 +13,7 @@ import com.github.soonboylena.entity.core.IEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -34,8 +37,13 @@ public class WebLayoutController {
     public UiObject layout(@PathVariable("formKey") String formKey) {
 
         Form form = webLayoutService.buildLayout(formKey);
+
         Page page = new Page(form.getCaption());
-        page.addContent(form);
+        SubmitAction clientAction = new SubmitAction(UrlManager.submit(), formKey);
+        Button button = new Button("提交", clientAction);
+        page.addForm(form);
+
+        page.addBtn(button);
         return page;
     }
 
@@ -44,10 +52,17 @@ public class WebLayoutController {
         return webLayoutService.buildLayout(formKey);
     }
 
-    @PutMapping("data/{formKey}")
-    public IEntity createData(@PathVariable("formKey") String formKey, @RequestBody Map<String, Object> map) {
+    @PutMapping("data")
+    public Map<String, IEntity> pageSubmit(@RequestBody Map<String, Map<String, Object>> map) {
 
-        IEntity iEntity = formSvc.cleanUp(formKey, map);
-        return iEntity;
+        Map<String, IEntity> entityMap = new HashMap<>();
+        if (map != null) {
+            for (String s : map.keySet()) {
+                IEntity iEntity = formSvc.cleanUp(s, map.get(s));
+                entityMap.put(s, iEntity);
+            }
+        }
+
+        return entityMap;
     }
 }

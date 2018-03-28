@@ -6,7 +6,7 @@
         <item key="item4" name="field4" caption="字段4" description="字段4" type="string"/>
     </items>
     <forms>
-        <form key="form1">
+        <form key="form1" caption="表单1">
             <field ref="item1"/>
             <field ref="item2" readonly="true"/>
             <field ref="item3" required="true"/>

@@ -20,6 +20,7 @@
     <modules>
         <module>demo</module>
         <module>entity</module>
+        <module>persistent-neo4j</module>
     </modules>
 
     <groupId>com.github.soonboylena</groupId>

@@ -9,6 +9,4 @@ public interface Dwc<C extends UiObject, D extends IUiDefinition> extends UiObje
     public D getDefine();
 
     public List<C> getContents();
-
-    public String getForm();
 }
