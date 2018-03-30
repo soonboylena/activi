@@ -1,0 +1,25 @@
+<root>
+    <items>
+        <item key="item1" name="field1" caption="字段1" description="字段1" type="string"/>
+        <item key="item2" name="field2" caption="字段2" description="字段2" type="string"/>
+        <item key="item3" name="field3" caption="字段3" description="字段3" type="string"/>
+        <item key="item4" name="field4" caption="字段4" description="字段4" type="string"/>
+    </items>
+    <forms>
+        <form key="form1" caption="表单1">
+            <field ref="item1"/>
+            <field ref="item2" readonly="true"/>
+            <field ref="item3" required="true"/>
+        </form>
+        <form key="form2">
+            <field ref="item3"/>
+            <field ref="item4"/>
+        </form>
+    </forms>
+    <transfers>
+        <transfer from="form1" to="form2">
+            <rules>
+            </rules>
+        </transfer>
+    </transfers>
+</root>
