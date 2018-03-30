@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.Auth.jpa;
 
-import com.github.soonboylena.myflow.Auth.bean.UserEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,14 +10,14 @@ import java.util.List;
  * @date 2018/2/2
  */
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<LoginInfoEntity, Long> {
 
-    UserEntity findUserById(Long userId);
+    LoginInfoEntity findUserById(Long userId);
 
-    UserEntity findUserByUsername(String name);
+    LoginInfoEntity findUserByUsername(String name);
 
-    List<UserEntity> findUserByUsernameContains(String name);
+    List<LoginInfoEntity> findUserByUsernameContains(String name);
 
-    List<UserEntity> findAllByEnabledTrue();
+    List<LoginInfoEntity> findAllByEnabledTrue();
 
 }

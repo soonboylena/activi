@@ -1,12 +1,11 @@
 package com.github.soonboylena.myflow.Auth.service;
 
-import com.github.soonboylena.myflow.Auth.bean.AuthorityEntity;
-import com.github.soonboylena.myflow.Auth.bean.RoleEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
 import com.github.soonboylena.myflow.Auth.jpa.RoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @CacheEvict(value = "MenuService_getTopMenu", allEntries = true)
+    //    @CacheEvict(value = "MenuService_getTopMenu", allEntries = true)
     public RoleEntity saveRole(RoleEntity roleEntity) {
         RoleEntity bak = roleRepository.save(roleEntity);
         return bak;
@@ -39,7 +38,8 @@ public class RoleService {
         Set<AuthorityEntity> authorities = roleEntity.getAuthorities();
         List<String> menuKeys = new ArrayList<>();
         if (null != authorities) {
-            authorities.forEach(element -> menuKeys.add(element.getMenu().getCurrentKey()));
+            // TODO 放开
+//            authorities.forEach(element -> menuKeys.add(element.getMenu().getCurrentKey()));
         }
         return menuKeys;
     }

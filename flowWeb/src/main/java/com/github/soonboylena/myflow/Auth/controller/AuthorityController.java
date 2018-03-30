@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
-import com.github.soonboylena.myflow.Auth.bean.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.service.AuthorityService;
 import com.github.soonboylena.myflow.Auth.service.MenuService;

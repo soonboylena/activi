@@ -1,7 +1,7 @@
 package com.github.soonboylena.myflow.Auth.security;
 
 
-import com.github.soonboylena.myflow.Auth.bean.UserEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.Auth.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,12 +24,15 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-        UserEntity userByUserName = userRepository.findUserByUsername(s);
+        LoginInfoEntity userByUserName = userRepository.findUserByUsername(s);
 
         if (userByUserName == null) {
             throw new UsernameNotFoundException(s);
         }
-        return userByUserName;
+
+        // TODO 放开
+//        return userByUserName;
+        return null;
     }
 
 

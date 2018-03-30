@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.Auth.service;
 
-import com.github.soonboylena.myflow.Auth.bean.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.jpa.AuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

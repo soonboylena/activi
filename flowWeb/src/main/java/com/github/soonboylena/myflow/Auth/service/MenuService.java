@@ -2,14 +2,13 @@ package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.bean.MenuNode;
-import com.github.soonboylena.myflow.Auth.bean.UserEntity;
 import com.github.soonboylena.myflow.Auth.jpa.MenuRepository;
 import com.github.soonboylena.myflow.vModel.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -109,9 +108,9 @@ public class MenuService {
         return false;
     }
 
-    @Cacheable(value = "MenuService_getTopMenu", key = "#user.id")
-    public List<MenuItem> getUserMenu(UserEntity user) {
-        Set<GrantedAuthority> authorities = user.getAuthorities();
+    //    @Cacheable(value = "MenuService_getTopMenu", key = "#user.id")
+    public List<MenuItem> getUserMenu(UserDetails user) {
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         if (authorities == null || authorities.isEmpty()) {
             return Collections.emptyList();
         }
@@ -157,13 +156,14 @@ public class MenuService {
         Menu menu = menuRepository.findOne(id);
         if (null != menu) {
             if (null != menu.getAuthorityEntity()) {
-                if (0 != menu.getAuthorityEntity().getRoleEntities().size()) {
-                    return false;
-                } else {
-                    menuRepository.delete(id);
-                    logger.debug("delete menu whose id is {} successfully", id);
-                    return true;
-                }
+                // TODO 放开
+//                if (0 != menu.getAuthorityEntity().getRoleEntities().size()) {
+//                    return false;
+//                } else {
+//                    menuRepository.delete(id);
+//                    logger.debug("delete menu whose id is {} successfully", id);
+//                    return true;
+//                }
             } else {
                 logger.warn("the menu has no related authority, it's dirty data");
                 menuRepository.delete(id);

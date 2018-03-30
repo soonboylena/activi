@@ -1,6 +1,8 @@
 package com.github.soonboylena.myflow.Auth.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.BaseModel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;

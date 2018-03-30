@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.Auth.jpa;
 
-import com.github.soonboylena.myflow.Auth.bean.RoleEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

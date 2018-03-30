@@ -1,9 +1,9 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
-import com.github.soonboylena.myflow.Auth.bean.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.bean.Message;
-import com.github.soonboylena.myflow.Auth.bean.RoleEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
 import com.github.soonboylena.myflow.Auth.service.AuthorityService;
 import com.github.soonboylena.myflow.Auth.service.MenuService;
 import com.github.soonboylena.myflow.Auth.service.RoleService;
@@ -112,7 +112,7 @@ public class RoleController {
         }
         RoleEntity temp = roleService.findRoleById(roleEntity.getId());
         roleEntity.setAuthorities(temp.getAuthorities());
-        roleEntity.setUsers(temp.getUsers());
+//        roleEntity.setUsers(temp.getUsers());
         RoleEntity bak = roleService.saveRole(roleEntity);
         if (bak == null) {
             return new Message<>("更新失败", false);
