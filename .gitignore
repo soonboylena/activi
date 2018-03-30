@@ -57,3 +57,37 @@ fabric.properties
 将删除 demo/mvnw
 将删除 demo/mvnw.cmd
 将删除 demo/src/main/java/com/github/soonboylena/activiti/config/
+将删除 .gitignore
+将删除 .mvn/
+将删除 mvnw
+将删除 mvnw.cmd
+将删除 src/main/java/com/github/soonboylena/activiti/config/
+将删除 src/main/resources/entityXml/
+mvnw
+mvnw.cmd
+将删除 demo/target/
+将删除 entity/target/
+将删除 flowWeb/.gitignore
+将删除 flowWeb/.mvn/
+将删除 flowWeb/mvnw
+将删除 flowWeb/mvnw.cmd
+将删除 flowWeb/pom.xml
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/ActivitiApplication.java
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/component/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/config/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/controller/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/service/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/support/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/vModel/
+将删除 flowWeb/src/main/resources/
+将删除 flowWeb/src/test/
+将删除 myflow.iml
+将删除 persistent-neo4j/.gitignore
+将删除 persistent-neo4j/.mvn/
+将删除 persistent-neo4j/mvnw
+将删除 persistent-neo4j/mvnw.cmd
+将删除 persistent-neo4j/pom.xml
+将删除 persistent-neo4j/src/main/java/com/github/soonboylena/myflow/
+将删除 persistent-neo4j/src/test/java/com/github/soonboylena/myflow/
+*.iml
+.idea/

@@ -1,1 +1,0 @@
-package com.github.soonboylena.activiti.vModel.uiComponent;import com.github.soonboylena.activiti.vModel.AbstractDwc;public class BoMeta extends AbstractDwc<BoMetaDefine> {    private transient static final String TYPE = "m-boMeta";    @Override    public String getType() {        return TYPE;    }}

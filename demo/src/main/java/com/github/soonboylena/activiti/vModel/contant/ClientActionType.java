@@ -1,1 +1,0 @@
-package com.github.soonboylena.activiti.vModel.contant;/** * Created with IntelliJ IDEA. * Description: * Project Name:    spring-boot-admin * UserEntity:            sunb * Date:            2017-11-22 * Time:            11:18 */public enum ClientActionType {    submit, link, serverAction, message, selectOne}
