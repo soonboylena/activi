@@ -1,9 +1,9 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
 import com.github.soonboylena.myflow.Auth.bean.Message;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
-import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
-import com.github.soonboylena.myflow.Auth.service.RoleService;
+import com.github.soonboylena.myflow.Auth.service.RoleServiceImpl;
 import com.github.soonboylena.myflow.Auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -25,9 +25,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RoleService roleService;
-
     @GetMapping("/user/{id:\\d+}")
     public LoginInfoEntity getUser(@PathVariable("id") Long id) {
         return userService.findUserById(id);
@@ -36,12 +33,12 @@ public class UserController {
 
     @GetMapping("/users")
     public List<LoginInfoEntity> listAll(@RequestParam(required = false) String name) {
-        if (name == null) {
-            List<LoginInfoEntity> userEntities = userService.listAllUser();
-            //waken hibernate to fetch data for me
-            userEntities.forEach(element -> element.getAuthorities().toString());
-            return userEntities;
-        }
+//        if (name == null) {
+//            List<LoginInfoEntity> userEntities = userService.listAllUser();
+//            //waken hibernate to fetch data for me
+//            userEntities.forEach(element -> element.getAuthorities().toString());
+//            return userEntities;
+//        }
         return userService.findUserLikeName(name);
     }
 
@@ -49,11 +46,11 @@ public class UserController {
     @GetMapping("/user/check/{username}")
     public Message checkCanUse(@PathVariable String username) {
         username = username.trim();
-        boolean flag = userService.findIfExist(username);
+        boolean exist = userService.exist(username);
         Message<Boolean> message = new Message<>();
-        message.setData(!flag);
+        message.setData(!exist);
         message.setCode(200);
-        if (flag) {
+        if (exist) {
             message.setDescription("用户名已存在");
         } else {
             message.setDescription("用户名可用");
@@ -84,18 +81,19 @@ public class UserController {
     }
 
     @PostMapping("/user/changeRole/{userId:\\d+}")
-    public Message changeUserRole(@PathVariable Long userId, @RequestBody List<RoleEntity> roleList) {
-        LoginInfoEntity user = userService.findUserById(userId);
-
-        user.setRoles(new HashSet<>(roleList));
-        LoginInfoEntity bak = userService.updateUser(user, false);
-        Message<Boolean> message;
-        if (bak == null) {
-            message = new Message<>("更新失败", false);
-        } else {
-            message = new Message<>("更新成功", true);
-        }
-        return message;
+    public Message changeUserRole(@PathVariable Long userId, @RequestBody List<AuthorityEntity> roleList) {
+//        LoginInfoEntity user = userService.findUserById(userId);
+//
+//        user.setRoles(new HashSet<>(roleList));
+//        LoginInfoEntity bak = userService.updateUser(user, false);
+//        Message<Boolean> message;
+//        if (bak == null) {
+//            message = new Message<>("更新失败", false);
+//        } else {
+//            message = new Message<>("更新成功", true);
+//        }
+//        return message;
+        return null;
     }
 
     @DeleteMapping("/user/del/{userId:\\d+}")
@@ -105,7 +103,7 @@ public class UserController {
         Message<Boolean> message;
         if (null != user) {
             user.setEnabled(false);
-            userService.updateUser(user);
+            userService.updateUser(user, true);
             message = new Message<>("删除成功", true);
         } else {
             message = new Message<>("删除失败", false);
@@ -115,24 +113,25 @@ public class UserController {
 
     @PostMapping("/user/reset")
     public Message<Boolean> resetUser(@RequestBody LoginInfoEntity loginInfoEntity) {
-        if (loginInfoEntity.getId() == 0) {
-            return new Message<>("用户id不能为空", false);
-        }
-        LoginInfoEntity temp = userService.findUserById(loginInfoEntity.getId());
-        if (!temp.getUsername().equals(loginInfoEntity.getUsername())) {
-            return new Message<>("用户名不能修改", false);
-        }
-        boolean shouldEncrypt = true;
-        if ("".equals(loginInfoEntity.getPassword()) || loginInfoEntity.getPassword() == null) {
-            loginInfoEntity.setPassword(temp.getPassword());
-            shouldEncrypt = false;
-        }
-        loginInfoEntity.setRoles(temp.getRoles());
-        LoginInfoEntity bak = userService.updateUser(loginInfoEntity, shouldEncrypt);
-        if (null == bak) {
-            return new Message<>("更新失败", false);
-        } else {
-            return new Message<>("更新成功", true);
-        }
+//        if (loginInfoEntity.getId() == 0) {
+//            return new Message<>("用户id不能为空", false);
+//        }
+//        LoginInfoEntity temp = userService.findUserById(loginInfoEntity.getId());
+//        if (!temp.getUsername().equals(loginInfoEntity.getUsername())) {
+//            return new Message<>("用户名不能修改", false);
+//        }
+//        boolean shouldEncrypt = true;
+//        if ("".equals(loginInfoEntity.getPassword()) || loginInfoEntity.getPassword() == null) {
+//            loginInfoEntity.setPassword(temp.getPassword());
+//            shouldEncrypt = false;
+//        }
+//        loginInfoEntity.setRoles(temp.getRoles());
+//        LoginInfoEntity bak = userService.updateUser(loginInfoEntity, shouldEncrypt);
+//        if (null == bak) {
+//            return new Message<>("更新失败", false);
+//        } else {
+//            return new Message<>("更新成功", true);
+//        }
+        return null;
     }
 }

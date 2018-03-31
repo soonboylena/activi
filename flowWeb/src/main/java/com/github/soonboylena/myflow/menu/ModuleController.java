@@ -1,7 +1,7 @@
 package com.github.soonboylena.myflow.menu;
 
+import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.service.MenuService;
-import com.github.soonboylena.myflow.vModel.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,12 +25,12 @@ public class ModuleController {
     private MenuService menuService;
 
     @RequestMapping("topMenu")
-    public List<MenuItem> topMenu(@RequestParam(defaultValue = "") String systemKey, @AuthenticationPrincipal User user) {
+    public List<Menu> topMenu(@RequestParam(defaultValue = "") String systemKey, @AuthenticationPrincipal User user) {
         return menuService.getUserMenu(user);
     }
 
     @RequestMapping("leftMenu")
-    public List<MenuItem> leftMenu(@RequestParam() String id) {
+    public List<Menu> leftMenu(@RequestParam() String id) {
         return menuService.getSubMenus(id);
     }
 

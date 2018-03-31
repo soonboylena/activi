@@ -1,10 +1,8 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
-import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
-import com.github.soonboylena.myflow.Auth.jpa.UserRepository;
+import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,55 +16,50 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Value("${user.custom.authority}")
-    private String authority;
+//    @Value("${user.custom.authority}")
+//    private String authority;
+
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private LoginInfoGraphRepository loginInfoRepository;
 
     @Autowired
     private PasswordEncoder encryption;
 
     public List<LoginInfoEntity> findUserLikeName(String name) {
-        return userRepository.findUserByUsernameContains(name);
+        return loginInfoRepository.findAllByUsernameLike(name);
     }
 
-    public boolean findIfExist(String username) {
-        LoginInfoEntity user = userRepository.findUserByUsername(username);
-        return null != user;
+    public boolean exist(String username) {
+        boolean exists = loginInfoRepository.existsByUsername(username);
+        return exists;
     }
 
     public LoginInfoEntity findUserById(Long id) {
-        return userRepository.findUserById(id);
+        return loginInfoRepository.findOne(id);
     }
 
     public LoginInfoEntity saveUser(LoginInfoEntity user) {
         user.setPassword(encryption.encode(user.getPassword()));
-        if (user.getRoles().size() == 0) {
-            RoleEntity roleEntity = roleService.findRoleByRoleName(authority);
-            user.addRole(roleEntity);
-        }
-        return userRepository.save(user);
-    }
-
-    public LoginInfoEntity updateUser(LoginInfoEntity user) {
-        if (null != user.getPassword())
-            user.setPassword(encryption.encode(user.getPassword()));
-        return userRepository.save(user);
+//        if (user.getAuthorities() != null && user.getAuthorities().isEmpty()) {
+//            RoleEntity roleEntity = loginInfoRepository.findRoleByRoleName(authority);
+//            user.addRole(roleEntity);
+//        }
+//        return userRepository.save(user);
+//        return null;
+        LoginInfoEntity save = loginInfoRepository.save(user);
+        return save;
     }
 
     public LoginInfoEntity updateUser(LoginInfoEntity loginInfoEntity, boolean shouldEncrypt) {
         if (shouldEncrypt) {
             loginInfoEntity.setPassword(encryption.encode(loginInfoEntity.getPassword()));
         }
-        return userRepository.save(loginInfoEntity);
+        return loginInfoRepository.save(loginInfoEntity);
     }
 
-    public List<LoginInfoEntity> listAllUser() {
-        List<LoginInfoEntity> all = userRepository.findAllByEnabledTrue();
+    public Iterable<LoginInfoEntity> listAllUser() {
+        Iterable<LoginInfoEntity> all = loginInfoRepository.findAll();
         if (all != null) {
             all.forEach(LoginInfoEntity::getAuthorities);
         }

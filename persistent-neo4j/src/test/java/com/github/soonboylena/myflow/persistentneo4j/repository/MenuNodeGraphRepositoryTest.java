@@ -1,0 +1,99 @@
+package com.github.soonboylena.myflow.persistentneo4j.repository;
+
+import com.github.soonboylena.myflow.persistentneo4j.NeoBaseTest;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
+
+    @Autowired
+    MenuNodeGraphRepository repository;
+
+    private MenuNode testObject;
+
+//    @Before
+    public void save() {
+
+        MenuNode menuNode11 = new MenuNode();
+        menuNode11.setCurrentKey("11");
+        menuNode11.setDescription("level 11");
+        menuNode11.setTitle("level 11 label");
+
+        AuthorityEntity auth11 = new AuthorityEntity("p11");
+        auth11.setTitle("权限");
+        auth11.setDescription("菜单权限测试");
+        menuNode11.setAuthorityEntity(auth11);
+
+        MenuNode menuNode111 = new MenuNode();
+        menuNode111.setTitle("level 111 label1");
+        menuNode111.setCurrentKey("111");
+        menuNode111.setDescription("level 111");
+
+        AuthorityEntity entity111 = new AuthorityEntity();
+        entity111.setTitle("111有权限");
+        entity111.setExpress("p111");
+        menuNode111.setAuthorityEntity(entity111);
+        menuNode11.addSubNode(menuNode111);
+
+        MenuNode menuNode112 = new MenuNode();
+        menuNode112.setTitle("level 112 label1");
+        menuNode112.setCurrentKey("112");
+        menuNode112.setDescription("level 112");
+        menuNode11.addSubNode(menuNode112);
+
+        MenuNode menuNode12 = new MenuNode();
+        menuNode12.setTitle("level 12 label");
+        menuNode12.setCurrentKey("12");
+        menuNode12.setDescription("level 12");
+
+        AuthorityEntity auth = new AuthorityEntity("p12");
+        auth.setTitle("权限");
+        auth.setDescription("菜单权限测试");
+        menuNode12.setAuthorityEntity(auth);
+
+        MenuNode menuNode1 = new MenuNode();
+        menuNode1.setTitle("level 1");
+        menuNode1.setCurrentKey("1");
+
+        menuNode1.addSubNode(menuNode11);
+        menuNode1.addSubNode(menuNode12);
+
+        MenuNode save = repository.save(menuNode1);
+        testObject = save;
+
+        print(save, "新提交的一条数据");
+    }
+
+    @Test
+    public void query() {
+        MenuNode one = repository.findOne(testObject.getId());
+        Assert.assertEquals("确认id相同", one.getId(), testObject.getId());
+        print(one, "找到的数据");
+//        repository.delete(one);
+    }
+
+    @Test
+    public void remove() {
+        Assert.assertNotNull(testObject);
+        repository.delete(testObject);
+    }
+
+    @Test
+    public void findMenuTreesByExpress() {
+        Set<String> expresses = new HashSet<>();
+        expresses.add("p11");
+        expresses.add("p111");
+
+        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress(expresses);
+//        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress("p11");
+        print(menuTreesByExpress, "测试根据权限取菜单");
+    }
+}

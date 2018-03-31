@@ -1,12 +1,12 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
-import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.bean.Menu;
+import com.github.soonboylena.myflow.Auth.bean.Role;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.bean.Message;
-import com.github.soonboylena.myflow.persistentneo4j.entity.RoleEntity;
 import com.github.soonboylena.myflow.Auth.service.AuthorityService;
 import com.github.soonboylena.myflow.Auth.service.MenuService;
-import com.github.soonboylena.myflow.Auth.service.RoleService;
+import com.github.soonboylena.myflow.Auth.service.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ import java.util.Set;
 public class RoleController {
 
     @Autowired
-    private RoleService roleService;
+    private RoleServiceImpl roleService;
 
     @Autowired
     private MenuService menuService;
@@ -35,27 +35,28 @@ public class RoleController {
     private AuthorityService authorityService;
 
     @PostMapping("/add")
-    public Message<Boolean> addNewRole(@RequestBody RoleEntity roleEntity) {
+    public Message<Boolean> addNewRole(@RequestBody Role role) {
 
 
-        RoleEntity bak = roleService.saveRole(roleEntity);
-
-        if (null != bak) {
-            return new Message<>("添加角色成功", true);
-        } else {
-            return new Message<>("添加角色失败", false);
-        }
+//        RoleEntity bak = roleService.saveRole(roleEntity);
+//
+//        if (null != bak) {
+//            return new Message<>("添加角色成功", true);
+//        } else {
+//            return new Message<>("添加角色失败", false);
+//        }
+        return null;
     }
 
     @GetMapping("/roles")
-    public List<RoleEntity> getRoles() {
-        List<RoleEntity> list = roleService.findAllRoles();
+    public List<Role> getRoles() {
+        List<Role> list = roleService.findAllRoles();
         return list;
     }
 
-    @PostMapping("/menus/{role}")
-    public List<String> getMenuListByRole(@PathVariable String role) {
-        return roleService.findRoleMenu(role);
+    @PostMapping("/menus")
+    public List<String> getMenuListByRole(@RequestParam Long roleId) {
+        return roleService.findRoleMenu(roleId);
     }
 
     @PostMapping("/authority/renewal")
@@ -63,10 +64,11 @@ public class RoleController {
         List<Long> authorityIds = (List<Long>) map.get("authorityIds");
         Long roleId = (Long) map.get("roleId");
         List<AuthorityEntity> authorityList = authorityService.findAuthoritiesInIds(authorityIds);
-        RoleEntity roleEntity = roleService.findRoleById(roleId);
-        roleEntity.setAuthorities(new HashSet<>(authorityList));
-        RoleEntity bak = roleService.saveRole(roleEntity);
-        Message<String>  message = new Message<>();
+        Role roleEntity = roleService.findRoleById(roleId);
+        // TODO
+//        roleEntity.setAuthorities(new HashSet<>(authorityList));
+        Role bak = roleService.saveRole(roleEntity);
+        Message<String> message = new Message<>();
         if (null != bak) {
             message.setCode(200);
             message.setDescription("角色权限更新成功");
@@ -85,39 +87,41 @@ public class RoleController {
 
         Set<AuthorityEntity> authorityEntities = new HashSet<>();
         menus.forEach(element -> {
-            if (element.getAuthorityEntity() != null) {
-                authorityEntities.add(element.getAuthorityEntity());
-            }
+            //TODO
+//            if (element.getAuthorityEntity() != null) {
+//                authorityEntities.add(element.getAuthorityEntity());
+//            }
         });
 
-        RoleEntity bak = roleService.findRoleByRoleName(role);
-        bak.setAuthorities(authorityEntities);
+//        RoleEntity bak = roleService.findRoleByRoleName(role);
+//        bak.setAuthorities(authorityEntities);
+//
+//        RoleEntity tmp = roleService.saveRole(bak);
 
-        RoleEntity tmp = roleService.saveRole(bak);
-
-        Message message;
-        if (null == tmp) {
-            message = new Message(500, "服务器出错, 更新失败");
-        } else {
-            message = new Message(200, "更新成功");
-        }
+        Message message = null;
+//        if (null == tmp) {
+//            message = new Message(500, "服务器出错, 更新失败");
+//        } else {
+//            message = new Message(200, "更新成功");
+//        }
 
         return message;
     }
 
     @PostMapping("/update")
-    public Message<Boolean> updateRole(@RequestBody RoleEntity roleEntity) {
-        if ("".equals(roleEntity.getId())) {
-            return new Message<>("角色id不能为空", false);
-        }
-        RoleEntity temp = roleService.findRoleById(roleEntity.getId());
-        roleEntity.setAuthorities(temp.getAuthorities());
-//        roleEntity.setUsers(temp.getUsers());
-        RoleEntity bak = roleService.saveRole(roleEntity);
-        if (bak == null) {
-            return new Message<>("更新失败", false);
-        } else {
-            return new Message<>("更新成功", true);
-        }
+    public Message<Boolean> updateRole(@RequestBody Role role) {
+//        if ("".equals(role.getId())) {
+//            return new Message<>("角色id不能为空", false);
+//        }
+//        Role temp = roleService.findRoleById(role.getId());
+//        role.setAuthorities(temp.getAuthorities());
+////        roleEntity.setUsers(temp.getUsers());
+//        RoleEntity bak = roleService.saveRole(roleEntity);
+//        if (bak == null) {
+//            return new Message<>("更新失败", false);
+//        } else {
+//            return new Message<>("更新成功", true);
+//        }
+        return null;
     }
 }

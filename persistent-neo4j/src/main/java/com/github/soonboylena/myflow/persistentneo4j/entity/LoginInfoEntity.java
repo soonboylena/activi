@@ -30,16 +30,9 @@ public class LoginInfoEntity extends BaseModel {
     // 密码未超期
     private boolean credentialsNonExpired;
 
-
-    @Relationship(type = "belong")
-    private Set<RoleEntity> roles = new HashSet<>();
-
     @Relationship(type = "has", direction = Relationship.INCOMING)
     private Set<AuthorityEntity> authorities = new HashSet<>();
 
-    public void addRole(RoleEntity role) {
-        roles.add(role);
-    }
 
     public String getPassword() {
         return password;

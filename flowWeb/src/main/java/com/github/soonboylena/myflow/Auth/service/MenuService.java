@@ -1,17 +1,20 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.Menu;
-import com.github.soonboylena.myflow.Auth.bean.MenuNode;
-import com.github.soonboylena.myflow.Auth.jpa.MenuRepository;
-import com.github.soonboylena.myflow.vModel.MenuItem;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
+import com.github.soonboylena.myflow.persistentneo4j.repository.MenuNodeGraphRepository;
+import org.apache.commons.collections4.set.UnmodifiableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author lungern xiii.at.cn@gmail.com
@@ -25,154 +28,171 @@ public class MenuService {
     private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
 
     @Autowired
-    private MenuRepository menuRepository;
+    private MenuNodeGraphRepository menuRepository;
 
-    private static void sortList(List<Menu> menuList) {
-        Collections.sort(menuList, (item1, item2) -> {
-            if (item1.getMenuOrder() > item2.getMenuOrder()) {
-                return 1;
-            } else if (item1.getMenuOrder() == item2.getMenuOrder()) {
-                return 0;
-            }
-            return -1;
-        });
-    }
+//    private static void sortList(List<Menu> menuList) {
+//        menuList.sort((item1, item2) -> {
+//            if (item1.getMenuOrder() > item2.getMenuOrder()) {
+//                return 1;
+//            } else if (item1.getMenuOrder() == item2.getMenuOrder()) {
+//                return 0;
+//            }
+//            return -1;
+//        });
+//    }
 
-    public List<Menu> allMenu() {
-        List<Menu> menuList = menuRepository.findAll();
-        sortList(menuList);
-        return menuList;
+    public List<MenuNode> allMenu() {
+        Iterable<MenuNode> menuList = menuRepository.findAll();
+//        sortList(menuList);
+//        return menuList;
+        return null;
     }
 
     public List<MenuNode> generateAllMenuTree() {
-        List<Menu> menuList = allMenu();
+        List<MenuNode> menuList = allMenu();
         return generateMenuTree(menuList);
     }
 
-    private List<MenuNode> generateMenuTree(List<Menu> menuList) {
+    private List<MenuNode> generateMenuTree(List<MenuNode> menuList) {
 
         Map<String, MenuNode> menuMap = new HashMap<>();
 
         TreeMap<String, MenuNode> menuTree = new TreeMap<>();
 
         menuList.forEach(element -> {
-            MenuNode menuNode = new MenuNode(element);
-            menuMap.put(element.getCurrentKey(), menuNode);
-            if (null == element.getParentKey() || "".equals(element.getParentKey())) {
-                menuTree.put(element.getCurrentKey(), menuNode);
-            }
+//            MenuNode menuNode = new MenuNode(element);
+//            menuMap.put(element.getCurrentKey(), menuNode);
+//            if (null == element.getParentKey() || "".equals(element.getParentKey())) {
+//                menuTree.put(element.getCurrentKey(), menuNode);
+//            }
         });
 
         menuList.forEach(element -> {
             if (null != element.getParentKey()) {
                 MenuNode parentNode = menuMap.get(element.getParentKey());
                 if (null != parentNode) {
-                    List<MenuNode> children;
-                    if (null == (children = parentNode.getChildren())) {
-                        children = new ArrayList<>();
-                        parentNode.setChildren(children);
-                    }
-                    children.add(menuMap.get(element.getCurrentKey()));
+                    parentNode.addSubNode(menuMap.get(element.getCurrentKey()));
                 }
             }
         });
 
         List<MenuNode> bak = new ArrayList<>(menuTree.values());
-        bak.forEach(element -> element.sortChildrenOrder());
-        MenuNode menuNode = new MenuNode(new Menu());
-        menuNode.setChildren(bak);
-        menuNode.sortChildrenOrder();
+        //TODO
+//        bak.forEach(MenuNode::sortChildrenOrder);
+//        MenuNode menuNode = new MenuNode(new Menu());
+//        menuNode.setChildren(bak);
+//        menuNode.sortChildrenOrder();
         return bak;
     }
 
-    public List<Menu> findMenuByCurrentKey(String key) {
-        List<Menu> menuList = menuRepository.findAllByCurrentKey(key);
-        return menuList;
+    public boolean existsByCurrentKey(String currentKey) {
+        boolean exists = menuRepository.existsByCurrentKey(currentKey);
+        return exists;
     }
 
     public List<Menu> findMenuByCurrentKeys(List<String> keyList) {
-        List<Menu> menuList = menuRepository.findAllByCurrentKeyIn(keyList);
-        return menuList;
+//        List<MenuNode> menuList = menuRepository.findAllByCurrentKeyIn(keyList);
+//        return menuList;
+        return null;
     }
 
     public Menu findMenuById(Long id) {
-        return menuRepository.findOne(id);
+//        return menuRepository.findOne(id);
+        return null;
     }
 
 
-    public boolean addMenu(Menu menu) {
-        Menu bak = menuRepository.save(menu);
-        if (null != bak) {
-            return true;
+    public Menu addMenu(Long pId, Menu menu) {
+
+        MenuNode menuNode = toDb(menu);
+        if (pId == null) {
+            logger.info("增加菜单根结点，{}", menu);
+            MenuNode save = menuRepository.save(menuNode);
+            return fromDb(save);
         }
-        return false;
+
+        MenuNode one = menuRepository.findOne(pId);
+        if (one == null) {
+            throw new RuntimeException("没有找到父结点：" + pId);
+        }
+        one.addSubNode(menuNode);
+        MenuNode pNode = menuRepository.save(one);
+        return fromDb(menuNode);
     }
 
-    //    @Cacheable(value = "MenuService_getTopMenu", key = "#user.id")
-    public List<MenuItem> getUserMenu(UserDetails user) {
+    private MenuNode toDb(Menu menu) {
+        MenuNode node = new MenuNode();
+        node.setUrl(menu.getUrl());
+        node.setTitle(menu.getTitle());
+        node.setPicUrl(menu.getPicUrl());
+        node.setIcon(menu.getIcon());
+        node.setDescription(menu.getDescription());
+        node.setCurrentKey(menu.getCurrentKey());
+        return node;
+    }
+
+    public List<Menu> getUserMenu(UserDetails user) {
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         if (authorities == null || authorities.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<Menu> menus = allMenu();
+        Set<String> collect = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+
+//        Set<AuthorityEntity> authSet = new HashSet<>();
+//
+//        if (User.class.isInstance(user)) {
+//            //
+//            User _user = (User) user;
+//            Collection<GrantedAuthority> authorities1 = _user.getAuthorities();
+//
+//        }
+//
+//        for (GrantedAuthority authority : authorities) {
+//            if (authority instanceof AuthorityEntity) {
+//                authSet.add((AuthorityEntity) authority);
+//            } else {
+//                throw new RuntimeException("UserDetails的实例应该都是AuthorityEntity.现在类型是： " + authorities.getClass().getName());
+//            }
+//        }
+
+        List<MenuNode> menus = menuRepository.findMenuTreesByExpress(collect);
         if (menus == null || menus.isEmpty()) {
             return Collections.emptyList();
         }
-        sortList(menus);
-        List<MenuItem> collect = new ArrayList<>();
-        menus.forEach(menu -> {
-            if ((null == menu.getParentKey() || "".equals(menu.getParentKey()))
-                    && authorities.contains(menu.getAuthorityEntity())) {
-                collect.add(convertMenu2MenuItem(menu));
-            }
-        });
-        return collect;
+        return menus.stream().map(this::fromDb).collect(Collectors.toList());
     }
 
-    public List<MenuItem> getSubMenus(String parentKey) {
-        List<Menu> allMenus = allMenu();
-        List<MenuItem> requiredMenus = new ArrayList<>();
-        allMenus.forEach(menu -> {
-            if (parentKey.equals(menu.getParentKey())) {
-                requiredMenus.add(convertMenu2MenuItem(menu));
-            }
-        });
-        return requiredMenus;
+    private Menu fromDb(MenuNode menuNode) {
+        Menu menu = new Menu();
+        menu.setCurrentKey(menuNode.getCurrentKey());
+        menu.setDescription(menuNode.getDescription());
+        menu.setIcon(menuNode.getIcon());
+        menu.setPicUrl(menuNode.getPicUrl());
+        menu.setTitle(menuNode.getTitle());
+        menu.setUrl(menuNode.getUrl());
+        return menu;
     }
 
-    public MenuItem convertMenu2MenuItem(Menu menu) {
-        MenuItem menuItem = new MenuItem();
-        menuItem.setUrl(menu.getUrl());
-        menuItem.setTitle(menu.getLabelName());
-        menuItem.setPicUrl(menu.getPicUrl());
-        menuItem.setIcon(menu.getIcon());
-        menuItem.setDetail(menu.getDescription());
-        menuItem.setCode(menu.getCurrentKey());
-        return menuItem;
+    public List<Menu> getSubMenus(String parentKey) {
+//        List<Menu> allMenus = allMenu();
+//        List<MenuItem> requiredMenus = new ArrayList<>();
+//        allMenus.forEach(menu -> {
+//            if (parentKey.equals(menu.getParentKey())) {
+//                requiredMenus.add(convertMenu2MenuItem(menu));
+//            }
+//        });
+//        return requiredMenus;
+        return null;
     }
 
-    public boolean deleteMenu(long id) {
-        Menu menu = menuRepository.findOne(id);
-        if (null != menu) {
-            if (null != menu.getAuthorityEntity()) {
-                // TODO 放开
-//                if (0 != menu.getAuthorityEntity().getRoleEntities().size()) {
-//                    return false;
-//                } else {
-//                    menuRepository.delete(id);
-//                    logger.debug("delete menu whose id is {} successfully", id);
-//                    return true;
-//                }
-            } else {
-                logger.warn("the menu has no related authority, it's dirty data");
-                menuRepository.delete(id);
-                logger.debug("delete menu whose id is {} successfully", id);
-                return true;
-            }
-        } else {
-            logger.warn("the menu whose id is {} does not exist ", id);
-        }
-        return false;
+
+    public void deleteMenu(long id) {
+        menuRepository.delete(id);
+    }
+
+    public void updateMenu(Menu menu) {
+        MenuNode menuNode = toDb(menu);
+        menuRepository.save(menuNode);
     }
 }

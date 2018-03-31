@@ -1,9 +1,8 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
-import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
-import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.service.AuthorityService;
 import com.github.soonboylena.myflow.Auth.service.MenuService;
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,12 +33,13 @@ public class AuthorityController {
 
     @GetMapping("/one/{id}")
     public AuthorityEntity findById(@PathVariable Long id) {
-        Menu menu = menuService.findMenuById(id);
-        AuthorityEntity authorityEntity = menu.getAuthorityEntity();
-        if (null != authorityEntity) {
-            //wake hibernate to fetch data for me
-            authorityEntity.toString();
-        }
-        return authorityEntity;
+//        Menu menu = menuService.findMenuById(id);
+//        AuthorityEntity authorityEntity = menu.getAuthorityEntity();
+//        if (null != authorityEntity) {
+//            //wake hibernate to fetch data for me
+//            authorityEntity.toString();
+//        }
+//        return authorityEntity;
+        return null;
     }
 }
