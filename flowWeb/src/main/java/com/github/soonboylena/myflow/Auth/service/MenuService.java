@@ -1,15 +1,14 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.Menu;
-import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
 import com.github.soonboylena.myflow.persistentneo4j.repository.MenuNodeGraphRepository;
-import org.apache.commons.collections4.set.UnmodifiableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +79,7 @@ public class MenuService {
         //TODO
 //        bak.forEach(MenuNode::sortChildrenOrder);
 //        MenuNode menuNode = new MenuNode(new Menu());
-//        menuNode.setChildren(bak);
+//        menuNode.setSubNode(bak);
 //        menuNode.sortChildrenOrder();
         return bak;
     }
@@ -111,10 +110,7 @@ public class MenuService {
             return fromDb(save);
         }
 
-        MenuNode one = menuRepository.findOne(pId);
-        if (one == null) {
-            throw new RuntimeException("没有找到父结点：" + pId);
-        }
+        MenuNode one = menuRepository.findById(pId).orElseThrow(() -> new RuntimeException("没有找到父结点"));
         one.addSubNode(menuNode);
         MenuNode pNode = menuRepository.save(one);
         return fromDb(menuNode);
@@ -156,11 +152,30 @@ public class MenuService {
 //            }
 //        }
 
-        List<MenuNode> menus = menuRepository.findMenuTreesByExpress(collect);
+        List<MenuNode> menus = menuRepository.findMenuByExpress(collect);
         if (menus == null || menus.isEmpty()) {
             return Collections.emptyList();
         }
-        return menus.stream().map(this::fromDb).collect(Collectors.toList());
+        List<MenuNode> menuNodes = buildMenuTree(menus);
+        return menuNodes.stream().map(this::fromDb).collect(Collectors.toList());
+    }
+
+    private List<MenuNode> buildMenuTree(List<MenuNode> menus) {
+
+        Map<String, MenuNode> collect = menus.stream().collect(Collectors.toMap(MenuNode::getCurrentKey, m -> m));
+
+        List<MenuNode> markToRemove = new ArrayList<>(menus.size());
+
+        for (MenuNode menu : menus) {
+            String parentKey = menu.getParentKey();
+            MenuNode parent = collect.get(parentKey);
+            if (parent != null) {
+                parent.addSubNode(menu);
+                markToRemove.add(menu);
+            }
+        }
+        menus.removeAll(markToRemove);
+        return menus;
     }
 
     private Menu fromDb(MenuNode menuNode) {
@@ -188,8 +203,9 @@ public class MenuService {
 
 
     public void deleteMenu(long id) {
-        menuRepository.delete(id);
+        menuRepository.deleteById(id);
     }
+
 
     public void updateMenu(Menu menu) {
         MenuNode menuNode = toDb(menu);

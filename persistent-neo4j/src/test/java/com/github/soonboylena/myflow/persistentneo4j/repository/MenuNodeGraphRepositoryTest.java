@@ -19,7 +19,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
     private MenuNode testObject;
 
-//    @Before
+        @Before
     public void save() {
 
         MenuNode menuNode11 = new MenuNode();
@@ -74,7 +74,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
     @Test
     public void query() {
-        MenuNode one = repository.findOne(testObject.getId());
+        MenuNode one = repository.findById(testObject.getId()).orElseThrow(RuntimeException::new);
         Assert.assertEquals("确认id相同", one.getId(), testObject.getId());
         print(one, "找到的数据");
 //        repository.delete(one);
@@ -92,7 +92,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         expresses.add("p11");
         expresses.add("p111");
 
-        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress(expresses);
+        List<MenuNode> menuTreesByExpress = repository.findMenuByExpress(expresses);
 //        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress("p11");
         print(menuTreesByExpress, "测试根据权限取菜单");
     }

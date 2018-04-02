@@ -39,7 +39,7 @@ public class AuthorityGraphRepositoryTest extends NeoBaseTest {
 
     @Test
     public void query() {
-        AuthorityEntity one = repository.findOne(testObject.getId());
+        AuthorityEntity one = repository.findById(testObject.getId()).orElseThrow(RuntimeException::new);
         Assert.assertEquals("确认id相同", one.getId(), testObject.getId());
         print(one, "找到的数据");
 //        repository.delete(one);
@@ -64,7 +64,7 @@ public class AuthorityGraphRepositoryTest extends NeoBaseTest {
     public void findPermissionByRoleId() {
         List<AuthorityEntity> permissionByRoleId = repository.findPermissionByRoleId(testObject.getId());
         repository.delete(testObject);
-        Assert.assertEquals(2,permissionByRoleId.size());
+        Assert.assertEquals(2, permissionByRoleId.size());
 
 
     }

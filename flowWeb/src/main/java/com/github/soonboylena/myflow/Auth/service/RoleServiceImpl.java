@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -67,8 +68,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role findRoleById(Long id) {
-        AuthorityEntity one = repository.findOne(id);
-        return fromDb(one);
+        Optional<AuthorityEntity> byId = repository.findById(id);
+        if (!byId.isPresent()) return null;
+        return fromDb(byId.get());
     }
 
     private AuthorityEntity toDb(Role role) {

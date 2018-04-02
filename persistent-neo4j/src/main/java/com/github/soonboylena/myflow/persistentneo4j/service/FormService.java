@@ -1,9 +1,9 @@
 package com.github.soonboylena.myflow.persistentneo4j.service;
 
-import com.github.soonboylena.myflow.entity.core.*;
+import com.github.soonboylena.myflow.entity.core.FieldEntity;
+import com.github.soonboylena.myflow.entity.core.IEntity;
+import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.persistentneo4j.dao.CQLTemplate;
-import com.github.soonboylena.myflow.persistentneo4j.dao.TransactDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.List;
 @Service
 public class FormService {
 
-    @Autowired
-    private TransactDao dao;
+//    @Autowired
+//    private TransactDao dao;
 
     public void save(List<IEntity> entityList) {
 
@@ -44,7 +44,7 @@ public class FormService {
         }
 
         if (!templates.isEmpty()) {
-            dao.execute(templates);
+//            dao.execute(templates);
         }
     }
 }

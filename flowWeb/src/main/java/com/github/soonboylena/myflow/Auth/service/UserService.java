@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public LoginInfoEntity findUserById(Long id) {
-        return loginInfoRepository.findOne(id);
+        return loginInfoRepository.findById(id).orElseGet(null);
     }
 
     public LoginInfoEntity saveUser(LoginInfoEntity user) {

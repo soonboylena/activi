@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +38,13 @@ public class MenuNode extends BaseModel {
     private AuthorityEntity authorityEntity;
 
     @Relationship(type = "sub")
-    private List<MenuNode> children = new ArrayList<>();
+    private List<MenuNode> subNode = new ArrayList<>();
 
     public MenuNode() {
     }
 
     public void addSubNode(MenuNode node) {
-        children.add(node);
+        subNode.add(node);
         // TODO: 应该存id？
         node.setParentKey(this.getCurrentKey());
     }
