@@ -71,14 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("1")).roles("admin");
+                .withUser("user").password(passwordEncoder().encode("1")).authorities("menu-system-user", "menu-system-auth");
     }
 
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
-                "/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",
                 "/configuration/security",

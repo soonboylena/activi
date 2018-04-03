@@ -37,6 +37,11 @@ public class AuthorityEntity extends BaseModel {
     @Relationship(type = "include")
     private Set<AuthorityEntity> authorities = new HashSet<>();
 
+    public AuthorityEntity(String title, String express) {
+        this.title = title;
+        this.express = express;
+    }
+
     public void addAuthority(AuthorityEntity entity) {
         authorities.add(entity);
     }

@@ -1,6 +1,5 @@
 package com.github.soonboylena.myflow.persistentneo4j.entity;
 
-import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Labels;
 import org.neo4j.ogm.annotation.NodeEntity;
 
@@ -17,9 +16,17 @@ public abstract class BaseModel implements Serializable {
 
     private Long id;
 
+    private String title;
+
     @Labels
     private Set<String> labels = new HashSet<>();
 
+    public BaseModel() {
+    }
+
+    public BaseModel(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -35,5 +42,13 @@ public abstract class BaseModel implements Serializable {
 
     public void setLabels(Set<String> labels) {
         this.labels = labels;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

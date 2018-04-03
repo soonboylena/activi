@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.persistentneo4j.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -19,33 +20,29 @@ public class MenuNode extends BaseModel {
 
     private int menuOrder = 0;
 
+    @Index(unique = true)
     private String currentKey;
 
     private String title;
 
     private String icon;
 
-    private String description;
-
     private String parentKey;
 
     private String url;
 
-    private String picUrl;
+//    @Relationship(type = "sub")
+//    private List<MenuNode> subNode = new ArrayList<>();
 
-    private int flag;
-
-    private AuthorityEntity authorityEntity;
-
-    @Relationship(type = "sub")
-    private List<MenuNode> subNode = new ArrayList<>();
+    @Relationship
+    private List<MenuItem> items = new ArrayList<>();
 
     public MenuNode() {
     }
 
-    public void addSubNode(MenuNode node) {
-        subNode.add(node);
+    public void addItem(MenuItem item) {
+        items.add(item);
         // TODO: 应该存id？
-        node.setParentKey(this.getCurrentKey());
+        item.setParentKey(this.getCurrentKey());
     }
 }
