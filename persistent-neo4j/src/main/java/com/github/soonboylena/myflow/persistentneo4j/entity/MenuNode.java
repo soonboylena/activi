@@ -31,18 +31,23 @@ public class MenuNode extends BaseModel {
 
     private String url;
 
-//    @Relationship(type = "sub")
-//    private List<MenuNode> subNode = new ArrayList<>();
+    @Relationship
+    private List<MenuNode> items = new ArrayList<>();
 
     @Relationship
-    private List<MenuItem> items = new ArrayList<>();
+    private AuthorityEntity authorityEntity;
 
     public MenuNode() {
     }
 
-    public void addItem(MenuItem item) {
+    public MenuNode(String currentKey, String parentKey, String title) {
+        this.currentKey = currentKey;
+        this.parentKey = parentKey;
+        this.title = title;
+    }
+
+    public void addItem(MenuNode item) {
         items.add(item);
-        // TODO: 应该存id？
         item.setParentKey(this.getCurrentKey());
     }
 }

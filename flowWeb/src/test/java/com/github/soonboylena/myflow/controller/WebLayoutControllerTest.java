@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.controller;
 
+import com.github.soonboylena.myflow.support.UrlManager;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -10,9 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class WebLayoutControllerTest extends ControllerTest {
 
+
     @Test
     public void init() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/page/init/{formKey}", "form1"))
+//        MvcResult mvcResult = mockMvc.perform(get("/api/page/init/{formKey}", "custom"))
+        MvcResult mvcResult = mockMvc.perform(get(UrlManager.pageInit("custom").asUrlString()))
                 .andExpect(status().isOk())
                 .andReturn();
         print(mvcResult, "init");
@@ -21,7 +24,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     @Test
     public void layout() throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(get("/page/layout/{formKey}", "form1"))
+        MvcResult mvcResult = mockMvc.perform(get(UrlManager.layout("custom").asUrlString()))
                 .andExpect(status().isOk())
                 .andReturn();
         print(mvcResult, "layout");
@@ -32,7 +35,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     public void createData() throws Exception {
         MvcResult mvcResult = mockMvc.perform
                 (
-                        put("/page/data/{formKey}", "form1")
+                        put(UrlManager.submit().asUrlString())
                                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                                 .content(readJsonAndReplace("form1.json"))
                 )

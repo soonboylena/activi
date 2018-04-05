@@ -1,19 +1,17 @@
 <root>
     <items>
-        <item key="item1" name="field1" caption="字段1" description="字段1" type="string"/>
-        <item key="item2" name="field2" caption="字段2" description="字段2" type="string"/>
-        <item key="item3" name="field3" caption="字段3" description="字段3" type="string"/>
-        <item key="item4" name="field4" caption="字段4" description="字段4" type="string"/>
+        <item key="customName" name="custom" caption="客户名称" description="客户名称" type="string"/>
+        <item key="customType" caption="客户分类" description="客户分类" type="select">
+            <option key="a">分类1</option>
+            <option key="b">分类2</option>
+            <option key="c">分类3</option>
+        </item>
     </items>
     <forms>
-        <form key="form1" caption="表单1">
-            <field ref="item1"/>
-            <field ref="item2" readonly="true"/>
-            <field ref="item3" required="true"/>
-        </form>
-        <form key="form2">
-            <field ref="item3"/>
-            <field ref="item4"/>
+        <form key="customer" caption="用户">
+            <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
+            <field ref="customName" required="true" isBussinessName="true"/>
+            <field ref="customType"/>
         </form>
     </forms>
     <transfers>

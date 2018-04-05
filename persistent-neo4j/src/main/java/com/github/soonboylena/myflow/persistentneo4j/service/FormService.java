@@ -1,50 +1,76 @@
 package com.github.soonboylena.myflow.persistentneo4j.service;
 
-import com.github.soonboylena.myflow.entity.core.FieldEntity;
-import com.github.soonboylena.myflow.entity.core.IEntity;
-import com.github.soonboylena.myflow.entity.core.IMeta;
-import com.github.soonboylena.myflow.persistentneo4j.dao.CQLTemplate;
+import com.github.soonboylena.myflow.entity.core.*;
+import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
+import com.github.soonboylena.myflow.persistentneo4j.repository.FormGraphRepository;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FormService {
 
-//    @Autowired
-//    private TransactDao dao;
+    @Autowired
+    private FormGraphRepository repository;
 
-    public void save(List<IEntity> entityList) {
+    public Iterable<DynamicEntity> save(List<IEntity> entityList) {
 
-
-        List<CQLTemplate> templates = new ArrayList<>();
+        List<DynamicEntity> dynamicEntities = new ArrayList<>();
         for (IEntity iEntity : entityList) {
+            DynamicEntity entity = resolve(iEntity);
+            dynamicEntities.add(entity);
+        }
+        Iterable<DynamicEntity> save = repository.saveAll(dynamicEntities);
+        return save;
+    }
 
-            IMeta entityMeta = iEntity.getMeta();
-            Object data = iEntity.getData();
+    private DynamicEntity resolve(IEntity iEntity) {
 
-            CQLTemplate template = CQLTemplate.create(entityMeta.getKey());
 
-            if (data instanceof List<?>) {
-                List entities = (List) data;
-                for (Object entity : entities) {
-                    if (entity instanceof FieldEntity) {
-                        FieldEntity<?> fe = (FieldEntity<?>) entity;
-                        template.property(fe.getMeta().getKey(), fe.getData());
-                    } else {
-                        throw new RuntimeException("类型不对");
-                    }
+        if (iEntity instanceof FormEntity) {
+            FormEntity _entity = (FormEntity) iEntity;
+
+            MetaForm meta = _entity.getMeta();
+            List<IEntity> data = _entity.getData();
+
+            Optional<String> businessName = findBusinessName(meta, data);
+
+            DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
+
+            for (IEntity datum : data) {
+                if (datum instanceof FieldEntity) {
+                    FieldEntity<?> f = (FieldEntity<?>) datum;
+                    IMeta fieldMeta = f.getMeta();
+                    dynamic.addProperty(fieldMeta.getKey(), f.getData());
+                } else {
+                    throw new RuntimeException("不是fieldEntity类型: " + data.getClass().getName());
                 }
-            } else {
-                throw new RuntimeException("类型不对2");
             }
 
-            templates.add(template);
+            return dynamic;
         }
 
-        if (!templates.isEmpty()) {
-//            dao.execute(templates);
+        throw new RuntimeException("不是FormEntity类型: " + iEntity.getClass().getName());
+
+    }
+
+    private Optional<String> findBusinessName(MetaForm meta, List<IEntity> data) {
+        if (data == null) return Optional.empty();
+        Map<String, IEntity> collect = data.stream().collect(Collectors.toMap(e -> e.getMeta().getKey(), e -> e));
+
+        String businessKey = meta.getBusinessKey();
+        if (StringUtils.isNotBlank(businessKey)) {
+            IEntity iEntity = collect.get(businessKey);
+            if (iEntity != null) {
+                return Optional.of((String) iEntity.getData());
+            }
         }
+        return Optional.empty();
     }
 }

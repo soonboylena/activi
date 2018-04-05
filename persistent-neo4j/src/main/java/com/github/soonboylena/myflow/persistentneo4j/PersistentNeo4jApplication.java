@@ -1,7 +1,6 @@
 package com.github.soonboylena.myflow.persistentneo4j;
 
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication

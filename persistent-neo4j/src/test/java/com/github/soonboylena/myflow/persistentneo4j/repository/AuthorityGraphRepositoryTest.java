@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.persistentneo4j.repository;
 
 import com.github.soonboylena.myflow.persistentneo4j.NeoBaseTest;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,15 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class AuthorityGraphRepositoryTest extends NeoBaseTest {
 
     @Autowired
     AuthorityGraphRepository repository;
 
+    @Autowired
+    LoginInfoGraphRepository loginInfoGraphRepository;
+
     private AuthorityEntity testObject;
 
-    @Before
     public void save() {
         AuthorityEntity role = new AuthorityEntity("ROLE_role");
         role.setDescription("测试1");
@@ -39,14 +43,16 @@ public class AuthorityGraphRepositoryTest extends NeoBaseTest {
 
     @Test
     public void query() {
+        save();
         AuthorityEntity one = repository.findById(testObject.getId()).orElseThrow(RuntimeException::new);
         Assert.assertEquals("确认id相同", one.getId(), testObject.getId());
         print(one, "找到的数据");
-//        repository.delete(one);
+        repository.delete(one);
     }
 
     @Test
     public void remove() {
+        save();
         Assert.assertNotNull(testObject);
         repository.delete(testObject);
     }
@@ -62,9 +68,40 @@ public class AuthorityGraphRepositoryTest extends NeoBaseTest {
 
     @Test
     public void findPermissionByRoleId() {
+        save();
         List<AuthorityEntity> permissionByRoleId = repository.findPermissionByRoleId(testObject.getId());
         repository.delete(testObject);
         Assert.assertEquals(2, permissionByRoleId.size());
+    }
+
+    /**
+     * 测试某人权限和角色
+     */
+    @Test
+    public void getSomebodyRolePermission() {
+
+
+        // 用户张三
+        LoginInfoEntity userZhang3 = new LoginInfoEntity();
+        userZhang3.setUsername("zhang3");
+        userZhang3.setTitle("张三");
+
+        // 权限1
+        AuthorityEntity per1 = new AuthorityEntity("张权1", "zhangPer1");
+        AuthorityEntity per2 = new AuthorityEntity("张权2", "zhangPer2");
+        AuthorityEntity role = new AuthorityEntity("张角1", "ROLE_zhangRole");
+        role.addAuthority(per1, per2);
+        AuthorityEntity per9 = new AuthorityEntity("张权2", "zhangPer9");
+
+        userZhang3.addAuthority(role, per9);
+        LoginInfoEntity save = loginInfoGraphRepository.save(userZhang3);
+
+        Long id = save.getId();
+        Optional<LoginInfoEntity> byId = loginInfoGraphRepository.findById(id, 3);
+
+        Assert.assertTrue(byId.isPresent());
+
+        print(byId.get(), "查找张三");
 
 
     }

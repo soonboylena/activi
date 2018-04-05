@@ -2,7 +2,6 @@ package com.github.soonboylena.myflow.service;
 
 import com.github.soonboylena.myflow.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
-import com.github.soonboylena.myflow.entity.core.FormEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import org.slf4j.Logger;
@@ -36,7 +35,7 @@ public class WebFormService {
         }
 
 
-//        FormEntity formEntity = new FormEntity(metaForm);
+//        DynamicEntity formEntity = new DynamicEntity(metaForm);
 //        formEntity.sorting(map);
 
         IEntity read = converterManager.read(metaForm, map);

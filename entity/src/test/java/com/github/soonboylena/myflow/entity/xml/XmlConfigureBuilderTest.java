@@ -2,7 +2,7 @@ package com.github.soonboylena.myflow.entity.xml;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.XmlConfigureBuilder;
+import com.github.soonboylena.myflow.entity.config.builder.xml.XmlConfigureBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

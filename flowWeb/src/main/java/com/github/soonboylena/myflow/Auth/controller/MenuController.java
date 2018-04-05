@@ -32,16 +32,16 @@ public class MenuController {
         }
     }
 
-    @PostMapping("/add/{pId}")
-    public Message<Boolean> addMenu(@RequestBody Menu menu, @PathVariable("pId") Long pId) {
-        Assert.hasText(menu.getCode(), "菜单的key值不能为空");
-        Menu saved = menuService.addMenu(pId, menu);
-        if (saved != null) {
-            return new Message<>("添加成功", true);
-        } else {
-            return new Message<>("添加失败", false);
-        }
-    }
+//    @PostMapping("/add/{pId}")
+//    public Message<Boolean> addMenu(@RequestBody Menu menu, @PathVariable("pId") Long pId) {
+//        Assert.hasText(menu.getCode(), "菜单的key值不能为空");
+//        Menu saved = menuService.addMenu(pId, menu);
+//        if (saved != null) {
+//            return new Message<>("添加成功", true);
+//        } else {
+//            return new Message<>("添加失败", false);
+//        }
+//    }
 
     @PostMapping("/update")
     public Message<Boolean> editMenu(@RequestBody Menu menu) {
@@ -59,5 +59,12 @@ public class MenuController {
     public Message<Boolean> deleteMenu(@PathVariable long id) {
         menuService.deleteMenu(id);
         return new Message<>("删除成功", true);
+    }
+
+    @PostMapping
+    public Message<Boolean> update(@RequestBody Menu menu) {
+//        System.out.println(menu);
+        menuService.updateMenu(menu);
+        return new Message<>("更新成功", true);
     }
 }

@@ -34,8 +34,7 @@ public class WebLayoutController {
     @GetMapping("init/{formKey}")
     public UrlSection init(@PathVariable("formKey") String formKey) {
 
-        UrlSection section = new UrlSection(UrlManager.layout(formKey));
-        return section;
+        return new UrlSection(UrlManager.layout(formKey));
     }
 
     @GetMapping("layout/{formKey}")

@@ -42,8 +42,8 @@ public class AuthorityEntity extends BaseModel {
         this.express = express;
     }
 
-    public void addAuthority(AuthorityEntity entity) {
-        authorities.add(entity);
+    public void addAuthority(AuthorityEntity... entities) {
+        Collections.addAll(authorities, entities);
     }
 
 
@@ -67,4 +67,5 @@ public class AuthorityEntity extends BaseModel {
     public void setExpress(String express) {
         this.express = express;
     }
+
 }

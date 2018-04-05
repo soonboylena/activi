@@ -60,11 +60,11 @@ public class UserController {
 
     @PostMapping("/user/add")
     public Message addUser(@RequestBody LoginInfoEntity user) {
-        Assert.notNull(user.getNickName(), "昵称不能为空");
+        Assert.notNull(user.getTitle(), "昵称不能为空");
         Assert.notNull(user.getUsername(), "用户名不能为空");
-        user.setNickName(user.getNickName().trim());
+        user.setTitle(user.getTitle().trim());
         user.setUsername(user.getUsername().trim());
-        Assert.hasText(user.getNickName(), "昵称不能为空白字符");
+        Assert.hasText(user.getTitle(), "昵称不能为空白字符");
         Assert.hasText(user.getUsername(), "用户名不能为空白字符");
         userService.saveUser(user);
         return new Message(200, "添加成功");

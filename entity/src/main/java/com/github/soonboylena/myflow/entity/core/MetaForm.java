@@ -9,9 +9,14 @@ import lombok.EqualsAndHashCode;
 public class MetaForm extends MetaCollection<MetaField> {
 
     private String caption;
+    private String businessKey;
 
     @Override
     public String getCaption() {
         return caption;
+    }
+
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
     }
 }

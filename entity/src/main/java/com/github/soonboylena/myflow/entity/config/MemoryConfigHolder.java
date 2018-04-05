@@ -2,7 +2,7 @@ package com.github.soonboylena.myflow.entity.config;
 
 import com.github.soonboylena.myflow.entity.exceptions.KeyDuplicateException;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
-import com.github.soonboylena.myflow.entity.core.MetaItem;
+import com.github.soonboylena.myflow.entity.core.AbstractMetaItem;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -12,15 +12,15 @@ import java.util.Map;
 @Data
 public class MemoryConfigHolder implements ConfigureHolder {
 
-    private Map<String, MetaItem> metaItems = new HashMap<>();
+    private Map<String, AbstractMetaItem> metaItems = new HashMap<>();
     private Map<String, MetaForm> metaForms = new HashMap<>();
 
-    public void addMetaItems(List<MetaItem> metaItems) {
+    public void addMetaItems(List<AbstractMetaItem> metaItems) {
         if (metaItems == null) {
             return;
         }
 
-        for (MetaItem metaItem : metaItems) {
+        for (AbstractMetaItem metaItem : metaItems) {
 
             if (this.metaItems.get(metaItem.getKey()) != null) {
                 throw new KeyDuplicateException("items.item", metaItem.getKey());
@@ -30,7 +30,7 @@ public class MemoryConfigHolder implements ConfigureHolder {
 
     }
 
-    public MetaItem getMetaItem(String key) {
+    public AbstractMetaItem getMetaItem(String key) {
         return metaItems.get(key);
     }
 

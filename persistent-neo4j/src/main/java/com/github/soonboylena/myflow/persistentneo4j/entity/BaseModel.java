@@ -5,13 +5,13 @@ import org.neo4j.ogm.annotation.NodeEntity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * @author lungern xiii.at.cn@gmail.com
  * @date 2018/2/2
  */
-@NodeEntity
 public abstract class BaseModel implements Serializable {
 
     private Long id;
@@ -50,5 +50,19 @@ public abstract class BaseModel implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseModel baseModel = (BaseModel) o;
+        return Objects.equals(id, baseModel.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

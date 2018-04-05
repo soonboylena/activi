@@ -1,13 +1,11 @@
 package com.github.soonboylena.myflow.Auth.bean;
 
-import lombok.Data;
+import java.util.List;
 
-@Data
-public class Role {
+public class Role extends Permission {
+    private List<Permission> children;
 
-    private String express;
-    private long id;
-    private String description;
-    private String title;
-
+    public boolean isRole() {
+        return true;
+    }
 }

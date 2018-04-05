@@ -2,12 +2,12 @@
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
 
+.mvn/
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -91,3 +91,6 @@ mvnw.cmd
 将删除 persistent-neo4j/src/test/java/com/github/soonboylena/myflow/
 *.iml
 .idea/
+/flowWeb/.mvn/
+将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/Auth/jpa/
+将删除 flowWeb/src/main/resources/entityXml/

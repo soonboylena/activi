@@ -10,12 +10,17 @@ import com.github.soonboylena.myflow.entity.core.IMetaInput;
 import com.github.soonboylena.myflow.entity.core.MetaField;
 
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class AbstractInputConverter implements UIConverter {
 
     @Override
     public boolean support(IMeta metaItem) {
-        return metaItem instanceof IMetaInput;
+        if (metaItem instanceof MetaField) {
+            MetaField field = (MetaField) metaItem;
+            return Objects.equals(field.getType(), getType().literal());
+        }
+        return false;
     }
 
     @Override

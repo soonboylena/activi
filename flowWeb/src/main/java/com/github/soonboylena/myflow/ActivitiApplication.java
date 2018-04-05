@@ -2,7 +2,7 @@ package com.github.soonboylena.myflow;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.XmlConfigureBuilder;
+import com.github.soonboylena.myflow.entity.config.builder.xml.XmlConfigureBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

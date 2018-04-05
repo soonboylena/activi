@@ -19,15 +19,6 @@ public class StringInputConverter extends AbstractInputConverter {
     private final static Logger logger = LoggerFactory.getLogger(StringInputConverter.class);
 
     @Override
-    public boolean support(IMeta metaItem) {
-        if (metaItem instanceof MetaField) {
-            MetaField field = (MetaField) metaItem;
-            return Objects.equals(field.getType(), type.literal());
-        }
-        return false;
-    }
-
-    @Override
     public IEntity read(IMeta meta, Object data) {
         if (data != null && !(data instanceof String)) {
             throw new IllegalArgumentException("类型不匹配。期望：String 实际：" + data.getClass().getName());

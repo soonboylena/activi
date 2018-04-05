@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class MetaField implements IMetaInput {
 
-    private MetaItem metaItem;
+    private AbstractMetaItem metaItem;
     private boolean readOnly = false;
     private boolean required = false;
 
     private String caption;
     private int sort = 0;
 
-    public MetaField(MetaItem metaItem) {
+    public MetaField(AbstractMetaItem metaItem) {
         this.metaItem = metaItem;
     }
 

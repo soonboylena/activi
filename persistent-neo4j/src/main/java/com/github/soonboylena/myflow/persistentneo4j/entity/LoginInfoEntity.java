@@ -5,15 +5,16 @@ import lombok.Setter;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NodeEntity
 @Getter
 @Setter
 public class LoginInfoEntity extends BaseModel {
 
-    private String nickName;
 
     private String username;
 
@@ -30,7 +31,7 @@ public class LoginInfoEntity extends BaseModel {
     // 密码未超期
     private boolean credentialsNonExpired;
 
-    @Relationship(type = "has", direction = Relationship.INCOMING)
+    @Relationship(type = "has")
     private Set<AuthorityEntity> authorities = new HashSet<>();
 
 
@@ -59,4 +60,7 @@ public class LoginInfoEntity extends BaseModel {
     }
 
 
+    public void addAuthority(AuthorityEntity... newAuths) {
+        Collections.addAll(authorities, newAuths);
+    }
 }

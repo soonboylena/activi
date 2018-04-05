@@ -6,13 +6,8 @@ import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.Column;
 import com.github.soonboylena.myflow.vModel.uiComponent.Form;
 import com.github.soonboylena.myflow.vModel.uiComponent.Row;
-import com.github.soonboylena.myflow.vModel.uiComponent.Section;
 import com.github.soonboylena.myflow.entity.core.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.*;
 
 public class FormConverter implements UIConverter {

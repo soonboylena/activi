@@ -2,10 +2,8 @@ package com.github.soonboylena.myflow.persistentneo4j.repository;
 
 import com.github.soonboylena.myflow.persistentneo4j.NeoBaseTest;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
-import com.github.soonboylena.myflow.persistentneo4j.entity.MenuItem;
 import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +18,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
     private MenuNode testObject;
 
-//    @Before
+    //    @Before
     public void save() {
 
 //        MenuNode menuNode11 = new MenuNode();
@@ -71,13 +69,13 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         node.setTitle("系统设置");
         node.setCurrentKey("systemSetting");
 
-        MenuItem userItem = new MenuItem("user", node.getCurrentKey(), "用户管理");
+        MenuNode userItem = new MenuNode("user", node.getCurrentKey(), "用户管理");
         userItem.setIcon("person-stalker");
         userItem.setUrl("?at=/layoutContent/systemSetting/user");
         userItem.setAuthorityEntity(new AuthorityEntity("用户管理权限", "menu-system-user"));
         node.addItem(userItem);
 
-        MenuItem authItem = new MenuItem("auth", node.getCurrentKey(), "权限管理");
+        MenuNode authItem = new MenuNode("auth", node.getCurrentKey(), "权限管理");
         authItem.setIcon("ios-toggle-outline");
         authItem.setUrl("?at=/layoutContent/systemSetting/auth");
         authItem.setAuthorityEntity(new AuthorityEntity("权限管理菜单权限", "menu-system-auth"));
@@ -87,11 +85,23 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         MenuNode save = repository.save(node);
         testObject = save;
 
+        MenuNode customer = new MenuNode();
+        customer.setTitle("客户管理");
+        customer.setCurrentKey("customerManage");
+
+        MenuNode customerAdd = new MenuNode("user", node.getCurrentKey(), "添加客户");
+        customerAdd.setIcon("person-stalker");
+        customerAdd.setUrl("/api/page/init/customer?at=/layoutContent/customs/page");
+        customerAdd.setAuthorityEntity(new AuthorityEntity("添加客户权限", "menu-customer-add"));
+        customer.addItem(customerAdd);
+        repository.save(customer);
+
         print(save, "新提交的一条数据");
     }
 
     @Test
     public void query() {
+        save();
         MenuNode one = repository.findById(testObject.getId()).orElseThrow(RuntimeException::new);
         Assert.assertEquals("确认id相同", one.getId(), testObject.getId());
         print(one, "找到的数据");

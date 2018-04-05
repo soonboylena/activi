@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.component.layout;
 
 import com.github.soonboylena.myflow.component.layout.converter.FormConverter;
+import com.github.soonboylena.myflow.component.layout.converter.SelectOneConverter;
 import com.github.soonboylena.myflow.component.layout.converter.StringInputConverter;
 import com.github.soonboylena.myflow.component.layout.converter.UIConverter;
 import com.github.soonboylena.myflow.vModel.UiObject;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 维护一组converter。这些convert负责将底层基础实体与表示层的模型进行转换
@@ -25,6 +25,7 @@ public class ConverterManager {
     public void setDefaultConvert() {
         converterList.add(new FormConverter(this));
         converterList.add(new StringInputConverter());
+        converterList.add(new SelectOneConverter());
     }
 
     /**

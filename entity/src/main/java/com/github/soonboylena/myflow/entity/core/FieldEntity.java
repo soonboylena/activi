@@ -11,7 +11,7 @@ public class FieldEntity<D> implements IEntity {
     }
 
     @Override
-    public IMeta getMeta() {
+    public MetaField getMeta() {
         return metaField;
     }
 

@@ -2,7 +2,8 @@ package com.github.soonboylena.myflow.support;
 
 public enum WebItemType {
 
-    StringType("string", "nInput");
+    StringType("string", "nInput"),
+    SelectType("select", "nSelect");
 
     private String literal;
     private String webType;

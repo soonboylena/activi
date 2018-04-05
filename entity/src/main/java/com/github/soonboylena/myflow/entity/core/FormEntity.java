@@ -12,7 +12,7 @@ public class FormEntity implements IEntity {
     private final static Logger logger = LoggerFactory.getLogger(FormEntity.class);
 
     private MetaForm metaCollection;
-    private List<Object> datas;
+    private List<IEntity> datas;
 
     public FormEntity(MetaForm metaForm) {
         this.metaCollection = metaForm;
@@ -20,12 +20,12 @@ public class FormEntity implements IEntity {
     }
 
     @Override
-    public IMeta getMeta() {
+    public MetaForm getMeta() {
         return metaCollection;
     }
 
     @Override
-    public List<Object> getData() {
+    public List<IEntity> getData() {
         return datas;
     }
 
