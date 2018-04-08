@@ -35,7 +35,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     public void createData() throws Exception {
         MvcResult mvcResult = mockMvc.perform
                 (
-                        put(UrlManager.submit().asUrlString())
+                        put(UrlManager.submit("customer").asUrlString())
                                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                                 .content(readJsonAndReplace("form1.json"))
                 )

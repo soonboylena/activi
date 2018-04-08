@@ -10,6 +10,7 @@ public class MetaField implements IMetaInput {
     private boolean required = false;
 
     private String caption;
+    private String description;
     private int sort = 0;
 
     public MetaField(AbstractMetaItem metaItem) {
@@ -25,7 +26,7 @@ public class MetaField implements IMetaInput {
     }
 
     public String getDescription() {
-        return getMetaItem().getDescription();
+        return this.description == null ? getMetaItem().getDescription() : this.description;
     }
 
     public String getType() {
@@ -41,7 +42,7 @@ public class MetaField implements IMetaInput {
     }
 
     public void setDescription(String description) {
-        getMetaItem().setDescription(description);
+        this.description = description;
     }
 
     public void setType(String type) {

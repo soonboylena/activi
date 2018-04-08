@@ -1,9 +1,6 @@
 package com.github.soonboylena.myflow.component.layout.converter;
 
-import com.github.soonboylena.myflow.entity.core.FieldEntity;
-import com.github.soonboylena.myflow.entity.core.IEntity;
-import com.github.soonboylena.myflow.entity.core.IMeta;
-import com.github.soonboylena.myflow.entity.core.MetaField;
+import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.support.WebItemType;
 
 import java.util.Collections;
@@ -14,8 +11,9 @@ public class SelectOneConverter extends AbstractInputConverter {
     private final static WebItemType type = WebItemType.SelectType;
 
     @Override
-    protected Map<String, Object> attach() {
-        return Collections.emptyMap();
+    protected Map<String, Object> attach(MetaField metaInput) {
+        MetaItemSelect metaItem = (MetaItemSelect) metaInput.getMetaItem();
+        return Collections.singletonMap("options", metaItem.getOptions());
     }
 
     @Override

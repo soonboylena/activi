@@ -28,6 +28,7 @@ public class FormConverter implements UIConverter {
 
     private List<RowBreaker> breakers = new ArrayList<>();
 
+
     public FormConverter(ConverterManager converterManager) {
         this.converterManager = converterManager;
     }
@@ -67,6 +68,11 @@ public class FormConverter implements UIConverter {
                 cursor = 0;
                 currentRow = new Row();
                 s.addContent(currentRow);
+            }
+
+            // 如果是form的代表字段，强行设置为必须输入
+            if (metaField.getKey().equalsIgnoreCase(metaForm.getBusinessKey())) {
+                metaField.setRequired(true);
             }
 
             currentRow.addContent(swapWithCol(metaField, cursor, span));

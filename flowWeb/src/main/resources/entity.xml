@@ -6,6 +6,11 @@
             <option key="b">分类2</option>
             <option key="c">分类3</option>
         </item>
+
+        <!--公司信息-->
+        <item key="companyName" caption="客户名称" description="客户名称" type="string"/>
+        <!--联系人信息-->
+        <item key="contactName" caption="联系人姓名" description="联系人姓名" type="string"/>
     </items>
     <forms>
         <form key="customer" caption="用户">
@@ -13,6 +18,18 @@
             <field ref="customName" required="true" isBussinessName="true"/>
             <field ref="customType"/>
         </form>
+
+        <form key="company" caption="公司">
+            <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
+            <field ref="companyName" required="true" isBussinessName="true"/>
+        </form>
+        <view key="customer2" caption="完整用户信息">
+            <!--form支持ref这种，也支持直接定义-->
+            <form ref="company"/>
+            <form key="contact" caption="联系人信息">
+                <field ref="contactName" required="true" isBussinessName="true"/>
+            </form>
+        </view>
     </forms>
     <transfers>
         <transfer from="form1" to="form2">

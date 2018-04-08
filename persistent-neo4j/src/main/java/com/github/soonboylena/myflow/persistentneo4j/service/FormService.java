@@ -26,8 +26,7 @@ public class FormService {
             DynamicEntity entity = resolve(iEntity);
             dynamicEntities.add(entity);
         }
-        Iterable<DynamicEntity> save = repository.saveAll(dynamicEntities);
-        return save;
+        return repository.saveAll(dynamicEntities);
     }
 
     private DynamicEntity resolve(IEntity iEntity) {
@@ -60,6 +59,13 @@ public class FormService {
 
     }
 
+    /**
+     * 查找可以代表form的代表字段的值；比如form是描述一个人的，这里通常会返回这个人的姓名
+     *
+     * @param meta
+     * @param data
+     * @return
+     */
     private Optional<String> findBusinessName(MetaForm meta, List<IEntity> data) {
         if (data == null) return Optional.empty();
         Map<String, IEntity> collect = data.stream().collect(Collectors.toMap(e -> e.getMeta().getKey(), e -> e));
@@ -68,7 +74,7 @@ public class FormService {
         if (StringUtils.isNotBlank(businessKey)) {
             IEntity iEntity = collect.get(businessKey);
             if (iEntity != null) {
-                return Optional.of((String) iEntity.getData());
+                return Optional.ofNullable((String) iEntity.getData());
             }
         }
         return Optional.empty();

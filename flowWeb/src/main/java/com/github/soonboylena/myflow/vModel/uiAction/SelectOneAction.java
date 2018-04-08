@@ -20,7 +20,8 @@ import java.util.List;
 @Data
 public class SelectOneAction extends LinkAction {
 
-    private ClientActionType type = ClientActionType.selectOne;
+    private final static ClientActionType type = ClientActionType.selectOne;
+
     private String message;
     private List<Button> buttons = new ArrayList<>(5);
 }

@@ -6,6 +6,7 @@ import com.github.soonboylena.myflow.entity.config.builder.InputItemBuilder;
 import com.github.soonboylena.myflow.entity.core.MetaField;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.entity.core.AbstractMetaItem;
+import com.github.soonboylena.myflow.entity.core.MetaView;
 import com.github.soonboylena.myflow.entity.exceptions.ConfigBuildException;
 import com.github.soonboylena.myflow.entity.support.XmlConfigureReader;
 import org.dom4j.Document;
@@ -57,18 +58,74 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         Element xmlForms = rootElement.element("forms");
         if (xmlForms != null) {
             List<Element> elements = xmlForms.elements("form");
-            List<MetaForm> forms = elements.stream().map(e -> readForm(e, holder.getMetaItems())).collect(Collectors.toList());
+            List<MetaForm> forms = elements.stream().map(e -> readForm(e, holder)).collect(Collectors.toList());
             holder.addMetaForms(forms);
         }
-
+        if (xmlForms != null) {
+            List<Element> elements = xmlForms.elements("view");
+            List<MetaView> forms = elements.stream().map(e -> readView(e, holder)).collect(Collectors.toList());
+            holder.addMetaViews(forms);
+        }
 
         return holder;
     }
 
-    private MetaForm readForm(Element formElement, Map<String, AbstractMetaItem> metaItems) {
+    /**
+     * forms节点下的第二种情况： view。view是有多个form的集合；
+     * view支持多个form
+     *
+     * @param viewElement xml元素
+     * @param holder      正在构建中的holder
+     * @return 构建后的MetaView
+     */
+    private MetaView readView(Element viewElement, MemoryConfigHolder holder) {
+
+        MetaView view = new MetaView();
+        view.setKey(viewElement.attributeValue("key"));
+        view.setCaption(viewElement.attributeValue("caption"));
+
+        logger.debug("处理view: {}, {}", view.getKey(), view.getCaption());
+        List forms = viewElement.elements("form");
+
+        logger.debug("view下定义了 {} 个form 节点", forms.size());
+
+        for (Object form : forms) {
+            Element xmlForm = (Element) form;
+            String ref = xmlForm.attributeValue("ref");
+            MetaForm metaForm;
+            if (ref != null) {
+                // 引用类型的form
+                metaForm = holder.getMetaForm(ref);
+                logger.debug(" 处理ref类型form 。ref：{}", ref);
+                if (metaForm == null) {
+                    throw new ConfigBuildException("没有找到ref: [\" + ref + \"]的指定的form。");
+                }
+            } else {
+                metaForm = readForm(xmlForm, holder);
+                logger.debug(" 读取定义类型form 。{},{}", metaForm.getKey(), metaForm.getCaption());
+            }
+
+            view.addMeta(metaForm);
+
+            String isBusinessName = xmlForm.attributeValue("isBusinessName");
+            // 设置view主form
+            if (Boolean.valueOf(isBusinessName)) {
+                view.setPrimaryFormKey(metaForm.getKey());
+            }
+        }
+
+        return view;
+    }
+
+    private MetaForm readForm(Element formElement, MemoryConfigHolder holder) {
+
+        Map<String, AbstractMetaItem> metaItems = holder.getMetaItems();
+
         MetaForm form = new MetaForm();
         form.setKey(formElement.attributeValue("key"));
         form.setCaption(formElement.attributeValue("caption"));
+
+        logger.debug("处理form: {}, {}", form.getKey(), form.getCaption());
 
         List fields = formElement.elements("field");
         for (Object field : fields) {
@@ -90,10 +147,15 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             String required = xmlField.attributeValue("required");
             Boolean bRequired = Boolean.valueOf(required);
             metaField.setRequired(bRequired);
+            // 覆盖值
+            String caption = xmlField.attributeValue("caption");
+            if (caption != null) {
+                metaField.setCaption(caption);
+            }
             // isBussinessName
-            String isBussinessName = xmlField.attributeValue("isBussinessName");
-            Boolean bBussinessName = Boolean.valueOf(isBussinessName);
-            if (bBussinessName) {
+            String isBusinessName = xmlField.attributeValue("isBusinessName");
+            Boolean bBusinessName = Boolean.valueOf(isBusinessName);
+            if (bBusinessName) {
                 form.setBusinessKey(metaField.getKey());
             }
 
