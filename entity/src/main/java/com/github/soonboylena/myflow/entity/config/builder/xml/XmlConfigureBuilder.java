@@ -110,7 +110,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             String isBusinessName = xmlForm.attributeValue("isBusinessName");
             // 设置view主form
             if (Boolean.valueOf(isBusinessName)) {
-                view.setPrimaryFormKey(metaForm.getKey());
+                view.setBusinessKey(metaForm.getKey());
             }
         }
 

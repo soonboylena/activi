@@ -19,44 +19,66 @@ public class FormService {
     @Autowired
     private FormGraphRepository repository;
 
-    public Iterable<DynamicEntity> save(List<IEntity> entityList) {
+    public DynamicEntity save(IEntity iEntity) {
 
-        List<DynamicEntity> dynamicEntities = new ArrayList<>();
-        for (IEntity iEntity : entityList) {
-            DynamicEntity entity = resolve(iEntity);
-            dynamicEntities.add(entity);
-        }
-        return repository.saveAll(dynamicEntities);
+        DynamicEntity entity = resolve(iEntity);
+        return repository.save(entity);
     }
 
+    /**
+     * 根据类型分类，走不同的插入流程
+     *
+     * @param iEntity
+     * @return
+     */
     private DynamicEntity resolve(IEntity iEntity) {
 
-
-        if (iEntity instanceof FormEntity) {
-            FormEntity _entity = (FormEntity) iEntity;
-
-            MetaForm meta = _entity.getMeta();
-            List<IEntity> data = _entity.getData();
-
-            Optional<String> businessName = findBusinessName(meta, data);
-
-            DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
-
-            for (IEntity datum : data) {
-                if (datum instanceof FieldEntity) {
-                    FieldEntity<?> f = (FieldEntity<?>) datum;
-                    IMeta fieldMeta = f.getMeta();
-                    dynamic.addProperty(fieldMeta.getKey(), f.getData());
-                } else {
-                    throw new RuntimeException("不是fieldEntity类型: " + data.getClass().getName());
-                }
-            }
-
-            return dynamic;
+        if (iEntity instanceof ViewEntity) {
+            ViewEntity view = (ViewEntity) iEntity;
+            return resolveAsView(view);
         }
 
-        throw new RuntimeException("不是FormEntity类型: " + iEntity.getClass().getName());
+        if (iEntity instanceof FormEntity) {
 
+            FormEntity form = (FormEntity) iEntity;
+            return resolveAsForm(form);
+        }
+
+        throw new RuntimeException("不是Entity类型: " + iEntity.getClass().getName());
+
+    }
+
+    private DynamicEntity resolveAsForm(FormEntity form) {
+
+        MetaForm meta = form.getMeta();
+        List<FieldEntity> data = form.getFieldEntities();
+        Optional<String> businessName = findBusinessName(meta, data);
+        DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
+        for (IEntity datum : data) {
+            FieldEntity<?> f = (FieldEntity<?>) datum;
+            IMeta fieldMeta = f.getMeta();
+            dynamic.addProperty(fieldMeta.getKey(), f.getData());
+        }
+        return dynamic;
+    }
+
+    private DynamicEntity resolveAsView(ViewEntity view) {
+
+        MetaView meta = view.getMeta();
+        List<FormEntity> data = view.getSubFormEntities();
+
+        Optional<String> businessName = findBusinessName(meta, data);
+        DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
+        for (IEntity datum : data) {
+            if (datum instanceof FieldEntity) {
+                FieldEntity<?> f = (FieldEntity<?>) datum;
+                IMeta fieldMeta = f.getMeta();
+                dynamic.addProperty(fieldMeta.getKey(), f.getData());
+            } else {
+                throw new RuntimeException("不是fieldEntity类型: " + data.getClass().getName());
+            }
+        }
+        return dynamic;
     }
 
     /**
@@ -66,7 +88,7 @@ public class FormService {
      * @param data
      * @return
      */
-    private Optional<String> findBusinessName(MetaForm meta, List<IEntity> data) {
+    private Optional<String> findBusinessName(MetaCollection meta, List<? extends IEntity> data) {
         if (data == null) return Optional.empty();
         Map<String, IEntity> collect = data.stream().collect(Collectors.toMap(e -> e.getMeta().getKey(), e -> e));
 

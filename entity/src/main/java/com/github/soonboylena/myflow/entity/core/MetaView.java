@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 public class MetaView extends MetaCollection<MetaForm> {
 
     private String caption;
-    private String primaryFormKey;
 
     @Override
     public String getCaption() {

@@ -9,7 +9,6 @@ import com.github.soonboylena.myflow.support.UrlManager;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiAction.AbstractAction;
 import com.github.soonboylena.myflow.vModel.uiAction.LinkAction;
-import com.github.soonboylena.myflow.vModel.uiAction.MessageAction;
 import com.github.soonboylena.myflow.vModel.uiAction.SubmitAction;
 import com.github.soonboylena.myflow.vModel.uiComponent.Button;
 import com.github.soonboylena.myflow.vModel.uiComponent.Form;
@@ -22,7 +21,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("page")
-public class WebLayoutController {
+public class WebFormController {
 
     @Autowired
     private WebLayoutService webLayoutService;
@@ -33,16 +32,15 @@ public class WebLayoutController {
     @Autowired
     private FormService formService;
 
-    @GetMapping("init/{formKey}")
+    @GetMapping("init/f-{formKey}")
     public UrlSection init(@PathVariable("formKey") String formKey) {
-
-        return new UrlSection(UrlManager.layout(formKey));
+        return new UrlSection(UrlManager.formLayout(formKey));
     }
 
-    @GetMapping("layout/{formKey}")
+    @GetMapping("layout/f-{formKey}")
     public UiObject layout(@PathVariable("formKey") String formKey) {
 
-        Form form = webLayoutService.buildLayout(formKey);
+        Form form = webLayoutService.buildFormLayout(formKey);
 
         Page page = new Page(form.getCaption());
         SubmitAction clientAction = new SubmitAction(UrlManager.submit(formKey), formKey);
@@ -53,34 +51,28 @@ public class WebLayoutController {
         return page;
     }
 
-    @GetMapping("data/{formKey}/{id}")
+    @GetMapping("data/f-{formKey}/{id}")
     public UiObject data(@PathVariable("formKey") String formKey, @PathVariable("id") String id) {
-        return webLayoutService.buildLayout(formKey);
+//        return webLayoutService.buildLayout(formKey);
+        return null;
     }
 
-    @PutMapping("data/{formKey}")
+    @PutMapping("data/f-{formKey}")
     public AbstractAction pageSubmit(@PathVariable String formKey, @RequestBody Map<String, Map<String, Object>> map) {
 
         if (map != null) {
 
-            if (map.size() != 1) {
-                return MessageAction.error("现在还不支持多个form提交");
-            }
-            List<IEntity> entityList = new ArrayList<>(map.size());
-            for (String s : map.keySet()) {
-                IEntity iEntity = webFromSvs.cleanUp(s, map.get(s));
-                entityList.add(iEntity);
+            if (!map.containsKey(formKey)) {
+                throw new IllegalStateException("单form提交，但是提交的数据中不包含 formKey: [" + formKey + "] 指定的form");
             }
 
-            Iterable<DynamicEntity> save = formService.save(entityList);
+            IEntity iEntity = webFromSvs.cleanUp(formKey, map.get(formKey));
 
-            List<Long> ids = new ArrayList<>();
-            save.forEach(s -> ids.add(s.getId()));
-            Long aLong = ids.get(0);
+            DynamicEntity save = formService.save(iEntity);
 
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
-            action.setUrl(UrlManager.pageInit(formKey, aLong));
+            action.setUrl(UrlManager.formInit(formKey, save.getId()));
             return action;
         }
 

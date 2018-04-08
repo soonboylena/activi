@@ -24,7 +24,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     @Test
     public void layout() throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(get(UrlManager.layout("custom").asUrlString()))
+        MvcResult mvcResult = mockMvc.perform(get(UrlManager.formLayout("custom").asUrlString()))
                 .andExpect(status().isOk())
                 .andReturn();
         print(mvcResult, "layout");

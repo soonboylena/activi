@@ -12,7 +12,13 @@ public class WebLayoutService {
     @Autowired
     private WebLayoutBuilder layoutBuilder;
 
-    public Form buildLayout(String formKey) {
+    public Form buildViewLayout(String viewKey) {
+        //TODO
+//        return layoutBuilder.buildForm(formKey);
+        return null;
+    }
+
+    public Form buildFormLayout(String formKey) {
         return layoutBuilder.buildForm(formKey);
     }
 }

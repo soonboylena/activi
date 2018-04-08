@@ -101,7 +101,9 @@ public class FormConverter implements UIConverter {
         for (MetaField metaField : metas) {
             String key = metaField.getKey();
             Object o = _map.get(key);
-            formEntity.addEntity(converterManager.read(metaField, o));
+            // 转成 IEntity ； 里边的meta信息不要
+            IEntity read = converterManager.read(metaField, o);
+            formEntity.addData(key, read.getData());
         }
 
         return formEntity;

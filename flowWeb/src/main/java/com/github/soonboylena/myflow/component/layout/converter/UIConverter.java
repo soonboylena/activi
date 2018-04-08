@@ -10,5 +10,5 @@ public interface UIConverter {
 
     public UiObject convert(IMeta metaItem);
 
-    IEntity read(IMeta meta, Object map);
+    public IEntity read(IMeta meta, Object data);
 }
