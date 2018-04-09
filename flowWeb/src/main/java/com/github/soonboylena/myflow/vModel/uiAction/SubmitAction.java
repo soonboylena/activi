@@ -8,11 +8,8 @@ import lombok.EqualsAndHashCode;
 @Data
 public class SubmitAction extends AbstractAction {
 
-    private String[] formKeys;
-
-    public SubmitAction(UrlObject url, String... formKeys) {
+    public SubmitAction(UrlObject url) {
         this.url = url;
-        this.formKeys = formKeys;
     }
 
     @Override

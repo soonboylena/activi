@@ -2,22 +2,21 @@ package com.github.soonboylena.myflow.persistentneo4j.service;
 
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
-import com.github.soonboylena.myflow.persistentneo4j.repository.FormGraphRepository;
+import com.github.soonboylena.myflow.persistentneo4j.repository.DynamicFormGraphRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class FormService {
+public class DynamicFormService {
 
     @Autowired
-    private FormGraphRepository repository;
+    private DynamicFormGraphRepository repository;
 
     public DynamicEntity save(IEntity iEntity) {
 

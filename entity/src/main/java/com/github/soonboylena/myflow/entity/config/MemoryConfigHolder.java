@@ -52,6 +52,11 @@ public class MemoryConfigHolder implements ConfigureHolder {
         return metaForms.get(formKey);
     }
 
+    @Override
+    public MetaView getMetaView(String viewKey) {
+        return metaViews.get(viewKey);
+    }
+
     public void addMetaViews(List<MetaView> forms) {
         if (forms == null) return;
 

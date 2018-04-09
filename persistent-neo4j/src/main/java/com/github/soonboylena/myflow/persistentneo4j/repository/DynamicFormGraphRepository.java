@@ -5,5 +5,5 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FormGraphRepository extends Neo4jRepository<DynamicEntity, Long> {
+public interface DynamicFormGraphRepository extends Neo4jRepository<DynamicEntity, Long> {
 }

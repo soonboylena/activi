@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.controller;
 
-import com.github.soonboylena.myflow.persistentneo4j.service.FormService;
+import com.github.soonboylena.myflow.persistentneo4j.service.DynamicFormService;
 import com.github.soonboylena.myflow.service.WebFormService;
 import com.github.soonboylena.myflow.service.WebLayoutService;
 import com.github.soonboylena.myflow.support.UrlManager;
@@ -33,7 +33,7 @@ public class WebViewController {
      * 持久层服务
      */
     @Autowired
-    private FormService formService;
+    private DynamicFormService dynamicFormService;
 
     @GetMapping("init/v-{viewKey}")
     public UrlSection init(@PathVariable("viewKey") String viewKey) {
@@ -43,12 +43,10 @@ public class WebViewController {
     @GetMapping("layout/v-{viewKey}")
     public UiObject layout(@PathVariable("viewKey") String viewKey) {
 
-        Form form = webLayoutService.buildViewLayout(viewKey);
+        Page page = webLayoutService.buildViewLayout(viewKey);
 
-        Page page = new Page(form.getCaption());
-        SubmitAction clientAction = new SubmitAction(UrlManager.submit(viewKey), viewKey);
+        SubmitAction clientAction = new SubmitAction(UrlManager.submit(viewKey));
         Button button = new Button("提交", clientAction);
-        page.addForm(form);
 
         page.addBtn(button);
         return page;
