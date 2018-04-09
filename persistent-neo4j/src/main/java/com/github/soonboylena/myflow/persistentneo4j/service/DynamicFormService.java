@@ -36,10 +36,10 @@ public class DynamicFormService {
      */
     private DynamicEntity resolve(IEntity iEntity) {
 
-        if (iEntity instanceof ViewEntity) {
-            ViewEntity view = (ViewEntity) iEntity;
-            return resolveAsView(view);
-        }
+//        if (iEntity instanceof ViewEntity) {
+//            ViewEntity view = (ViewEntity) iEntity;
+//            return resolveAsView(view);
+//        }
 
         if (iEntity instanceof FormEntity) {
 
@@ -65,24 +65,24 @@ public class DynamicFormService {
         return dynamic;
     }
 
-    private DynamicEntity resolveAsView(ViewEntity view) {
-
-        MetaView meta = view.getMeta();
-        List<FormEntity> data = view.getSubFormEntities();
-
-        Optional<String> businessName = findBusinessName(meta, data);
-        DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
-        for (IEntity datum : data) {
-            if (datum instanceof FormEntity) {
-                FormEntity f = (FormEntity) datum;
-                DynamicEntity dynamicEntity = resolveAsForm(f);
-                dynamic.addProperty(dynamic.getTitle(), dynamicEntity);
-            } else {
-                throw new RuntimeException("不是fieldEntity类型: " + data.getClass().getName());
-            }
-        }
-        return dynamic;
-    }
+//    private DynamicEntity resolveAsView(ViewEntity view) {
+//
+//        MetaView meta = view.getMeta();
+//        List<FormEntity> data = view.getSubFormEntities();
+//
+//        Optional<String> businessName = findBusinessName(meta, data);
+//        DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
+//        for (IEntity datum : data) {
+//            if (datum instanceof FormEntity) {
+//                FormEntity f = (FormEntity) datum;
+//                DynamicEntity dynamicEntity = resolveAsForm(f);
+//                dynamic.addProperty(dynamic.getTitle(), dynamicEntity);
+//            } else {
+//                throw new RuntimeException("不是fieldEntity类型: " + data.getClass().getName());
+//            }
+//        }
+//        return dynamic;
+//    }
 
     /**
      * 查找可以代表form的代表字段的值；比如form是描述一个人的，这里通常会返回这个人的姓名

@@ -4,7 +4,6 @@ import com.github.soonboylena.myflow.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
-import com.github.soonboylena.myflow.entity.core.MetaView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +32,29 @@ public class WebFormService {
             return null;
         }
 
-        Set<String> strings = map.keySet();
-        if (strings.size() == 1 && strings.contains(key)) {
-            logger.info("按照Form进行提交. formKey:{}", key);
-            return cleanUpForm(key, map.get(key));
-        }
+        return cleanUpForm(key, map.get(key));
 
-        logger.info("按照view进行提交。viewKey:{}", key);
-        return cleanUpView(key, map);
+//        logger.info("按照view进行提交。viewKey:{}", key);
+//        return cleanUpView(key, map);
     }
 
 
-    /**
-     * 按照view对提交的数据处理
-     *
-     * @param key
-     * @param map
-     * @return
-     */
-    private IEntity cleanUpView(String key, Map<String, Map<String, Object>> map) {
-        MetaView metaView = holder.getMetaView(key);
-        if (metaView == null) {
-            logger.error("metaView: {} 没有被定义在配置文件中。", key);
-            throw new IllegalArgumentException("viewKey [" + key + "] 无法找到配置");
-        }
-
-        return converterManager.read(metaView, map);
-    }
+//    /**
+//     * 按照view对提交的数据处理
+//     *
+//     * @param key
+//     * @param map
+//     * @return
+//     */
+//    private IEntity cleanUpView(String key, Map<String, Map<String, Object>> map) {
+//        MetaView metaView = holder.getMetaView(key);
+//        if (metaView == null) {
+//            logger.error("metaView: {} 没有被定义在配置文件中。", key);
+//            throw new IllegalArgumentException("viewKey [" + key + "] 无法找到配置");
+//        }
+//
+//        return converterManager.read(metaView, map);
+//    }
 
     /**
      * 按照form对提交的数据处理
