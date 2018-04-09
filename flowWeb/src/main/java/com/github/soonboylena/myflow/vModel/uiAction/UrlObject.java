@@ -46,6 +46,10 @@ public class UrlObject {
         this(url, method, null, null, null);
     }
 
+    public UrlObject(String url, HttpMethod method, Map<String, Object> pathParams) {
+        this(url, method, pathParams, null, null);
+    }
+
 
     public String asUrlString() {
 

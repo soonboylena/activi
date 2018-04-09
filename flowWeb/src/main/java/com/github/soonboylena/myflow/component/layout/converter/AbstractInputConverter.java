@@ -3,7 +3,6 @@ package com.github.soonboylena.myflow.component.layout.converter;
 import com.github.soonboylena.myflow.support.WebItemType;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.FormItem;
-import com.github.soonboylena.myflow.vModel.uiComponent.LabelInput;
 import com.github.soonboylena.myflow.vModel.uiComponent.MapUiObject;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.entity.core.IMetaInput;
@@ -26,7 +25,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     @Override
     public UiObject convert(IMeta metaItem) {
 
-        IMetaInput metaInput = (IMetaInput) metaItem;
+        MetaField metaInput = (MetaField) metaItem;
 
         FormItem labelInput = new FormItem(metaInput.getCaption());
 
@@ -36,14 +35,15 @@ public abstract class AbstractInputConverter implements UIConverter {
         mapUiObject.put("readonly", field.isReadOnly());
         mapUiObject.put("required", field.isRequired());
 
-        Map<String, Object> attach = attach();
+
+        Map<String, Object> attach = attach(metaInput);
         if (attach != null) mapUiObject.putAll(attach);
 
         labelInput.addContent(mapUiObject);
         return labelInput;
     }
 
-    protected abstract Map<String, Object> attach();
+    protected abstract Map<String, Object> attach(MetaField metaInput);
 
     protected abstract WebItemType getType();
 

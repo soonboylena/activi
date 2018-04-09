@@ -50,13 +50,14 @@ public class ConverterManager {
      * @param meta
      * @param map
      */
-    public IEntity read(IMeta meta, Object map) {
+    public IEntity read(IMeta meta, Object data) {
 
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(meta)) {
-                return uiConverter.read(meta, map);
+                return uiConverter.read(meta, data);
             }
         }
         return null;
     }
+
 }

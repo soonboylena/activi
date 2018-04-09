@@ -1,20 +1,35 @@
 <root>
     <items>
-        <item key="item1" name="field1" caption="字段1" description="字段1" type="string"/>
-        <item key="item2" name="field2" caption="字段2" description="字段2" type="string"/>
-        <item key="item3" name="field3" caption="字段3" description="字段3" type="string"/>
-        <item key="item4" name="field4" caption="字段4" description="字段4" type="string"/>
+        <item key="customName" name="custom" caption="客户名称" description="客户名称" type="string"/>
+        <item key="customType" caption="客户分类" description="客户分类" type="select">
+            <option key="a">分类1</option>
+            <option key="b">分类2</option>
+            <option key="c">分类3</option>
+        </item>
+
+        <!--公司信息-->
+        <item key="companyName" caption="客户名称" description="客户名称" type="string"/>
+        <!--联系人信息-->
+        <item key="contactName" caption="联系人姓名" description="联系人姓名" type="string"/>
     </items>
     <forms>
-        <form key="custom">
-            <field ref="item1"/>
-            <field ref="item2" readonly="true"/>
-            <field ref="item3" required="true"/>
+        <form key="customer" caption="用户">
+            <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
+            <field ref="customName" required="true" isBusinessName="true"/>
+            <field ref="customType"/>
         </form>
-        <form key="form2">
-            <field ref="item3"/>
-            <field ref="item4"/>
+
+        <form key="company" caption="公司">
+            <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
+            <field ref="companyName" required="true" isBusinessName="true"/>
         </form>
+        <view key="customer2" caption="完整用户信息">
+            <!--form支持ref这种，也支持直接定义-->
+            <form ref="company" isBusinessName="true"/>
+            <form key="contact" caption="联系人信息">
+                <field ref="contactName" required="true" isBusinessName="true"/>
+            </form>
+        </view>
     </forms>
     <transfers>
         <transfer from="form1" to="form2">

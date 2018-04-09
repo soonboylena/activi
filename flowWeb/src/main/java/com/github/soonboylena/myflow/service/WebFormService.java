@@ -22,7 +22,7 @@ public class WebFormService {
     @Autowired
     private ConverterManager converterManager;
 
-    public IEntity cleanUp(String formKey, Map<String, Object> map) {
+    public IEntity cleanUp(String formKey,Map<String, Map<String, Object>> map) {
 
         if (map == null) {
             return null;

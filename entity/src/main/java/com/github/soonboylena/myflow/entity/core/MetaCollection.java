@@ -14,6 +14,12 @@ public abstract class MetaCollection<T extends IMeta> implements IMetaInput {
 
     protected Map<String, T> metaPool = new LinkedHashMap<>();
 
+    private String businessKey;
+
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
+    }
+
     @Override
     public String getKey() {
         return key;

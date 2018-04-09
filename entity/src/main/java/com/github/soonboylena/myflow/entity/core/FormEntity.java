@@ -1,22 +1,19 @@
 package com.github.soonboylena.myflow.entity.core;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FormEntity implements IEntity {
 
-    private final static Logger logger = LoggerFactory.getLogger(FormEntity.class);
-
     private MetaForm metaCollection;
-    private List<IEntity> datas;
+    private Map<String, Object> data;
 
     public FormEntity(MetaForm metaForm) {
         this.metaCollection = metaForm;
-        datas = new ArrayList<>(metaForm.size());
+        data = new HashMap<>(metaForm.size());
     }
 
     @Override
@@ -25,11 +22,32 @@ public class FormEntity implements IEntity {
     }
 
     @Override
-    public List<IEntity> getData() {
-        return datas;
+    public Map<String, Object> getData() {
+        return data;
     }
 
-    public void addEntity(IEntity entityObject) {
-        this.datas.add(entityObject);
+//    public void addEntity(IEntity entityObject) {
+//        this.data.add(entityObject);
+//    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
+    public List<FieldEntity> getFieldEntities() {
+        List<FieldEntity> entities = new ArrayList<>(metaCollection.size());
+        Map<String, MetaField> metaPool = metaCollection.getMetaPool();
+        for (Map.Entry<String, MetaField> poolSet : metaPool.entrySet()) {
+            String key = poolSet.getKey();
+            Object o = data.get(key);
+            FieldEntity<Object> field = new FieldEntity(poolSet.getValue(), o);
+            field.setData(o);
+            entities.add(field);
+        }
+        return entities;
+    }
+
+    public void addData(String key, Object o) {
+        data.put(key, o);
     }
 }
