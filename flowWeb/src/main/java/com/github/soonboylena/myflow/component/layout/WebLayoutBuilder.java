@@ -29,12 +29,6 @@ public class WebLayoutBuilder {
     public Page buildView(String viewKey) {
 
         MetaView metaView = holder.getMetaView(viewKey);
-        Page page = new Page(metaView.getCaption());
-        Collection<MetaForm> values = metaView.getMetaPool().values();
-        for (MetaForm value : values) {
-            Form form = (Form) converterManager.convert(value);
-            page.addForm(form);
-        }
-        return page;
+        return (Page) converterManager.convert(metaView);
     }
 }

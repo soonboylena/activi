@@ -39,4 +39,8 @@ public class ViewEntity implements IEntity {
         }
         return entities;
     }
+
+    public void addDatum(String key, Map<String, Object> data) {
+        this.data.put(key, data);
+    }
 }

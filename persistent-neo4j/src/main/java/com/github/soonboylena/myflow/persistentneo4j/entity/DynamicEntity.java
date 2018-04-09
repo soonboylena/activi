@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Properties;
+import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @NodeEntity
 @Getter
@@ -19,10 +18,24 @@ public class DynamicEntity extends BaseModel {
         super.setLabels(Collections.singleton(key));
     }
 
-    @Properties
+    @Properties(allowCast = true)
     private Map<String, Object> properties = new HashMap<>();
+
+    @Relationship(type = "hasRelation")
+    private Set<DynamicRelation> relationShips = new HashSet<>();
+
 
     public void addProperty(String key, Object data) {
         properties.put(key, data);
     }
+
+
+    public void addRelation(DynamicRelation relation) {
+        this.relationShips.add(relation);
+    }
+
+
+//    public void addOther(String key, DynamicEntity other) {
+//        this.others.put(key, other);
+//    }
 }

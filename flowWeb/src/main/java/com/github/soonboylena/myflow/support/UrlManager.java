@@ -12,7 +12,7 @@ public class UrlManager {
     }
 
     public static UrlObject submit(String viewKey) {
-        return new UrlObject(prefix + "/page/data/{viewKey}", HttpMethod.PUT, ChainMap.get().put("viewKey", viewKey).ok());
+        return new UrlObject(prefix + "/data/{viewKey}", HttpMethod.PUT, ChainMap.get().put("viewKey", viewKey).ok());
     }
 
     public static UrlObject pageInit(String formKey) {
