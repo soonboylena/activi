@@ -180,6 +180,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         for (Object relation : relations) {
 
         }
+        return null;
     }
 
     private AbstractMetaItem readItem(Element s, MemoryConfigHolder holder, Document xmlDocument) {
