@@ -102,3 +102,8 @@ mvnw.cmd
 将删除 entity/target/generated-test-sources/
 将删除 entity/target/maven-archiver/
 将删除 entity/target/maven-status/
+将删除 target/entity-1.0-SNAPSHOT.jar
+将删除 target/generated-sources/
+将删除 target/generated-test-sources/
+将删除 target/maven-archiver/
+将删除 target/maven-status/
