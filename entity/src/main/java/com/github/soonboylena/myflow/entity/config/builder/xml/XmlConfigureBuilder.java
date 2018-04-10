@@ -162,25 +162,35 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         }
 
         // form可以与其他form嵌套
-        readRelation(formElement, holder);
-//        if (relations != null) {
-//            List relation = relations.elements("relation");
+        MetaForm o = readRelation(form, formElement, holder);
 
-
-//        }
-
-        return form;
+        return o;
     }
 
-    private Object readRelation(Element form, MemoryConfigHolder holder) {
-        Element relationsNode = (Element) form.elements("relations");
-        if (relationsNode == null) return null;
+    private MetaForm readRelation(MetaForm metaForm, Element form, MemoryConfigHolder holder) {
+        Element relationsNode = form.element("relations");
+        if (relationsNode == null) return metaForm;
         List relations = relationsNode.elements("relation");
-        if (relations == null || relations.isEmpty()) return null;
+        if (relations == null || relations.isEmpty()) return metaForm;
         for (Object relation : relations) {
-
+            Element _relation = (Element) relation;
+//                <relation type="contact">
+            String type = _relation.attributeValue("type");
+            List nextForms = _relation.elements("form");
+            if (nextForms == null) {
+                continue;
+            }
+            for (Object nextForm : nextForms) {
+                MetaForm nextMetaForm = readForm((Element) nextForm, holder);
+                // 如果没有指定relation的类型，就用form的key来进行代替
+                if (type == null || type.trim().isEmpty()) {
+                    metaForm.setRelation(metaForm.getKey(), nextMetaForm);
+                } else {
+                    metaForm.setRelation(type, nextMetaForm);
+                }
+            }
         }
-        return null;
+        return metaForm;
     }
 
     private AbstractMetaItem readItem(Element s, MemoryConfigHolder holder, Document xmlDocument) {

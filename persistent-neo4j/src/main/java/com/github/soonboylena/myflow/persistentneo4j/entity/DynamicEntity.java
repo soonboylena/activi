@@ -30,8 +30,17 @@ public class DynamicEntity extends BaseModel {
     }
 
 
-    public void addRelation(DynamicRelation relation) {
-        this.relationShips.add(relation);
+//    public void addRelation(DynamicRelation relation) {
+//        this.relationShips.add(relation);
+//    }
+
+    public void addRelation(String type, DynamicEntity... relatedEntities) {
+        if (relatedEntities != null) {
+            for (DynamicEntity relatedEntity : relatedEntities) {
+                DynamicRelation dynamicRelation = new DynamicRelation(this, relatedEntity, type);
+                this.relationShips.add(dynamicRelation);
+            }
+        }
     }
 
 

@@ -24,9 +24,11 @@
             <field ref="companyName" required="true" isBusinessName="true"/>
         </form>
         <!--form支持ref这种，也支持直接定义; form可以嵌套-->
-        <form ref="company" caption="客户">
+        <form ref="company" caption="客户信息">
             <relations>
-                <relation>
+                <!--一个relation里边可以放多个form，前提是type一样-->
+                <!--如果不想指定type，可以留空，form的key将会做为type-->
+                <relation type="contact">
                     <form key="contact" caption="联系人信息">
                         <field ref="contactName" required="true" isBusinessName="true"/>
                     </form>

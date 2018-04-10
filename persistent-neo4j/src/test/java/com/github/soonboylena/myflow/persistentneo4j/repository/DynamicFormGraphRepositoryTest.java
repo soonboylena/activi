@@ -21,9 +21,7 @@ public class DynamicFormGraphRepositoryTest extends NeoBaseTest {
         DynamicEntity entity2 = new DynamicEntity("测试2", "test2");
         entity2.addProperty("test2A", "string2");
 
-        DynamicRelation dynamicRelation = new DynamicRelation(entity, entity2, "test1");
-
-        entity.addRelation(dynamicRelation);
+        entity.addRelation("test2", entity2);
 
         repository.save(entity);
     }
