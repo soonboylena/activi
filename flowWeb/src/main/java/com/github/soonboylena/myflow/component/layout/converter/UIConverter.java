@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.component.layout.converter;
 
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
+import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 
 /**
@@ -14,7 +15,14 @@ public interface UIConverter {
 
     public boolean support(IMeta metaItem);
 
-    public UiObject convert(IMeta metaItem);
+    /**
+     * 定义-->画面
+     *
+     * @param metaItem  定义类型
+     * @param container 指定的父容器
+     * @return 如果指定了父容器，返回父容器；如果没有指定，由实现类自己处理返回UiObject;
+     */
+    public UiObject convert(IMeta metaItem, UiContainer container);
 
     public IEntity read(IMeta meta, Object data);
 }

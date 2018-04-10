@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.component.layout.converter;
 
 import com.github.soonboylena.myflow.support.WebItemType;
+import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.FormItem;
 import com.github.soonboylena.myflow.vModel.uiComponent.MapUiObject;
@@ -23,7 +24,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     }
 
     @Override
-    public UiObject convert(IMeta metaItem) {
+    public UiObject convert(IMeta metaItem, UiContainer container) {
 
         MetaField metaInput = (MetaField) metaItem;
 
@@ -40,6 +41,10 @@ public abstract class AbstractInputConverter implements UIConverter {
         if (attach != null) mapUiObject.putAll(attach);
 
         labelInput.addContent(mapUiObject);
+
+        if(container != null) {
+//            container.
+        }
         return labelInput;
     }
 

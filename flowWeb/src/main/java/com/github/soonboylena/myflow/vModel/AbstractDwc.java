@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 动态组件
  */
-public abstract class AbstractDwc<D extends IUiDefinition> implements Dwc, Serializable {
+public abstract class AbstractDwc<D extends IUiDefinition> implements UiContainer, Serializable {
 
     // id
     @JsonProperty(value = "ui_id", index = 1)

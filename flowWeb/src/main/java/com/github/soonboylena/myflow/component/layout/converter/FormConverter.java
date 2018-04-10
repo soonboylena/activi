@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.component.layout.converter;
 
 import com.github.soonboylena.myflow.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.component.layout.RowBreaker;
+import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.Column;
 import com.github.soonboylena.myflow.vModel.uiComponent.Form;
@@ -39,7 +40,7 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public UiObject convert(IMeta meta) {
+    public UiObject convert(IMeta meta, UiContainer container) {
 
         MetaForm metaForm = (MetaForm) meta;
 
@@ -121,8 +122,8 @@ public class FormConverter implements UIConverter {
 
     private UiObject swapWithCol(MetaField metaField, int cursor, int span) {
         Column c = new Column(0, span * unit);
-        c.addContent(converterManager.convert(metaField));
-        return c;
+        UiObject convert = converterManager.convert(metaField, c);
+        return convert;
     }
 
 }

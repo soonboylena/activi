@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.component.layout;
 
 import com.github.soonboylena.myflow.component.layout.converter.*;
+import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
@@ -32,11 +33,11 @@ public class ConverterManager {
      * @param metaItem
      * @return
      */
-    public UiObject convert(IMeta metaItem) {
+    public UiObject convert(IMeta metaItem, UiContainer container) {
 
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(metaItem)) {
-                return uiConverter.convert(metaItem);
+                return uiConverter.convert(metaItem, container);
             }
         }
         return null;
@@ -46,7 +47,7 @@ public class ConverterManager {
      * 画面数据 ==> data
      *
      * @param meta
-     * @param map
+     * @param data
      */
     public IEntity read(IMeta meta, Object data) {
 
