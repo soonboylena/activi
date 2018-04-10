@@ -35,7 +35,7 @@ cmake-build-release/
 
 # IntelliJ
 out/
-
+**/target/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -94,16 +94,3 @@ mvnw.cmd
 /flowWeb/.mvn/
 将删除 flowWeb/src/main/java/com/github/soonboylena/myflow/Auth/jpa/
 将删除 flowWeb/src/main/resources/entityXml/
-/entity/entity.iml
-将删除 entity/target/classes/com/github/soonboylena/myflow/entity/core/MetaView.class
-将删除 entity/target/classes/com/github/soonboylena/myflow/entity/core/ViewEntity.class
-将删除 entity/target/entity-1.0-SNAPSHOT.jar
-将删除 entity/target/generated-sources/
-将删除 entity/target/generated-test-sources/
-将删除 entity/target/maven-archiver/
-将删除 entity/target/maven-status/
-将删除 target/entity-1.0-SNAPSHOT.jar
-将删除 target/generated-sources/
-将删除 target/generated-test-sources/
-将删除 target/maven-archiver/
-将删除 target/maven-status/
