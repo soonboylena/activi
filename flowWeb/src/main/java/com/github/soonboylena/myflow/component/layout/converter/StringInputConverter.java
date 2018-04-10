@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class StringInputConverter extends AbstractInputConverter {
 
-    private final static WebItemType type = WebItemType.StringType;
+    private final transient static WebItemType type = WebItemType.StringType;
 
-    private final static Logger logger = LoggerFactory.getLogger(StringInputConverter.class);
+//    private final static Logger logger = LoggerFactory.getLogger(StringInputConverter.class);
 
     @Override
-    public IEntity read(IMeta meta, Object data) {
+    public FieldEntity read(IMeta meta, Object data) {
         if (data != null && !(data instanceof String)) {
             throw new IllegalArgumentException("类型不匹配。期望：String 实际：" + data.getClass().getName());
         }

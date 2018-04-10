@@ -23,13 +23,16 @@
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
             <field ref="companyName" required="true" isBusinessName="true"/>
         </form>
-        <view key="customer2" caption="完整用户信息">
-            <!--form支持ref这种，也支持直接定义-->
-            <form ref="company" isBusinessName="true"/>
-            <form key="contact" caption="联系人信息">
-                <field ref="contactName" required="true" isBusinessName="true"/>
-            </form>
-        </view>
+        <!--form支持ref这种，也支持直接定义; form可以嵌套-->
+        <form ref="company" caption="客户">
+            <relations>
+                <relation>
+                    <form key="contact" caption="联系人信息">
+                        <field ref="contactName" required="true" isBusinessName="true"/>
+                    </form>
+                </relation>
+            </relations>
+        </form>
     </forms>
     <transfers>
         <transfer from="form1" to="form2">

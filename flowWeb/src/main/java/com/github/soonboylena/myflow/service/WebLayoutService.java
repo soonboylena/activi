@@ -13,9 +13,9 @@ public class WebLayoutService {
     @Autowired
     private WebLayoutBuilder layoutBuilder;
 
-    public Page buildViewLayout(String viewKey) {
-        return layoutBuilder.buildView(viewKey);
-    }
+//    public Page buildViewLayout(String viewKey) {
+//        return layoutBuilder.buildView(viewKey);
+//    }
 
     public Form buildFormLayout(String formKey) {
         return layoutBuilder.buildForm(formKey);

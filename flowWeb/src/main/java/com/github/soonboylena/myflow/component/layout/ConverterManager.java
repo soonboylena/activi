@@ -1,9 +1,6 @@
 package com.github.soonboylena.myflow.component.layout;
 
-import com.github.soonboylena.myflow.component.layout.converter.FormConverter;
-import com.github.soonboylena.myflow.component.layout.converter.SelectOneConverter;
-import com.github.soonboylena.myflow.component.layout.converter.StringInputConverter;
-import com.github.soonboylena.myflow.component.layout.converter.UIConverter;
+import com.github.soonboylena.myflow.component.layout.converter.*;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
@@ -24,6 +21,7 @@ public class ConverterManager {
     @PostConstruct
     public void setDefaultConvert() {
         converterList.add(new FormConverter(this));
+//        converterList.add(new ViewConverter(this));
         converterList.add(new StringInputConverter());
         converterList.add(new SelectOneConverter());
     }

@@ -1,19 +1,15 @@
 package com.github.soonboylena.myflow.entity.core;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FormEntity implements IEntity {
 
     private MetaForm metaCollection;
-    private Map<String, Object> data;
+    private Map<String, Object> data = new HashMap<>(20);
 
     public FormEntity(MetaForm metaForm) {
         this.metaCollection = metaForm;
-        data = new HashMap<>(metaForm.size());
     }
 
     @Override
@@ -31,7 +27,7 @@ public class FormEntity implements IEntity {
 //    }
 
     public void setData(Map<String, Object> data) {
-        this.data = data;
+        this.data = Optional.ofNullable(data).orElse(new HashMap<>(20));
     }
 
     public List<FieldEntity> getFieldEntities() {

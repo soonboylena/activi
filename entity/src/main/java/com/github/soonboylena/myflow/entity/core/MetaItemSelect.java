@@ -8,6 +8,9 @@ import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+/**
+ * 单选框
+ */
 public class MetaItemSelect extends AbstractMetaItem {
     Map<String, String> options = new HashMap<>();
 
