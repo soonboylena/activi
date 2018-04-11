@@ -20,7 +20,7 @@ public class XmlConfigureBuilderTest {
 
     @Test
     public void build() {
-        ConfigureHolder build = configureBuilder.build("file:/home/sunb/IdeaProjects/activi/entity/src/main/resources/entity.xml");
+        ConfigureHolder build = configureBuilder.build("file:/home/sunb/IdeaProjects/activi/flowWeb/src/main/resources/entity.xml");
         Assert.assertNotNull(build);
         Assert.assertNotNull(build.getMetaItems());
         Assert.assertNotEquals("item定义不为空", build.getMetaItems().size(), 0);

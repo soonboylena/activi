@@ -6,7 +6,7 @@ package com.github.soonboylena.myflow.entity.core;
  */
 public interface IEntity {
 
-    public IMeta getMeta();
+    public IMeta acquireMeta();
 
     public Object getData();
 }

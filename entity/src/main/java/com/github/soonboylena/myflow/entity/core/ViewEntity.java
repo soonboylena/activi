@@ -16,7 +16,7 @@
 //    }
 //
 //    @Override
-//    public MetaView getMeta() {
+//    public MetaView acquireMeta() {
 //        return metaCollection;
 //    }
 //

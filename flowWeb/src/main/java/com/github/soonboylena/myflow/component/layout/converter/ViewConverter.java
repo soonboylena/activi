@@ -55,7 +55,7 @@
 //
 //            String key = stringMapEntry.getKey();
 //            Map<String, Object> value = stringMapEntry.getValue();
-//            FormEntity formEntiy = (FormEntity) converterManager.read(metaView.getMeta(key), value);
+//            FormEntity formEntiy = (FormEntity) converterManager.read(metaView.acquireMeta(key), value);
 //            entity.addDatum(key, formEntiy.getData());
 //        }
 //        return entity;

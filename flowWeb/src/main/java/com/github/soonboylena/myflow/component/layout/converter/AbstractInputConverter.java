@@ -42,8 +42,9 @@ public abstract class AbstractInputConverter implements UIConverter {
 
         labelInput.addContent(mapUiObject);
 
-        if(container != null) {
-//            container.
+        if (container != null) {
+            container.addContent(labelInput);
+            return container;
         }
         return labelInput;
     }

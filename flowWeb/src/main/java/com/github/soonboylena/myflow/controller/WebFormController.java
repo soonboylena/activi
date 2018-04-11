@@ -24,26 +24,25 @@ public class WebFormController {
     private WebLayoutService webLayoutService;
 
 
-    @GetMapping("init/f-{formKey}")
+    @GetMapping("init/{formKey}")
     public UrlSection init(@PathVariable("formKey") String formKey) {
         return new UrlSection(UrlManager.formLayout(formKey));
     }
 
-    @GetMapping("layout/f-{formKey}")
+    @GetMapping("layout/{formKey}")
     public UiObject layout(@PathVariable("formKey") String formKey) {
 
-        Form form = webLayoutService.buildFormLayout(formKey);
-
-        Page page = new Page(form.getCaption());
+        Page page = new Page();
+        webLayoutService.buildFormLayout(formKey, page);
         SubmitAction clientAction = new SubmitAction(UrlManager.submit(formKey));
         Button button = new Button("提交", clientAction);
-        page.addForm(form);
+//        page.addForm(form);
 
         page.addBtn(button);
         return page;
     }
 
-    @GetMapping("data/f-{formKey}/{id}")
+    @GetMapping("data/{formKey}/{id}")
     public UiObject data(@PathVariable("formKey") String formKey, @PathVariable("id") String id) {
 //        return webLayoutService.buildLayout(formKey);
         return null;

@@ -22,7 +22,6 @@ public class ConverterManager {
     @PostConstruct
     public void setDefaultConvert() {
         converterList.add(new FormConverter(this));
-//        converterList.add(new ViewConverter(this));
         converterList.add(new StringInputConverter());
         converterList.add(new SelectOneConverter());
     }

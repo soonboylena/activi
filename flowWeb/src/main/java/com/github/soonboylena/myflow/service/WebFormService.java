@@ -32,10 +32,7 @@ public class WebFormService {
             return null;
         }
 
-        return cleanUpForm(key, map.get(key));
-
-//        logger.info("按照view进行提交。viewKey:{}", key);
-//        return cleanUpView(key, map);
+        return cleanUpForm(key, map);
     }
 
 
@@ -63,7 +60,7 @@ public class WebFormService {
      * @param map
      * @return
      */
-    private IEntity cleanUpForm(String formKey, Map<String, Object> map) {
+    private IEntity cleanUpForm(String formKey, Map<String, Map<String, Object>> map) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         if (metaForm == null) {

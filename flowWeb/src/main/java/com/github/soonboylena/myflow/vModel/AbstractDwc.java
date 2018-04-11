@@ -21,11 +21,9 @@ public abstract class AbstractDwc<D extends IUiDefinition> implements UiContaine
     @JsonProperty(value = "ui_define", index = 4)
     private D define;
 
+    private String caption;
+
     public AbstractDwc() {
-        // 影响缓存 id 设为空
-//        this.id = StringTools.randomStr6();
-//        this.id = "";
-//        this.form = "form";
     }
 
     @JsonProperty(value = "ui_type", index = 2)
@@ -53,6 +51,15 @@ public abstract class AbstractDwc<D extends IUiDefinition> implements UiContaine
 
     public void setDefine(D define) {
         this.define = define;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    @Override
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     public void addContent(UiObject dwc) {

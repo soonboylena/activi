@@ -91,7 +91,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
         MenuNode customerAdd = new MenuNode("user", node.getCurrentKey(), "添加客户");
         customerAdd.setIcon("person-stalker");
-        customerAdd.setUrl("/api/page/init/v-customer2?at=/layoutContent/customs/page");
+        customerAdd.setUrl("/api/page/init/company2?at=/layoutContent/customs/page");
         customerAdd.setAuthorityEntity(new AuthorityEntity("添加客户权限", "menu-customer-add"));
         customer.addItem(customerAdd);
         repository.save(customer);

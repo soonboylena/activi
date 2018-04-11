@@ -4,7 +4,6 @@ import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.DynamicFormGraphRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,21 +52,29 @@ public class DynamicFormService {
 
     private DynamicEntity resolveAsForm(FormEntity form) {
 
-        MetaForm meta = form.getMeta();
+        MetaForm meta = form.acquireMeta();
         List<FieldEntity> data = form.getFieldEntities();
         Optional<String> businessName = findBusinessName(meta, data);
         DynamicEntity dynamic = new DynamicEntity(businessName.orElse(meta.getCaption()), meta.getKey());
         for (IEntity datum : data) {
             FieldEntity<?> f = (FieldEntity<?>) datum;
-            IMeta fieldMeta = f.getMeta();
+            IMeta fieldMeta = f.acquireMeta();
             dynamic.addProperty(fieldMeta.getKey(), f.getData());
+        }
+        for (MetaForm.Relation relation : meta.getRelations()) {
+            String type = relation.getType();
+            List<FormEntity> relatedEntities = form.getRelations(type);
+            for (FormEntity relatedEntity : relatedEntities) {
+                DynamicEntity entity = resolveAsForm(relatedEntity);
+                dynamic.addRelation(type, entity);
+            }
         }
         return dynamic;
     }
 
 //    private DynamicEntity resolveAsView(ViewEntity view) {
 //
-//        MetaView meta = view.getMeta();
+//        MetaView meta = view.acquireMeta();
 //        List<FormEntity> data = view.getSubFormEntities();
 //
 //        Optional<String> businessName = findBusinessName(meta, data);
@@ -93,7 +100,7 @@ public class DynamicFormService {
      */
     private Optional<String> findBusinessName(MetaCollection meta, List<? extends IEntity> data) {
         if (data == null) return Optional.empty();
-        Map<String, IEntity> collect = data.stream().collect(Collectors.toMap(e -> e.getMeta().getKey(), e -> e));
+        Map<String, IEntity> collect = data.stream().collect(Collectors.toMap(e -> e.acquireMeta().getKey(), e -> e));
 
         String businessKey = meta.getBusinessKey();
         if (StringUtils.isNotBlank(businessKey)) {

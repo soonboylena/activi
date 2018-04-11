@@ -1,7 +1,7 @@
 <root>
     <items>
         <item key="customName" name="custom" caption="客户名称" description="客户名称" type="string"/>
-        <item key="customType" caption="客户分类" description="客户分类" type="select">
+        <item key="customerType" caption="客户分类" description="客户分类" type="select">
             <option key="a">分类1</option>
             <option key="b">分类2</option>
             <option key="c">分类3</option>
@@ -11,25 +11,36 @@
         <item key="companyName" caption="客户名称" description="客户名称" type="string"/>
         <!--联系人信息-->
         <item key="contactName" caption="联系人姓名" description="联系人姓名" type="string"/>
+        <!--联系人电话-->
+        <item key="contactTel" caption="联系人电话" description="联系人电话" type="string"/>
+
     </items>
     <forms>
         <form key="customer" caption="用户">
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
-            <field ref="customName" required="true" isBussinessName="true"/>
-            <field ref="customType"/>
+            <field ref="customName" required="true" isBusinessName="true"/>
+            <field ref="customerType"/>
         </form>
 
         <form key="company" caption="公司">
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
-            <field ref="companyName" required="true" isBussinessName="true"/>
+            <field ref="companyName" required="true" isBusinessName="true"/>
         </form>
-        <view key="customer2" caption="完整用户信息">
-            <!--form支持ref这种，也支持直接定义-->
-            <form ref="company"/>
-            <form key="contact" caption="联系人信息">
-                <field ref="contactName" required="true" isBussinessName="true"/>
-            </form>
-        </view>
+        <!--form(暂不)支持ref这种，也支持直接定义; form可以嵌套-->
+        <form key="company2" caption="客户信息">
+            <field ref="companyName" required="true" isBusinessName="true"/>
+            <field ref="customerType" required="true"/>
+            <relations>
+                <!--一个relation里边可以放多个form，前提是type一样-->
+                <!--如果不想指定type，可以留空，form的key将会做为type-->
+                <relation type="contact">
+                    <form key="contact" caption="联系人信息">
+                        <field ref="contactName" required="true" isBusinessName="true"/>
+                        <field ref="contactTel" required="true" isBusinessName="true"/>
+                    </form>
+                </relation>
+            </relations>
+        </form>
     </forms>
     <transfers>
         <transfer from="form1" to="form2">

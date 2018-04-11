@@ -29,7 +29,7 @@ public class MetaForm extends MetaCollection<MetaField> {
         String type;
         MetaForm relatedForm;
 
-        public Relation(String type, MetaForm relatedForm) {
+        Relation(String type, MetaForm relatedForm) {
             this.type = type;
             this.relatedForm = relatedForm;
         }

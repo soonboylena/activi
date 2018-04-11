@@ -23,17 +23,17 @@ public class WebDataController {
     @Autowired
     private DynamicFormService dynamicFormService;
 
-    @PutMapping("/{viewKey}")
-    public AbstractAction pageSubmit(@PathVariable String viewKey, @RequestBody Map<String, Map<String, Object>> map) {
+    @PutMapping("/{formKey}")
+    public AbstractAction pageSubmit(@PathVariable String formKey, @RequestBody Map<String, Map<String, Object>> map) {
 
         if (map != null) {
 
-            IEntity iEntity = webFromSvs.cleanUp(viewKey, map);
+            IEntity iEntity = webFromSvs.cleanUp(formKey, map);
             DynamicEntity save = dynamicFormService.save(iEntity);
 
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
-            action.setUrl(UrlManager.formInit(viewKey, save.getId()));
+            action.setUrl(UrlManager.formInit(formKey, save.getId()));
             return action;
         }
 

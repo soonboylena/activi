@@ -8,11 +8,11 @@ public class UrlManager {
     private static final String prefix = "/api";
 
     public static UrlObject formLayout(String formKey) {
-        return new UrlObject(prefix + "/page/layout/f-{formKey}", ChainMap.get().put("formKey", formKey).ok());
+        return new UrlObject(prefix + "/page/layout/{formKey}", ChainMap.get().put("formKey", formKey).ok());
     }
 
-    public static UrlObject submit(String viewKey) {
-        return new UrlObject(prefix + "/data/{viewKey}", HttpMethod.PUT, ChainMap.get().put("viewKey", viewKey).ok());
+    public static UrlObject submit(String formKey) {
+        return new UrlObject(prefix + "/data/{viewKey}", HttpMethod.PUT, ChainMap.get().put("viewKey", formKey).ok());
     }
 
     public static UrlObject pageInit(String formKey) {
@@ -20,15 +20,10 @@ public class UrlManager {
     }
 
     public static UrlObject formInit(String formKey, Long id) {
-        return new UrlObject(prefix + "/page/init/f-{formKey}/{id}"
+        return new UrlObject(prefix + "/page/init/{formKey}/{id}"
                 , ChainMap.get()
                 .put("formKey", formKey)
                 .put("id", id)
                 .ok());
-    }
-
-    // ===============================view========================================
-    public static UrlObject viewLayout(String viewKey) {
-        return new UrlObject(prefix + "/page/layout/v-{viewKey}", ChainMap.get().put("viewKey", viewKey).ok());
     }
 }
