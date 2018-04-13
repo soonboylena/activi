@@ -33,7 +33,7 @@ public class WebDataController {
 
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
-            action.setUrl(UrlManager.formInit(formKey, save.getId()));
+            action.setUrl(UrlManager.pageInit(formKey, save.getId()));
             return action;
         }
 
