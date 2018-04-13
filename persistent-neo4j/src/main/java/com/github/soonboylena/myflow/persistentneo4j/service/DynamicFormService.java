@@ -35,11 +35,6 @@ public class DynamicFormService {
      */
     private DynamicEntity resolve(IEntity iEntity) {
 
-//        if (iEntity instanceof ViewEntity) {
-//            ViewEntity view = (ViewEntity) iEntity;
-//            return resolveAsView(view);
-//        }
-
         if (iEntity instanceof FormEntity) {
 
             FormEntity form = (FormEntity) iEntity;
