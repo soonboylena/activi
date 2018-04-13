@@ -51,7 +51,7 @@ public class FormConverter implements UIConverter {
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
         Collection<MetaField> fields = metaForm.getMetas();
 
-        Form s = new Form(metaForm.getKey(), metaForm.getCaption());
+        Form s = new Form(metaForm.getKeyIndex(), metaForm.getCaption());
         container.addContent(s);
         if (fields == null || fields.isEmpty()) {
             return s;
@@ -89,12 +89,13 @@ public class FormConverter implements UIConverter {
         }
 
         // 处理关系
-        for (MetaForm.Relation relation : metaForm.getRelations()) {
-            MetaForm relatedForm = relation.getRelatedForm();
+        for (Relation relation : metaForm.getRelations()) {
+            List<MetaForm> relatedForms = relation.getRelatedForm();
             // 递归，把有关联的form装到容器里边； 这个过程中嵌套关系会变成Array
-
-            logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
-            this.convert(relatedForm, container);
+            for (MetaForm relatedForm : relatedForms) {
+                logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
+                this.convert(relatedForm, container);
+            }
         }
 
         return container;
@@ -111,7 +112,7 @@ public class FormConverter implements UIConverter {
         MetaForm metaForm = (MetaForm) meta;
         Collection<MetaField> metas = metaForm.getMetas();
 
-        Map<String, Object> _map = ((Map<String, Map<String, Object>>) map).get(meta.getKey());
+        Map<String, Object> _map = ((Map<String, Map<String, Object>>) map).get(((MetaForm) meta).getKeyIndex());
 
         FormEntity formEntity = new FormEntity(metaForm);
         for (MetaField metaField : metas) {
@@ -122,16 +123,19 @@ public class FormConverter implements UIConverter {
             formEntity.addData(key, read.getData());
         }
 
-        List<MetaForm.Relation> relations = metaForm.getRelations();
-        for (MetaForm.Relation relation : relations) {
-            MetaForm relatedForm = relation.getRelatedForm();
-            String key = relatedForm.getKey();
-            // 提前判断一下是否有这个下级form对应的数据；没有的话就不建了
-            if (!((Map) map).containsKey(key)) {
-                continue;
+        Collection<Relation> relations = metaForm.getRelations();
+        for (Relation relation : relations) {
+            List<MetaForm> relatedForms = relation.getRelatedForm();
+//            String key = relatedForm.getKey();
+            for (MetaForm relatedForm : relatedForms) {
+                String keyIndex = relatedForm.getKeyIndex();
+                // 提前判断一下是否有这个下级form对应的数据；没有的话就不建了
+                if (!((Map) map).containsKey(keyIndex)) {
+                    continue;
+                }
+                FormEntity nextFormEntity = read(relatedForm, map);
+                formEntity.addRelatedForm(relation.getType(), nextFormEntity);
             }
-            FormEntity nextFormEntity = read(relatedForm, map);
-            formEntity.addRelatedForm(relation.getType(), nextFormEntity);
         }
         return formEntity;
     }

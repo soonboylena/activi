@@ -3,9 +3,7 @@ package com.github.soonboylena.myflow.entity.config.builder.xml;
 import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
 import com.github.soonboylena.myflow.entity.config.builder.InputItemBuilder;
-import com.github.soonboylena.myflow.entity.core.MetaField;
-import com.github.soonboylena.myflow.entity.core.MetaForm;
-import com.github.soonboylena.myflow.entity.core.AbstractMetaItem;
+import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.entity.exceptions.ConfigBuildException;
 import com.github.soonboylena.myflow.entity.support.XmlConfigureReader;
 import org.dom4j.Document;
@@ -57,72 +55,38 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         Element xmlForms = rootElement.element("forms");
         if (xmlForms != null) {
             List<Element> elements = xmlForms.elements("form");
-            List<MetaForm> forms = elements.stream().map(e -> readForm(e, holder)).collect(Collectors.toList());
-            holder.addMetaForms(forms);
+//            List<MetaForm> forms = elements.stream().map(e -> readForm(e, holder)).collect(Collectors.toList());
+//            holder.addMetaForms(forms);
+
+            for (Element element : elements) {
+                MetaForm metaForm = readForm(element, holder);
+                holder.addMetaForm(metaForm);
+            }
         }
-//        if (xmlForms != null) {
-//            List<Element> elements = xmlForms.elements("view");
-//            List<MetaView> forms = elements.stream().map(e -> readView(e, holder)).collect(Collectors.toList());
-//            holder.addMetaViews(forms);
-//        }
 
         return holder;
     }
-
-//    /**
-//     * forms节点下的第二种情况： view。view是有多个form的集合；
-//     * view支持多个form
-//     *
-//     * @param viewElement xml元素
-//     * @param holder      正在构建中的holder
-//     * @return 构建后的MetaView
-//     */
-//    private MetaView readView(Element viewElement, MemoryConfigHolder holder) {
-//
-//        MetaView view = new MetaView();
-//        view.setKey(viewElement.attributeValue("key"));
-//        view.setCaption(viewElement.attributeValue("caption"));
-//
-//        logger.debug("处理view: {}, {}", view.getKey(), view.getCaption());
-//        List forms = viewElement.elements("form");
-//
-//        logger.debug("view下定义了 {} 个form 节点", forms.size());
-//
-//        for (Object form : forms) {
-//            Element xmlForm = (Element) form;
-//            String ref = xmlForm.attributeValue("ref");
-//            MetaForm metaForm;
-//            if (ref != null) {
-//                // 引用类型的form
-//                metaForm = holder.getMetaForm(ref);
-//                logger.debug(" 处理ref类型form 。ref：{}", ref);
-//                if (metaForm == null) {
-//                    throw new ConfigBuildException("没有找到ref: [\" + ref + \"]的指定的form。");
-//                }
-//            } else {
-//                metaForm = readForm(xmlForm, holder);
-//                logger.debug(" 读取定义类型form 。{},{}", metaForm.getKey(), metaForm.getCaption());
-//            }
-//
-//            view.addMeta(metaForm);
-//
-//            String isBusinessName = xmlForm.attributeValue("isBusinessName");
-//            // 设置view主form
-//            if (Boolean.valueOf(isBusinessName)) {
-//                view.setBusinessKey(metaForm.getKey());
-//            }
-//        }
-//
-//        return view;
-//    }
 
     private MetaForm readForm(Element formElement, MemoryConfigHolder holder) {
 
         Map<String, AbstractMetaItem> metaItems = holder.getMetaItems();
 
+        String refAttr = formElement.attributeValue("ref");
+        String formCaption = formElement.attributeValue("caption");
+        if (refAttr != null && !refAttr.trim().isEmpty()) {
+            MetaForm metaForm = holder.getMetaForm(refAttr);
+            if (metaForm == null) {
+                throw new ConfigBuildException("ref:[" + refAttr + "] 指向的form不存在。");
+            }
+
+            return new MetaFormRef(formCaption, metaForm);
+        }
+
+
         MetaForm form = new MetaForm();
         form.setKey(formElement.attributeValue("key"));
-        form.setCaption(formElement.attributeValue("caption"));
+        form.setCaption(formCaption);
+
 
         logger.debug("处理form: {}, {}", form.getKey(), form.getCaption());
 
@@ -151,7 +115,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             if (caption != null) {
                 metaField.setCaption(caption);
             }
-            // isBussinessName
+            // isBusinessName
             String isBusinessName = xmlField.attributeValue("isBusinessName");
             Boolean bBusinessName = Boolean.valueOf(isBusinessName);
             if (bBusinessName) {
@@ -163,7 +127,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
 
         // form可以与其他form嵌套
         MetaForm o = readRelation(form, formElement, holder);
-
+//        holder.addMetaForm(o);
         return o;
     }
 
@@ -180,8 +144,12 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             if (nextForms == null) {
                 continue;
             }
-            for (Object nextForm : nextForms) {
-                MetaForm nextMetaForm = readForm((Element) nextForm, holder);
+
+            for (int i = 0; i < nextForms.size(); i++) {
+                Element nextForm = (Element) nextForms.get(i);
+
+                MetaForm nextMetaForm = readForm(nextForm, holder);
+                nextMetaForm.setIndex(i);
                 // 如果没有指定relation的类型，就用form的key来进行代替
                 if (type == null || type.trim().isEmpty()) {
                     metaForm.setRelation(metaForm.getKey(), nextMetaForm);
@@ -189,6 +157,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
                     metaForm.setRelation(type, nextMetaForm);
                 }
             }
+
         }
         return metaForm;
     }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 处理提交上来的数据
@@ -32,35 +31,20 @@ public class WebFormService {
             return null;
         }
 
+//        FormRawData rawData = new FormRawData(map);
+
+
         return cleanUpForm(key, map);
     }
-
-
-//    /**
-//     * 按照view对提交的数据处理
-//     *
-//     * @param key
-//     * @param map
-//     * @return
-//     */
-//    private IEntity cleanUpView(String key, Map<String, Map<String, Object>> map) {
-//        MetaView metaView = holder.getMetaView(key);
-//        if (metaView == null) {
-//            logger.error("metaView: {} 没有被定义在配置文件中。", key);
-//            throw new IllegalArgumentException("viewKey [" + key + "] 无法找到配置");
-//        }
-//
-//        return converterManager.read(metaView, map);
-//    }
 
     /**
      * 按照form对提交的数据处理
      *
      * @param formKey
-     * @param map
+     * @param
      * @return
      */
-    private IEntity cleanUpForm(String formKey, Map<String, Map<String, Object>> map) {
+    private IEntity cleanUpForm(String formKey, Map<String, Map<String, Object>> rawData) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         if (metaForm == null) {
@@ -68,6 +52,6 @@ public class WebFormService {
             throw new IllegalArgumentException("formKey： [" + formKey + "] 无法找到配置");
         }
 
-        return converterManager.read(metaForm, map);
+        return converterManager.read(metaForm, rawData);
     }
 }

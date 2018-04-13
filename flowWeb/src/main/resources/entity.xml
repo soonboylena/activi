@@ -26,7 +26,12 @@
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
             <field ref="companyName" required="true" isBusinessName="true"/>
         </form>
-        <!--form(暂不)支持ref这种，也支持直接定义; form可以嵌套-->
+
+        <form key="contact" caption="联系人信息">
+            <field ref="contactName" required="true" isBusinessName="true"/>
+            <field ref="contactTel" required="true"/>
+        </form>
+
         <form key="company2" caption="客户信息">
             <field ref="companyName" required="true" isBusinessName="true"/>
             <field ref="customerType" required="true"/>
@@ -34,10 +39,9 @@
                 <!--一个relation里边可以放多个form，前提是type一样-->
                 <!--如果不想指定type，可以留空，form的key将会做为type-->
                 <relation type="contact">
-                    <form key="contact" caption="联系人信息">
-                        <field ref="contactName" required="true" isBusinessName="true"/>
-                        <field ref="contactTel" required="true" isBusinessName="true"/>
-                    </form>
+                    <!--如果ref了，下边就不能再加别的东西了。加了也会被忽略-->
+                    <form ref="contact" caption="联系人信息1"/>
+                    <form ref="contact" caption="联系人信息2"/>
                 </relation>
             </relations>
         </form>

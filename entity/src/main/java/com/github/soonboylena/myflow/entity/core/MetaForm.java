@@ -1,18 +1,21 @@
 package com.github.soonboylena.myflow.entity.core;
 
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
 public class MetaForm extends MetaCollection<MetaField> {
 
     private String caption;
-    private List<Relation> relations = new ArrayList<>();
+    private Map<String, Relation> relations = new HashMap<>();
+
+    /**
+     * 如果这个form是relation里边的form，可能会有key重复的情况；
+     * 加了index避免在画面上key值相同
+     */
+    private Integer index;
 
     @Override
     public String getCaption() {
@@ -20,18 +23,29 @@ public class MetaForm extends MetaCollection<MetaField> {
     }
 
     public void setRelation(String type, MetaForm relatedForm) {
-        Relation r = new Relation(type, relatedForm);
-        relations.add(r);
+        Relation relation = relations.get(type);
+        if (relation == null)
+            relation = new Relation(type);
+        relation.addRelatedForm(relatedForm);
+        relations.put(type, relation);
     }
 
-    @Data
-    public static class Relation {
-        String type;
-        MetaForm relatedForm;
-
-        Relation(String type, MetaForm relatedForm) {
-            this.type = type;
-            this.relatedForm = relatedForm;
+    public String getKeyIndex() {
+        if (index == null || index == 0) {
+            return getKey();
         }
+        return getKey() + "[" + index + "]";
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public Collection<Relation> getRelations() {
+        return relations.values();
     }
 }

@@ -28,9 +28,4 @@ public class WebLayoutBuilder {
         return (UiContainer) converterManager.convert(metaForm, container);
     }
 
-//    public Page buildView(String viewKey) {
-//
-//        MetaView metaView = holder.getMetaView(viewKey);
-//        return (Page) converterManager.convert(metaView);
-//    }
 }
