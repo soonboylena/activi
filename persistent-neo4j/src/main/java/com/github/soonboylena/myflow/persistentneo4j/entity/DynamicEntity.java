@@ -31,7 +31,7 @@ public class DynamicEntity extends BaseModel {
 
     public void addProperty(String key, Object data) {
         if (data == null) {
-            logger.warn("尝试将[{}]的property [{}] 为null。改处理将被忽略", getTitle(), key);
+            logger.warn("尝试将[{}]的property [{}] 为null。该处理将被忽略", getTitle(), key);
             return;
         }
         logger.trace("[{}]: \\{{}:{}\\}", getTitle(), key, data);
