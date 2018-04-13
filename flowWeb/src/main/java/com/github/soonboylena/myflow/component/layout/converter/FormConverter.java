@@ -108,13 +108,18 @@ public class FormConverter implements UIConverter {
             throw new IllegalArgumentException("类型不正确。类型需要是Map的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
         }
 
+
         Objects.requireNonNull(meta);
         MetaForm metaForm = (MetaForm) meta;
+        FormEntity formEntity = new FormEntity(metaForm);
         Collection<MetaField> metas = metaForm.getMetas();
 
         Map<String, Object> _map = ((Map<String, Map<String, Object>>) map).get(((MetaForm) meta).getKeyIndex());
 
-        FormEntity formEntity = new FormEntity(metaForm);
+        if (_map == null) {
+            return formEntity;
+        }
+
         for (MetaField metaField : metas) {
             String key = metaField.getKey();
             Object o = _map.get(key);

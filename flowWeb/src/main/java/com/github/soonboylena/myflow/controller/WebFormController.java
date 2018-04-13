@@ -3,7 +3,9 @@ package com.github.soonboylena.myflow.controller;
 import com.github.soonboylena.myflow.service.WebLayoutService;
 import com.github.soonboylena.myflow.support.UrlManager;
 import com.github.soonboylena.myflow.vModel.UiObject;
+import com.github.soonboylena.myflow.vModel.contant.ButtonType;
 import com.github.soonboylena.myflow.vModel.uiAction.SubmitAction;
+import com.github.soonboylena.myflow.vModel.uiAction.UrlObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.Button;
 import com.github.soonboylena.myflow.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.vModel.uiComponent.UrlSection;
@@ -21,9 +23,30 @@ public class WebFormController {
     private WebLayoutService webLayoutService;
 
 
+    /**
+     * 新建画面
+     *
+     * @param formKey
+     * @return
+     */
     @GetMapping("init/{formKey}")
     public UrlSection init(@PathVariable("formKey") String formKey) {
         return new UrlSection(UrlManager.formLayout(formKey));
+    }
+
+    /**
+     * 更新画面；有数据的情况
+     *
+     * @param formKey
+     * @param id
+     * @return
+     */
+    @GetMapping("init/{formKey}/{id}")
+    public UrlSection init(@PathVariable("formKey") String formKey, @PathVariable("id") Long id) {
+        UrlObject defineUrl = UrlManager.formLayout(formKey);
+        UrlSection urlSection = new UrlSection(defineUrl);
+        urlSection.setDataUrl(UrlManager.data(formKey, id));
+        return urlSection;
     }
 
     @GetMapping("layout/{formKey}")
@@ -32,16 +55,10 @@ public class WebFormController {
         Page page = new Page();
         webLayoutService.buildFormLayout(formKey, page);
         SubmitAction clientAction = new SubmitAction(UrlManager.submit(formKey));
-        Button button = new Button("提交", clientAction);
-//        page.addForm(form);
+        Button button = new Button("提交", ButtonType.primary, clientAction);
 
         page.addBtn(button);
         return page;
     }
 
-    @GetMapping("data/{formKey}/{id}")
-    public UiObject data(@PathVariable("formKey") String formKey, @PathVariable("id") String id) {
-//        return webLayoutService.buildLayout(formKey);
-        return null;
-    }
 }

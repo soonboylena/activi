@@ -41,7 +41,7 @@
                 <relation type="contact">
                     <!--如果ref了，下边就不能再加别的东西了。加了也会被忽略-->
                     <form ref="contact" caption="联系人信息1"/>
-                    <form ref="contact" caption="联系人信息2"/>
+                    <!--<form ref="contact" caption="联系人信息2"/>-->
                 </relation>
             </relations>
         </form>

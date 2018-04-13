@@ -5,13 +5,17 @@ import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
 import com.github.soonboylena.myflow.persistentneo4j.service.DynamicFormService;
 import com.github.soonboylena.myflow.service.WebFormService;
 import com.github.soonboylena.myflow.support.UrlManager;
+import com.github.soonboylena.myflow.vModel.UiObject;
+import com.github.soonboylena.myflow.vModel.contant.ClientRouterMode;
 import com.github.soonboylena.myflow.vModel.uiAction.AbstractAction;
 import com.github.soonboylena.myflow.vModel.uiAction.LinkAction;
 import com.github.soonboylena.myflow.vModel.uiAction.MessageAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
@@ -33,11 +37,26 @@ public class WebDataController {
 
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
+            action.setMode(ClientRouterMode.replace);
             action.setUrl(UrlManager.pageInit(formKey, save.getId()));
             return action;
         }
 
         return MessageAction.error("没有接收到提交的数据！");
+    }
+
+    @GetMapping("/{formKey}/{id}")
+    public Map<String, String> data(@PathVariable("formKey") String formKey, @PathVariable("id") Long id) {
+
+        Optional<DynamicEntity> byId = dynamicFormService.findById(id);
+        if (!byId.isPresent()) {
+            return null;
+        }
+
+        DynamicEntity entity = byId.get();
+
+
+        return Collections.singletonMap("test", "123");
     }
 
 }

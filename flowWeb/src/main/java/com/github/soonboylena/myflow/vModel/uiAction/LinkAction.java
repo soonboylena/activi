@@ -22,7 +22,6 @@ public class LinkAction extends AbstractAction {
     private String alert;
     private ClientRouterMode mode;
     private String callbackMethodName;
-    private String forms;
 
     public LinkAction(UrlObject url) {
         this.url = url;

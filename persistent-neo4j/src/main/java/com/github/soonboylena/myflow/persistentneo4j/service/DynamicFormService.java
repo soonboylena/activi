@@ -18,11 +18,23 @@ public class DynamicFormService {
     @Autowired
     private DynamicFormGraphRepository repository;
 
-//    @Autowired
-//    private Session session;
 
+    /**
+     * @param id
+     * @return
+     */
+    public Optional<DynamicEntity> findById(Long id) {
+        Optional<DynamicEntity> byId = repository.findById(id);
+        return byId;
+    }
+
+    /**
+     * 保存
+     *
+     * @param iEntity
+     * @return
+     */
     public DynamicEntity save(IEntity iEntity) {
-
         DynamicEntity entity = resolve(iEntity);
         return repository.save(entity);
     }

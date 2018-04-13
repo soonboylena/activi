@@ -53,4 +53,14 @@ public class UrlManager {
                 .put("id", id)
                 .ok());
     }
+
+    /**
+     * 动态表单提交
+     *
+     * @param formKey
+     * @return
+     */
+    public static UrlObject data(String formKey, Long id) {
+        return new UrlObject(prefix + "/data/{viewKey}/{id}", HttpMethod.GET, ChainMap.get().put("viewKey", formKey).put("id", id).ok());
+    }
 }

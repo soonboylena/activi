@@ -18,6 +18,9 @@ public class DynamicRelation {
     @EndNode
     DynamicEntity end;
 
+    public DynamicRelation() {
+    }
+
     public DynamicRelation(DynamicEntity start, DynamicEntity end, String type) {
         this.start = start;
         this.end = end;

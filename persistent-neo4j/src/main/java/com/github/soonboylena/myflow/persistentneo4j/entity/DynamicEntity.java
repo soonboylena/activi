@@ -17,6 +17,9 @@ public class DynamicEntity extends BaseModel {
 
     private transient static final Logger logger = LoggerFactory.getLogger(DynamicEntity.class);
 
+    public DynamicEntity() {
+    }
+
     public DynamicEntity(String title, String key) {
         super(title);
         super.setLabels(Collections.singleton(key));
