@@ -97,7 +97,7 @@ public class FormConverter implements UIConverter {
                 this.convert(relatedForm, container);
             }
         }
-
+        container.setCaption(metaForm.getCaption());
         return container;
     }
 
@@ -143,6 +143,36 @@ public class FormConverter implements UIConverter {
             }
         }
         return formEntity;
+    }
+
+    @Override
+    public void loadData(IEntity entity, Map topMap) {
+
+        if (entity == null) return;
+
+        FormEntity formEntity = (FormEntity) entity;
+
+        MetaForm metaForm = formEntity.acquireMeta();
+        String keyIndex = metaForm.getKeyIndex();
+
+        Map formMap = new HashMap();
+
+        List<FieldEntity> fieldEntities = formEntity.getFieldEntities();
+        for (FieldEntity fieldEntity : fieldEntities) {
+            converterManager.loadData(fieldEntity, formMap);
+        }
+
+        topMap.put(metaForm.getKeyIndex(), formMap);
+
+        Collection<Relation> relations = metaForm.getRelations();
+        for (Relation relation : relations) {
+            String type = relation.getType();
+            List<FormEntity> thisTypeRelations = formEntity.getRelations(type);
+            for (FormEntity relatedFormEtt : thisTypeRelations) {
+                loadData(relatedFormEtt, topMap);
+            }
+        }
+
     }
 
     private boolean isBreakPoint(int totalIndex, int cursor, int span, int colsInRow, MetaForm metaForm) {

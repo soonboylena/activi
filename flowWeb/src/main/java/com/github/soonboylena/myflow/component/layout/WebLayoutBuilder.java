@@ -24,6 +24,7 @@ public class WebLayoutBuilder {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         Objects.requireNonNull(metaForm, "没有找到formKey: [ " + formKey + " ] 的定义.");
+
         container.setCaption(metaForm.getCaption());
         return (UiContainer) converterManager.convert(metaForm, container);
     }

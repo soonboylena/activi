@@ -8,6 +8,7 @@ public class FormEntity implements IEntity {
     private MetaForm metaCollection;
     private Map<String, Object> data = new HashMap<>(20);
 
+
     // key值是关系类型；一个关系类型底下可能会有多个相关的entity
     private Map<String, List<FormEntity>> relations = new HashMap<>();
 
@@ -58,5 +59,14 @@ public class FormEntity implements IEntity {
         List<FormEntity> entities = relations.get(type);
         if (entities == null) return Collections.emptyList();
         return entities;
+    }
+
+    public void setDatum(String key, Object property) {
+        if (metaCollection.contains(key)) {
+            data.put(key, property);
+            return;
+        }
+
+        throw new RuntimeException("metaPool 中没有这个包含这个key： " + key + ", 无法赋值");
     }
 }

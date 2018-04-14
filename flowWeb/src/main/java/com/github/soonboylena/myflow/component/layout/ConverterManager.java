@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.component.layout;
 
 import com.github.soonboylena.myflow.component.layout.converter.*;
+import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
@@ -28,7 +29,7 @@ public class ConverterManager {
     }
 
     /**
-     * meta ==> 画面
+     * meta ==> 画面定义
      *
      * @param metaItem
      * @return
@@ -44,7 +45,7 @@ public class ConverterManager {
     }
 
     /**
-     * 画面数据 ==> data
+     * 画面数据 ==> IEntity
      *
      * @param meta
      * @param data
@@ -59,4 +60,12 @@ public class ConverterManager {
         return null;
     }
 
+    public void loadData(IEntity entity, Map topMap) {
+        for (UIConverter uiConverter : converterList) {
+            if (uiConverter.support(entity.acquireMeta())) {
+                uiConverter.loadData(entity, topMap);
+                return;
+            }
+        }
+    }
 }

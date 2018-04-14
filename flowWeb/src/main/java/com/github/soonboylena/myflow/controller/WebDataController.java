@@ -1,11 +1,7 @@
 package com.github.soonboylena.myflow.controller;
 
-import com.github.soonboylena.myflow.entity.core.IEntity;
-import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
-import com.github.soonboylena.myflow.persistentneo4j.service.DynamicFormService;
 import com.github.soonboylena.myflow.service.WebFormService;
 import com.github.soonboylena.myflow.support.UrlManager;
-import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.contant.ClientRouterMode;
 import com.github.soonboylena.myflow.vModel.uiAction.AbstractAction;
 import com.github.soonboylena.myflow.vModel.uiAction.LinkAction;
@@ -13,9 +9,7 @@ import com.github.soonboylena.myflow.vModel.uiAction.MessageAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
@@ -24,21 +18,18 @@ public class WebDataController {
     @Autowired
     private WebFormService webFromSvs;
 
-    @Autowired
-    private DynamicFormService dynamicFormService;
 
     @PutMapping("/{formKey}")
     public AbstractAction pageSubmit(@PathVariable String formKey, @RequestBody Map<String, Map<String, Object>> map) {
 
         if (map != null) {
 
-            IEntity iEntity = webFromSvs.cleanUp(formKey, map);
-            DynamicEntity save = dynamicFormService.save(iEntity);
+            Long id = webFromSvs.save(formKey, map);
 
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
             action.setMode(ClientRouterMode.replace);
-            action.setUrl(UrlManager.pageInit(formKey, save.getId()));
+            action.setUrl(UrlManager.pageInit(formKey, id));
             return action;
         }
 
@@ -46,17 +37,9 @@ public class WebDataController {
     }
 
     @GetMapping("/{formKey}/{id}")
-    public Map<String, String> data(@PathVariable("formKey") String formKey, @PathVariable("id") Long id) {
+    public Map data(@PathVariable("formKey") String formKey, @PathVariable("id") Long id) {
 
-        Optional<DynamicEntity> byId = dynamicFormService.findById(id);
-        if (!byId.isPresent()) {
-            return null;
-        }
-
-        DynamicEntity entity = byId.get();
-
-
-        return Collections.singletonMap("test", "123");
+        return webFromSvs.loadData(formKey, id);
     }
 
 }

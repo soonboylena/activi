@@ -5,6 +5,8 @@ import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 
+import java.util.Map;
+
 /**
  * 转换器，用来转换画面UI组件与基础结构
  * support: 是否支持
@@ -25,4 +27,6 @@ public interface UIConverter {
     public UiObject convert(IMeta metaItem, UiContainer container);
 
     public IEntity read(IMeta meta, Object data);
+
+    public void loadData(IEntity entity, Map topMap);
 }

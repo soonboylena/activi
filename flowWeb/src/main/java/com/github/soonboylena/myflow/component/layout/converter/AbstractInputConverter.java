@@ -1,13 +1,14 @@
 package com.github.soonboylena.myflow.component.layout.converter;
 
+import com.github.soonboylena.myflow.entity.core.FieldEntity;
+import com.github.soonboylena.myflow.entity.core.IEntity;
+import com.github.soonboylena.myflow.entity.core.IMeta;
+import com.github.soonboylena.myflow.entity.core.MetaField;
 import com.github.soonboylena.myflow.support.WebItemType;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.FormItem;
 import com.github.soonboylena.myflow.vModel.uiComponent.MapUiObject;
-import com.github.soonboylena.myflow.entity.core.IMeta;
-import com.github.soonboylena.myflow.entity.core.IMetaInput;
-import com.github.soonboylena.myflow.entity.core.MetaField;
 
 import java.util.Map;
 import java.util.Objects;
@@ -53,4 +54,9 @@ public abstract class AbstractInputConverter implements UIConverter {
 
     protected abstract WebItemType getType();
 
+    @Override
+    public void loadData(IEntity entity, Map topMap) {
+        FieldEntity fe = (FieldEntity) entity;
+        topMap.put(fe.acquireMeta().getKey(), fe.getData());
+    }
 }

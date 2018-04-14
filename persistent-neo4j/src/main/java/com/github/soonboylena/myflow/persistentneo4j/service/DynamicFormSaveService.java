@@ -13,20 +13,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DynamicFormService {
+public class DynamicFormSaveService {
 
     @Autowired
     private DynamicFormGraphRepository repository;
-
-
-    /**
-     * @param id
-     * @return
-     */
-    public Optional<DynamicEntity> findById(Long id) {
-        Optional<DynamicEntity> byId = repository.findById(id);
-        return byId;
-    }
 
     /**
      * 保存

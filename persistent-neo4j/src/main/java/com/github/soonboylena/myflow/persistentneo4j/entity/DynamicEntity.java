@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NodeEntity
 @Getter
@@ -42,10 +43,6 @@ public class DynamicEntity extends BaseModel {
     }
 
 
-//    public void addRelation(DynamicRelation relation) {
-//        this.relationShips.add(relation);
-//    }
-
     public void addRelation(String type, DynamicEntity... relatedEntities) {
         if (relatedEntities != null) {
             for (DynamicEntity relatedEntity : relatedEntities) {
@@ -55,8 +52,18 @@ public class DynamicEntity extends BaseModel {
         }
     }
 
+    public Object getProperty(String key) {
+        Object o = properties.get(key);
+        return o;
+    }
 
-//    public void addOther(String key, DynamicEntity other) {
-//        this.others.put(key, other);
-//    }
+    /**
+     * 根据type找所有联系并返回
+     *
+     * @param type
+     * @return
+     */
+    public List<DynamicRelation> getRelationShip(String type) {
+        return relationShips.stream().filter(s -> s.getType().equalsIgnoreCase(type)).collect(Collectors.toList());
+    }
 }

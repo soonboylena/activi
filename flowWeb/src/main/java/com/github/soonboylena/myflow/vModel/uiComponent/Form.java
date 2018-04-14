@@ -1,10 +1,11 @@
 package com.github.soonboylena.myflow.vModel.uiComponent;
 
-import com.github.soonboylena.myflow.vModel.AbstractDwc;
+import com.github.soonboylena.myflow.vModel.AbstractContainer;
+import com.github.soonboylena.myflow.vModel.AbstractContainerDefinition;
 import com.github.soonboylena.myflow.vModel.IUiDefinition;
 import lombok.Data;
 
-public class Form extends AbstractDwc<FormDefinition> {
+public class Form extends AbstractContainer<FormDefinition> {
 
     private final static String type = "nForm";
 
@@ -19,9 +20,6 @@ public class Form extends AbstractDwc<FormDefinition> {
         setDefine(definition);
     }
 
-    public String getCaption() {
-        return getDefine().getCaption();
-    }
 
     @Override
     public String getType() {
@@ -30,7 +28,7 @@ public class Form extends AbstractDwc<FormDefinition> {
 }
 
 @Data
-class FormDefinition implements IUiDefinition {
+class FormDefinition  extends AbstractContainerDefinition {
     private String model;
     private String caption;
 }

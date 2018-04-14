@@ -48,4 +48,8 @@ public class MetaForm extends MetaCollection<MetaField> {
     public Collection<Relation> getRelations() {
         return relations.values();
     }
+
+    public boolean contains(String key) {
+        return metaPool != null && metaPool.containsKey(key);
+    }
 }

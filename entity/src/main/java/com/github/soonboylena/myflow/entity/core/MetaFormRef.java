@@ -66,4 +66,8 @@ public class MetaFormRef extends MetaForm {
         return this.caption == null ? form.getCaption() : this.caption;
     }
 
+    @Override
+    public boolean contains(String key) {
+        return getMetaPool().containsKey(key);
+    }
 }

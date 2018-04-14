@@ -4,12 +4,17 @@ import com.github.soonboylena.myflow.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
+import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
+import com.github.soonboylena.myflow.persistentneo4j.service.DynamicFormQueryService;
+import com.github.soonboylena.myflow.persistentneo4j.service.DynamicFormSaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 处理提交上来的数据
@@ -25,16 +30,29 @@ public class WebFormService {
     @Autowired
     private ConverterManager converterManager;
 
-    public IEntity cleanUp(String key, Map<String, Map<String, Object>> map) {
+    @Autowired
+    private DynamicFormQueryService queryService;
+
+    @Autowired
+    private DynamicFormSaveService dynamicFormService;
+
+
+    /**
+     * formData --> IEntity --> database
+     *
+     * @param key
+     * @param map
+     * @return
+     */
+    public Long save(String key, Map<String, Map<String, Object>> map) {
 
         if (map == null) {
             return null;
         }
 
-//        FormRawData rawData = new FormRawData(map);
-
-
-        return cleanUpForm(key, map);
+        IEntity entity = saveForm(key, map);
+        DynamicEntity saved = dynamicFormService.save(entity);
+        return saved.getId();
     }
 
     /**
@@ -44,7 +62,7 @@ public class WebFormService {
      * @param
      * @return
      */
-    private IEntity cleanUpForm(String formKey, Map<String, Map<String, Object>> rawData) {
+    private IEntity saveForm(String formKey, Map<String, Map<String, Object>> rawData) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         if (metaForm == null) {
@@ -53,5 +71,27 @@ public class WebFormService {
         }
 
         return converterManager.read(metaForm, rawData);
+    }
+
+    /**
+     * database --> IEntity --> formData
+     *
+     * @param formKey
+     * @param id
+     * @return
+     */
+    public Map<String, Map<String, Object>> loadData(String formKey, Long id) {
+
+        Map dataMap = new HashMap();
+
+        MetaForm metaForm = holder.getMetaForm(formKey);
+        Objects.requireNonNull(metaForm);
+
+        IEntity entity = queryService.findById(metaForm, id);
+        if (entity == null) return dataMap;
+        converterManager.loadData(entity, dataMap);
+
+
+        return dataMap;
     }
 }
