@@ -72,7 +72,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("1")).authorities("menu-system-user", "menu-system-auth", "menu-customer-add");
+                .withUser("user").password(passwordEncoder().encode("1"))
+                .authorities(
+                        "menu-system-user",
+                        "menu-system-auth",
+                        "menu-customer-add",
+                        "menu-customer-list"
+                );
     }
 
 

@@ -89,11 +89,19 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         customer.setTitle("客户管理");
         customer.setCurrentKey("customerManage");
 
-        MenuNode customerAdd = new MenuNode("user", node.getCurrentKey(), "添加客户");
+        MenuNode customerAdd = new MenuNode("user", customer.getCurrentKey(), "添加客户");
         customerAdd.setIcon("person-stalker");
         customerAdd.setUrl("/api/page/init/company2?at=/layoutContent/customs/page");
         customerAdd.setAuthorityEntity(new AuthorityEntity("添加客户权限", "menu-customer-add"));
         customer.addItem(customerAdd);
+//        repository.save(customer);
+
+
+        MenuNode customerList = new MenuNode("users", customer.getCurrentKey(), "客户一览");
+        customerList.setIcon("person-stalker");
+        customerList.setUrl("/api/list/layout/company2?at=/layoutContent/customs/page");
+        customerList.setAuthorityEntity(new AuthorityEntity("显示客户一览权限", "menu-customer-list"));
+        customer.addItem(customerList);
         repository.save(customer);
 
         print(save, "新提交的一条数据");

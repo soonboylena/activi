@@ -118,6 +118,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             // isBusinessName
             String isBusinessName = xmlField.attributeValue("isBusinessName");
             Boolean bBusinessName = Boolean.valueOf(isBusinessName);
+            metaField.setBusinessKey(bBusinessName);
             if (bBusinessName) {
                 form.setBusinessKey(metaField.getKey());
             }

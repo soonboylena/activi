@@ -26,6 +26,7 @@ public class ConverterManager {
         converterList.add(new FormConverter(this));
         converterList.add(new StringInputConverter());
         converterList.add(new SelectOneConverter());
+        converterList.add(new ListConverter());
     }
 
     /**

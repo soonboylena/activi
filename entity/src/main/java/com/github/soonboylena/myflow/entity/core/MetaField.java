@@ -8,6 +8,7 @@ public class MetaField implements IMetaInput {
     private AbstractMetaItem metaItem;
     private boolean readOnly = false;
     private boolean required = false;
+    private boolean isBusinessKey = false;
 
     private String caption;
     private String description;

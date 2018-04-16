@@ -22,7 +22,6 @@ public class WebFormController {
     @Autowired
     private WebLayoutService webLayoutService;
 
-
     /**
      * 新建画面
      *
@@ -60,5 +59,4 @@ public class WebFormController {
         page.addBtn(button);
         return page;
     }
-
 }
