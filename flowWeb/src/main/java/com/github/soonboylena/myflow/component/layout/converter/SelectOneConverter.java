@@ -22,7 +22,7 @@ public class SelectOneConverter extends AbstractInputConverter {
     }
 
     @Override
-    public FieldEntity read(IMeta meta, Object data) {
+    public FieldEntity pageData2Entity(IMeta meta, Object data) {
 
         if (data != null && !(data instanceof String)) {
             throw new IllegalArgumentException("类型不匹配。期望：String 实际：" + data.getClass().getName());

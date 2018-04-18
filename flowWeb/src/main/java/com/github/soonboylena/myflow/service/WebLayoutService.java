@@ -48,7 +48,7 @@ public class WebLayoutService {
     public UiContainer listLayout(String formKey) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
-        MetaList metaList = MetaList.fromMetaForm(metaForm);
+        MetaList metaList = new MetaList(metaForm);
 
         Page page = new Page(metaForm.getCaption(), "一览");
         UiContainer build = layoutBuilder.build(metaList, page);

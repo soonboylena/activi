@@ -150,7 +150,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
                 Element nextForm = (Element) nextForms.get(i);
 
                 MetaForm nextMetaForm = readForm(nextForm, holder);
-                nextMetaForm.setIndex(i);
+//                nextMetaForm.setIndex(i);
                 // 如果没有指定relation的类型，就用form的key来进行代替
                 if (type == null || type.trim().isEmpty()) {
                     metaForm.setRelation(metaForm.getKey(), nextMetaForm);

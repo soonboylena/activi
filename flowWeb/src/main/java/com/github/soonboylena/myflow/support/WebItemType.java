@@ -27,6 +27,6 @@ public enum WebItemType {
                 return webItemType;
             }
         }
-        throw new IllegalArgumentException("can not convert string \"" + literal + "\" to WebItemType ");
+        throw new IllegalArgumentException("can not meta2Page string \"" + literal + "\" to WebItemType ");
     }
 }

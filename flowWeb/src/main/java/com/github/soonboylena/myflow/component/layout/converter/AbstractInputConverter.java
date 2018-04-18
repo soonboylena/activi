@@ -4,6 +4,7 @@ import com.github.soonboylena.myflow.entity.core.FieldEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.entity.core.MetaField;
+import com.github.soonboylena.myflow.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.support.WebItemType;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
@@ -25,7 +26,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     }
 
     @Override
-    public UiObject convert(IMeta metaItem, UiContainer container) {
+    public UiObject meta2Page(IMeta metaItem, UiContainer container) {
 
         MetaField metaInput = (MetaField) metaItem;
 
@@ -55,7 +56,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     protected abstract WebItemType getType();
 
     @Override
-    public void loadData(IEntity entity, Map topMap) {
+    public void entityData2PageMap(IEntity entity, Map topMap) {
         FieldEntity fe = (FieldEntity) entity;
         topMap.put(fe.acquireMeta().getKey(), fe.getData());
     }

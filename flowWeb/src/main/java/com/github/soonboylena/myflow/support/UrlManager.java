@@ -5,7 +5,7 @@ import org.springframework.http.HttpMethod;
 
 public class UrlManager {
 
-    private static final String prefix = "/api";
+    public static final String prefix = "/api";
 
     //=======================================================================================================================
 
@@ -61,6 +61,16 @@ public class UrlManager {
      * @return
      */
     public static UrlObject data(String formKey, Long id) {
-        return new UrlObject(prefix + "/data/{viewKey}/{id}", HttpMethod.GET, ChainMap.get().put("viewKey", formKey).put("id", id).ok());
+        return new UrlObject(prefix + "/data/{formKey}/{id}", HttpMethod.GET, ChainMap.get().put("formKey", formKey).put("id", id).ok());
+    }
+
+    /**
+     * 一览画面数据
+     *
+     * @param formKey
+     * @return
+     */
+    public static UrlObject dataList(String formKey) {
+        return new UrlObject(prefix + "/data/list/{formKey}", HttpMethod.GET, ChainMap.get().put("formKey", formKey).ok());
     }
 }

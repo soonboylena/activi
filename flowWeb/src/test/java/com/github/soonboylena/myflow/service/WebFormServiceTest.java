@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 public class WebFormServiceTest extends BaseTest {
 
 
@@ -17,7 +15,7 @@ public class WebFormServiceTest extends BaseTest {
 
     @Test
     public void loadData() {
-        Map<String, Map<String, Object>> company2 = webFormService.loadData("company2", 13L);
+        Map<String, Map<String, Object>> company2 = webFormService.findById("company2", 13L);
         Assert.assertEquals(3, company2.size());
         print(company2, "取回来的数据");
     }

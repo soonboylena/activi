@@ -69,4 +69,12 @@ public class FormEntity implements IEntity {
 
         throw new RuntimeException("metaPool 中没有这个包含这个key： " + key + ", 无法赋值");
     }
+
+    public void setId(Long id) {
+        data.put("id", id);
+    }
+
+    public Object getId() {
+        return data.get("id");
+    }
 }

@@ -3,6 +3,7 @@ package com.github.soonboylena.myflow.component.layout.converter;
 import com.github.soonboylena.myflow.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.component.layout.RowBreaker;
 import com.github.soonboylena.myflow.entity.core.*;
+import com.github.soonboylena.myflow.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.Column;
@@ -44,14 +45,14 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public UiObject convert(IMeta meta, UiContainer container) {
+    public UiObject meta2Page(IMeta meta, UiContainer container) {
 
         MetaForm metaForm = (MetaForm) meta;
 
         this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
         Collection<MetaField> fields = metaForm.getMetas();
 
-        Form s = new Form(metaForm.getKeyIndex(), metaForm.getCaption());
+        Form s = new Form(metaForm.getKey(), metaForm.getCaption());
         container.addContent(s);
         if (fields == null || fields.isEmpty()) {
             return s;
@@ -94,7 +95,7 @@ public class FormConverter implements UIConverter {
             // 递归，把有关联的form装到容器里边； 这个过程中嵌套关系会变成Array
             for (MetaForm relatedForm : relatedForms) {
                 logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
-                this.convert(relatedForm, container);
+                this.meta2Page(relatedForm, container);
             }
         }
         container.setCaption(metaForm.getCaption());
@@ -102,19 +103,26 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public FormEntity read(IMeta meta, Object map) {
+    public FormEntity pageData2Entity(IMeta meta, Object map) {
 
-        if (!(map instanceof Map)) {
-            throw new IllegalArgumentException("类型不正确。类型需要是Map的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
+        if (!(map instanceof KeyConflictCollection)) {
+            throw new IllegalArgumentException("类型不正确。类型需要是KeyConflictCollection的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
         }
 
-
-        Objects.requireNonNull(meta);
         MetaForm metaForm = (MetaForm) meta;
+        KeyConflictCollection<Map<String, Object>> collection = (KeyConflictCollection<Map<String, Object>>) map;
+        return read(metaForm, collection, 0);
+
+
+    }
+
+    private FormEntity read(MetaForm metaForm, KeyConflictCollection<Map<String, Object>> collection, int index) {
+
+        Objects.requireNonNull(metaForm);
         FormEntity formEntity = new FormEntity(metaForm);
         Collection<MetaField> metas = metaForm.getMetas();
 
-        Map<String, Object> _map = ((Map<String, Map<String, Object>>) map).get(((MetaForm) meta).getKeyIndex());
+        Map<String, Object> _map = collection.get(metaForm.getKey(), index);
 
         if (_map == null) {
             return formEntity;
@@ -131,14 +139,14 @@ public class FormConverter implements UIConverter {
         Collection<Relation> relations = metaForm.getRelations();
         for (Relation relation : relations) {
             List<MetaForm> relatedForms = relation.getRelatedForm();
-//            String key = relatedForm.getKey();
-            for (MetaForm relatedForm : relatedForms) {
-                String keyIndex = relatedForm.getKeyIndex();
+            for (int i = 0; i < relatedForms.size(); i++) {
+                MetaForm relatedForm = relatedForms.get(i);
+                String key = relatedForm.getKey();
                 // 提前判断一下是否有这个下级form对应的数据；没有的话就不建了
-                if (!((Map) map).containsKey(keyIndex)) {
+                if (collection.get(key, i) == null) {
                     continue;
                 }
-                FormEntity nextFormEntity = read(relatedForm, map);
+                FormEntity nextFormEntity = read(relatedForm, collection, i);
                 formEntity.addRelatedForm(relation.getType(), nextFormEntity);
             }
         }
@@ -146,30 +154,30 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public void loadData(IEntity entity, Map topMap) {
+    public void entityData2PageMap(IEntity entity, Map topMap) {
 
         if (entity == null) return;
 
         FormEntity formEntity = (FormEntity) entity;
 
         MetaForm metaForm = formEntity.acquireMeta();
-        String keyIndex = metaForm.getKeyIndex();
+//        String keyIndex = metaForm.getKeyIndex();
 
-        Map formMap = new HashMap();
 
         List<FieldEntity> fieldEntities = formEntity.getFieldEntities();
+        Map<String, Object> fieldsMap = new HashMap<>(fieldEntities.size());
         for (FieldEntity fieldEntity : fieldEntities) {
-            converterManager.loadData(fieldEntity, formMap);
+            converterManager.entityData2PageMap(fieldEntity, fieldsMap);
         }
-
-        topMap.put(metaForm.getKeyIndex(), formMap);
+        fieldsMap.put("id", formEntity.getId());
+        topMap.put(metaForm.getKey(), fieldsMap);
 
         Collection<Relation> relations = metaForm.getRelations();
         for (Relation relation : relations) {
             String type = relation.getType();
             List<FormEntity> thisTypeRelations = formEntity.getRelations(type);
             for (FormEntity relatedFormEtt : thisTypeRelations) {
-                loadData(relatedFormEtt, topMap);
+                entityData2PageMap(relatedFormEtt, topMap);
             }
         }
 

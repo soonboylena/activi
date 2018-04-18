@@ -1,7 +1,6 @@
 package com.github.soonboylena.myflow.component.layout;
 
 import com.github.soonboylena.myflow.component.layout.converter.*;
-import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
@@ -26,7 +25,7 @@ public class ConverterManager {
         converterList.add(new FormConverter(this));
         converterList.add(new StringInputConverter());
         converterList.add(new SelectOneConverter());
-        converterList.add(new ListConverter());
+        converterList.add(new ListConverter(this));
     }
 
     /**
@@ -39,7 +38,7 @@ public class ConverterManager {
 
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(metaItem)) {
-                return uiConverter.convert(metaItem, container);
+                return uiConverter.meta2Page(metaItem, container);
             }
         }
         return null;
@@ -55,16 +54,16 @@ public class ConverterManager {
 
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(meta)) {
-                return uiConverter.read(meta, data);
+                return uiConverter.pageData2Entity(meta, data);
             }
         }
         return null;
     }
 
-    public void loadData(IEntity entity, Map topMap) {
+    public void entityData2PageMap(IEntity entity, Map collection) {
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(entity.acquireMeta())) {
-                uiConverter.loadData(entity, topMap);
+                uiConverter.entityData2PageMap(entity, collection);
                 return;
             }
         }

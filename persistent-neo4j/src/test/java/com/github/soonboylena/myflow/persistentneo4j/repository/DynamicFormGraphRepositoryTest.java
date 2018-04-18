@@ -3,8 +3,11 @@ package com.github.soonboylena.myflow.persistentneo4j.repository;
 import com.github.soonboylena.myflow.persistentneo4j.NeoBaseTest;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicRelation;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class DynamicFormGraphRepositoryTest extends NeoBaseTest {
 
@@ -26,4 +29,10 @@ public class DynamicFormGraphRepositoryTest extends NeoBaseTest {
         repository.save(entity);
     }
 
+    @Test
+    public void findByLabel() {
+        List<DynamicEntity> company2 = repository.findByLabel("company2");
+        Assert.assertTrue(company2 != null && company2.size() > 0);
+        print(company2, "取company2");
+    }
 }

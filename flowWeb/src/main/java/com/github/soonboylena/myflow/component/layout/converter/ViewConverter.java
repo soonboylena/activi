@@ -25,20 +25,20 @@
 //    }
 //
 //    @Override
-//    public UiObject convert(IMeta meta) {
+//    public UiObject meta2Page(IMeta meta) {
 //
 //        MetaView metaView = (MetaView) meta;
 //        Page page = new Page(metaView.getCaption());
 //        Collection<MetaForm> values = metaView.getMetaPool().values();
 //        for (MetaForm value : values) {
-//            Form form = (Form) converterManager.convert(value);
+//            Form form = (Form) converterManager.meta2Page(value);
 //            page.addForm(form);
 //        }
 //        return page;
 //    }
 //
 //    @Override
-//    public ViewEntity read(IMeta meta, Object map) {
+//    public ViewEntity pageData2Entity(IMeta meta, Object map) {
 //
 //        if (!(map instanceof Map)) {
 //            throw new IllegalArgumentException("类型不正确。类型需要是Map的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
@@ -55,7 +55,7 @@
 //
 //            String key = stringMapEntry.getKey();
 //            Map<String, Object> value = stringMapEntry.getValue();
-//            FormEntity formEntiy = (FormEntity) converterManager.read(metaView.acquireMeta(key), value);
+//            FormEntity formEntiy = (FormEntity) converterManager.pageData2Entity(metaView.acquireMeta(key), value);
 //            entity.addDatum(key, formEntiy.getData());
 //        }
 //        return entity;

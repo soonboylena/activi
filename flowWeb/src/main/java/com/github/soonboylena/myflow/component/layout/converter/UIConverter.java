@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.component.layout.converter;
 
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
+import com.github.soonboylena.myflow.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 
@@ -10,8 +11,8 @@ import java.util.Map;
 /**
  * 转换器，用来转换画面UI组件与基础结构
  * support: 是否支持
- * convert：将IMeta转为画面UI组件
- * read：   把画面提交的数据整理，转成IEntity
+ * meta2Page：将IMeta转为画面UI组件
+ * pageData2Entity：   把画面提交的数据整理，转成IEntity
  */
 public interface UIConverter {
 
@@ -24,11 +25,11 @@ public interface UIConverter {
      * @param container 指定的父容器
      * @return 如果指定了父容器，返回父容器；如果没有指定，由实现类自己处理返回UiObject;
      */
-    public UiObject convert(IMeta metaItem, UiContainer container);
+    public UiObject meta2Page(IMeta metaItem, UiContainer container);
 
     // 用meta和data构造IEntity
-    public IEntity read(IMeta meta, Object data);
+    public IEntity pageData2Entity(IMeta meta, Object data);
 
-    // 从IEntity里边取数据
-    public void loadData(IEntity entity, Map topMap);
+    // 从IEntity里边取数据,放到Map里边给画面用
+    public void entityData2PageMap(IEntity entity, Map topMap);
 }

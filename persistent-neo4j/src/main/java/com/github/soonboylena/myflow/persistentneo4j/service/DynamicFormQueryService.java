@@ -5,6 +5,7 @@ import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicRelation;
 import com.github.soonboylena.myflow.persistentneo4j.repository.DynamicFormGraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -20,11 +21,13 @@ public class DynamicFormQueryService {
 
 
     /**
+     * 找到这个formMeta的这个id对应的IEntity
+     *
      * @param metaForm
      * @param id
      * @return
      */
-    public IEntity findById(MetaForm metaForm, Long id) {
+    public FormEntity findById(MetaForm metaForm, Long id) {
 
         Optional<DynamicEntity> byId = repository.findById(id);
 
@@ -41,7 +44,7 @@ public class DynamicFormQueryService {
      * 根据metaForm，从Map中找对应的值，并构造出IEntity
      *
      * @param metaForm
-     * @param properties
+     * @param dynamic
      */
 
     private FormEntity extract(MetaForm metaForm, DynamicEntity dynamic) {
@@ -56,6 +59,8 @@ public class DynamicFormQueryService {
             Object property = dynamic.getProperty(key);
             formEntity.setDatum(key, property);
         }
+        Long id = dynamic.getId();
+        formEntity.setId(id);
 
         Collection<Relation> relations = metaForm.getRelations();
         if (relations == null) return formEntity;
@@ -77,4 +82,20 @@ public class DynamicFormQueryService {
         return formEntity;
     }
 
+
+    public ListEntity findByMeta(MetaForm metaForm) {
+        List<DynamicEntity> nodes = repository.findByLabel(metaForm.getKey());
+        MetaList metaList = new MetaList(metaForm);
+        ListEntity entity = new ListEntity(metaList);
+        if (nodes == null) {
+            return entity;
+        }
+
+        for (DynamicEntity node : nodes) {
+            FormEntity extract = extract(metaForm, node);
+            entity.addDatum(extract.getData());
+        }
+
+        return entity;
+    }
 }

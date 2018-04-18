@@ -15,7 +15,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     @Test
     public void init() throws Exception {
 //        MvcResult mvcResult = mockMvc.perform(get("/api/page/init/{formKey}", "custom"))
-        MvcResult mvcResult = mockMvc.perform(get(UrlManager.pageInit("custom").asUrlString()))
+        MvcResult mvcResult = mockMvc.perform(get(UrlManager.pageInit("company2").asUrlString()).contextPath(UrlManager.prefix))
                 .andExpect(status().isOk())
                 .andReturn();
         print(mvcResult, "init");
@@ -24,7 +24,7 @@ public class WebLayoutControllerTest extends ControllerTest {
     @Test
     public void layout() throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(get(UrlManager.formLayout("custom").asUrlString()))
+        MvcResult mvcResult = mockMvc.perform(get(UrlManager.formLayout("company2").asUrlString()).contextPath(UrlManager.prefix))
                 .andExpect(status().isOk())
                 .andReturn();
         print(mvcResult, "layout");
