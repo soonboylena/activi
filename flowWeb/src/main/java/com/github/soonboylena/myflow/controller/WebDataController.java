@@ -1,6 +1,8 @@
 package com.github.soonboylena.myflow.controller;
 
+import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.service.WebFormService;
+import com.github.soonboylena.myflow.service.WebValidService;
 import com.github.soonboylena.myflow.support.UrlManager;
 import com.github.soonboylena.myflow.vModel.contant.ClientRouterMode;
 import com.github.soonboylena.myflow.vModel.uiAction.AbstractAction;
@@ -18,14 +20,20 @@ public class WebDataController {
     @Autowired
     private WebFormService webFromSvs;
 
+    @Autowired
+    private WebValidService validService;
 
     @PutMapping("/{formKey}")
     public AbstractAction pageSubmit(@PathVariable String formKey, @RequestBody Map<String, Map<String, Object>> map) {
 
         if (map != null) {
 
-            Long id = webFromSvs.save(formKey, map);
-
+            IEntity entity = webFromSvs.form2Entity(formKey, map);
+            // ============
+            // 这个地方留定制校验
+            validService.valid(entity);
+            // =============
+            Long id = webFromSvs.save(entity);
             LinkAction action = new LinkAction();
             action.setAlert("提交成功!");
             action.setMode(ClientRouterMode.replace);

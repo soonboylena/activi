@@ -5,6 +5,7 @@ import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.entity.core.MetaList;
 import com.github.soonboylena.myflow.vModel.UiContainer;
+import com.github.soonboylena.myflow.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.vModel.uiComponent.Section;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,8 @@ public class WebLayoutService {
         MetaForm metaForm = holder.getMetaForm(formKey);
         MetaList metaList = MetaList.fromMetaForm(metaForm);
 
-        Section section = new Section();
-        UiContainer build = layoutBuilder.build(metaList, section);
+        Page page = new Page(metaForm.getCaption(), "一览");
+        UiContainer build = layoutBuilder.build(metaList, page);
         return build;
     }
 }

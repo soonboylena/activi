@@ -26,7 +26,9 @@ public interface UIConverter {
      */
     public UiObject convert(IMeta metaItem, UiContainer container);
 
+    // 用meta和data构造IEntity
     public IEntity read(IMeta meta, Object data);
 
+    // 从IEntity里边取数据
     public void loadData(IEntity entity, Map topMap);
 }

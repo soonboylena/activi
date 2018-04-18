@@ -40,17 +40,11 @@ public class WebFormService {
     /**
      * formData --> IEntity --> database
      *
-     * @param key
-     * @param map
+     * @param entity
      * @return
      */
-    public Long save(String key, Map<String, Map<String, Object>> map) {
+    public Long save(IEntity entity) {
 
-        if (map == null) {
-            return null;
-        }
-
-        IEntity entity = saveForm(key, map);
         DynamicEntity saved = dynamicFormService.save(entity);
         return saved.getId();
     }
@@ -62,7 +56,7 @@ public class WebFormService {
      * @param
      * @return
      */
-    private IEntity saveForm(String formKey, Map<String, Map<String, Object>> rawData) {
+    public IEntity form2Entity(String formKey, Map<String, Map<String, Object>> rawData) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         if (metaForm == null) {
