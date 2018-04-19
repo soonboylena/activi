@@ -13,7 +13,6 @@ public abstract class AbstractMetaItem implements IMetaInput {
 
     public abstract MetaInputType getType();
 
-    private void setType(MetaInputType type) {
-        this.type = type;
+    final void setType(MetaInputType type) {
     }
 }

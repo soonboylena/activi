@@ -171,8 +171,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             throw new ConfigBuildException("没有找到ref: [" + ref + "]的指定的item。");
         }
         // 处理field自己的属性
-        MetaField metaField = new MetaField((AbstractMetaItem) metaItem);// TODO 强转
-        return metaField;
+        return new MetaField((AbstractMetaItem) metaItem);
     }
 
     private MetaForm readRelation(MetaForm metaForm, Element form, MemoryConfigHolder holder) {

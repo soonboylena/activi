@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,5 +66,23 @@ public class WebDataController {
         return all;
     }
 
+    // ===================================画面选择下拉一览======================================
+    @GetMapping("key/{formKey}/resources")
+    public List<Map<String, String>> listResources(@PathVariable("formKey") String formKey) {
+
+        // FOR TEST
+
+        List<Map<String, String>> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Map<String, String> option = new HashMap<>();
+            list.add(option);
+
+            option.put("key", String.valueOf(i));
+            char s = (char) ('A' + i);
+            option.put("option", "用户" + s + " / 某某公司" + i);
+            option.put("value", "用户" + s);
+        }
+        return list;
+    }
 
 }

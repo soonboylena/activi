@@ -3,9 +3,6 @@ package com.github.soonboylena.myflow.entity.core;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 选择一个资源
  */
@@ -17,6 +14,6 @@ public class MetaItemResource extends AbstractMetaItem {
 
     @Override
     public MetaInputType getType() {
-        return MetaInputType.select_form;
+        return MetaInputType.resource;
     }
 }

@@ -29,7 +29,7 @@ public class DynamicEntity extends BaseModel {
     @Properties(allowCast = true)
     private Map<String, Object> properties = new HashMap<>();
 
-    @Relationship(type = "hasRelation")
+    @Relationship(type = "include")
     private Set<DynamicRelation> relationShips = new HashSet<>();
 
 

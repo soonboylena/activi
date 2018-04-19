@@ -73,4 +73,14 @@ public class UrlManager {
     public static UrlObject dataList(String formKey) {
         return new UrlObject(prefix + "/data/list/{formKey}", HttpMethod.GET, ChainMap.get().put("formKey", formKey).ok());
     }
+
+    /**
+     * 取得resource下拉一览
+     *
+     * @param formKey
+     * @return
+     */
+    public static UrlObject getResources(String formKey) {
+        return new UrlObject(prefix + "/data/key/{formKey}/resources", HttpMethod.GET, ChainMap.get().put("formKey", formKey).ok());
+    }
 }

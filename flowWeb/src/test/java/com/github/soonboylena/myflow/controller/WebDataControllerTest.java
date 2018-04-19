@@ -24,4 +24,16 @@ public class WebDataControllerTest extends ControllerTest {
                 .andReturn();
         print(mvcResult, "一览数据");
     }
+
+    @Test
+    public void listResources() throws Exception {
+        MvcResult mvcResult = mockMvc.perform
+                (
+                        get(UrlManager.getResources("company2").asUrlString())
+                                .contextPath(UrlManager.prefix)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+        print(mvcResult, "一览下拉选择");
+    }
 }
