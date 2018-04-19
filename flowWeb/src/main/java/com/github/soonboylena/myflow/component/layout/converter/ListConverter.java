@@ -7,6 +7,7 @@ import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.vModel.uiComponent.ListComponent;
 import com.github.soonboylena.myflow.vModel.uiComponent.ListComponentDefine;
+import org.hibernate.type.EmbeddedComponentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +49,21 @@ public class ListConverter implements UIConverter {
 //            String key = stringMetaFieldEntry.getKey();
             MetaField metaField = stringMetaFieldEntry.getValue();
             logger.debug("list组件列： key： {}, caption: {}", metaField.getKey(), metaField.getCaption());
-            define.addColDefine(new ListComponentDefine.ColDefine(metaField.getKey(), metaField.getCaption(), metaField.isBusinessKey()));
+
+            define.addColDefine(metaField.getMetaItem());
         }
         define.setDataUrl(UrlManager.dataList(metaList.getKey()));
+        define.setDetailUrl(UrlManager.pageInit(metaList.getKey()));
+
+        if (metaList.getBusinessKey() == null || metaList.getBusinessKey().isEmpty()) {
+            MetaItemString idCol = new MetaItemString();
+            idCol.setKey("id");
+            define.addColDefine(idCol);
+            define.setBusinessKey("id");
+        } else {
+            define.setBusinessKey(metaList.getBusinessKey());
+        }
+
 
         if (container != null) {
             container.setCaption(metaList.getCaption());

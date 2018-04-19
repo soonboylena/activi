@@ -195,7 +195,7 @@ public class FormConverter implements UIConverter {
 
     private UiObject swapWithCol(MetaField metaField, int cursor, int span) {
         Column c = new Column(0, span * unit);
-        UiObject convert = converterManager.convert(metaField, c);
+        UiObject convert = converterManager.meta2Page(metaField, c);
         return c;
     }
 

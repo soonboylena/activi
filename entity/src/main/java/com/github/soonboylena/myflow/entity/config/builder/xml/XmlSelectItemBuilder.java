@@ -12,7 +12,7 @@ import java.util.Objects;
 public class XmlSelectItemBuilder extends AbstractXmlItemBuilder {
 
     @Override
-    public AbstractMetaItem read(Object config, ConfigureHolder holder, Object source) {
+    public MetaItemSelect read(Object config, ConfigureHolder holder, Object source) {
         Element element = (Element) config;
         MetaItemSelect item = (MetaItemSelect) super.read(config, holder, source);
         List options = element.elements("option");
@@ -25,7 +25,7 @@ public class XmlSelectItemBuilder extends AbstractXmlItemBuilder {
     }
 
     @Override
-    protected AbstractMetaItem instanceItem() {
+    protected MetaItemSelect instanceItem() {
         return new MetaItemSelect();
     }
 

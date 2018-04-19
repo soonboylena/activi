@@ -5,6 +5,7 @@ import com.github.soonboylena.myflow.vModel.UiContainer;
 import com.github.soonboylena.myflow.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,9 @@ import java.util.Map;
 
 /**
  * 维护一组converter。这些convert负责将底层基础实体与表示层的模型进行转换
+ * 如果需要支持二次开发注入新的converter
+ * 1 把converterList放到composite组件里边
+ * 2 manager只跟composite打交道，并接受注入
  */
 @Component
 public class ConverterManager {
@@ -34,14 +38,14 @@ public class ConverterManager {
      * @param metaItem
      * @return
      */
-    public UiObject convert(IMeta metaItem, UiContainer container) {
+    public UiObject meta2Page(IMeta metaItem, UiContainer container) {
 
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(metaItem)) {
                 return uiConverter.meta2Page(metaItem, container);
             }
         }
-        return null;
+        return container;
     }
 
     /**

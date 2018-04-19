@@ -17,4 +17,9 @@ public class MetaItemSelect extends AbstractMetaItem {
     public void addOption(String key, String stringValue) {
         options.put(key, stringValue);
     }
+
+    @Override
+    public MetaInputType getType() {
+        return MetaInputType.select;
+    }
 }

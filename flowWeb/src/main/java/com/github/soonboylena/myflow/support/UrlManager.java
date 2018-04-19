@@ -40,7 +40,7 @@ public class UrlManager {
     }
 
     /**
-     * 动态表单入口 （加数据）
+     * 动态表单入口 （数据）
      *
      * @param formKey
      * @param id

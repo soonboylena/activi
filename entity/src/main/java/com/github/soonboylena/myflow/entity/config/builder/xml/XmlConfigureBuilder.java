@@ -1,16 +1,19 @@
 package com.github.soonboylena.myflow.entity.config.builder.xml;
 
+import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
 import com.github.soonboylena.myflow.entity.config.builder.InputItemBuilder;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.entity.exceptions.ConfigBuildException;
 import com.github.soonboylena.myflow.entity.support.XmlConfigureReader;
+import javafx.geometry.HorizontalDirection;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         Element xmlItems = rootElement.element("items");
         if (xmlItems != null) {
             List<Element> elements = xmlItems.elements("item");
-            List<AbstractMetaItem> items = elements.stream().map(e -> readItem(e, holder, xmlDocument)).collect(Collectors.toList());
+            List<IMetaInput> items = elements.stream().map(e -> readItem(e, holder, xmlDocument)).collect(Collectors.toList());
             holder.addMetaItems(items);
         }
 
@@ -69,8 +72,6 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
 
     private MetaForm readForm(Element formElement, MemoryConfigHolder holder) {
 
-        Map<String, AbstractMetaItem> metaItems = holder.getMetaItems();
-
         String refAttr = formElement.attributeValue("ref");
         String formCaption = formElement.attributeValue("caption");
         if (refAttr != null && !refAttr.trim().isEmpty()) {
@@ -82,26 +83,30 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             return new MetaFormRef(formCaption, metaForm);
         }
 
-
         MetaForm form = new MetaForm();
         form.setKey(formElement.attributeValue("key"));
         form.setCaption(formCaption);
 
-
         logger.debug("处理form: {}, {}", form.getKey(), form.getCaption());
 
         List fields = formElement.elements("field");
+
+        // 第一个，如果form没有设置 businessName的话，就用第一个
+        MetaField first = null;
         for (Object field : fields) {
 
             Element xmlField = (Element) field;
-            // 处理ref属性；关联到一个item
-            String ref = xmlField.attributeValue("ref");
-            AbstractMetaItem metaItem = metaItems.get(ref);
-            if (metaItem == null) {
-                throw new ConfigBuildException("没有找到ref: [" + ref + "]的指定的item。");
+
+
+            MetaField metaField;
+
+            String type = xmlField.attributeValue("type");
+            if (!StringUtils.isEmpty(type)) {
+                metaField = readFieldForm(xmlField, holder);
+            } else {
+                metaField = readAsRef(xmlField, holder);
             }
-            // 处理field自己的属性
-            MetaField metaField = new MetaField(metaItem);
+
             String readonly = xmlField.attributeValue("readonly");
             // readonly
             Boolean bReadOnly = Boolean.valueOf(readonly);
@@ -115,21 +120,59 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             if (caption != null) {
                 metaField.setCaption(caption);
             }
-            // isBusinessName
-            String isBusinessName = xmlField.attributeValue("isBusinessName");
-            Boolean bBusinessName = Boolean.valueOf(isBusinessName);
-            metaField.setBusinessKey(bBusinessName);
-            if (bBusinessName) {
-                form.setBusinessKey(metaField.getKey());
-            }
 
+
+            if (first == null) first = metaField;
             form.addMeta(metaField);
         }
+        // businessName
+        String bnsName = formElement.attributeValue("bnsName");
+        if (!StringUtils.isEmpty(bnsName)) {
+            form.setBusinessKey(bnsName);
+        } else if (first != null) {
+            form.setBusinessKey(first.getKey());
+        } else {
+            form.setBusinessKey("id");
+        }
+
 
         // form可以与其他form嵌套
-        MetaForm o = readRelation(form, formElement, holder);
-//        holder.addMetaForm(o);
-        return o;
+        return readRelation(form, formElement, holder);
+    }
+
+    private MetaField readFieldForm(Element xmlField, MemoryConfigHolder holder) {
+        String formKey = xmlField.attributeValue("formKey");
+        if (StringUtils.isEmpty(formKey)) {
+            throw new ConfigBuildException("field关联的formKey没有设置: " + formKey);
+        }
+
+        MetaForm metaForm = holder.getMetaForm(formKey);
+        if (metaForm == null) {
+            throw new ConfigBuildException("field关联的 form 没有找到. 有可能是form没正确的设置，或者是顺序不对。被依赖的form要放到前边: " + formKey);
+        }
+
+        MetaItemResource resource = new MetaItemResource();
+        resource.setKey(metaForm.getKey());
+        resource.setCaption(metaForm.getCaption());
+        resource.setDescription(metaForm.getDescription());
+
+        return new MetaField(resource);
+    }
+
+    private MetaField readAsRef(Element xmlField, ConfigureHolder holder) {
+
+        Map<String, IMetaInput> metaItems = holder.getMetaItems();
+
+        // 处理ref属性；关联到一个item
+        String ref = xmlField.attributeValue("ref");
+
+        IMetaInput metaItem = metaItems.get(ref);
+        if (metaItem == null) {
+            throw new ConfigBuildException("没有找到ref: [" + ref + "]的指定的item。");
+        }
+        // 处理field自己的属性
+        MetaField metaField = new MetaField((AbstractMetaItem) metaItem);// TODO 强转
+        return metaField;
     }
 
     private MetaForm readRelation(MetaForm metaForm, Element form, MemoryConfigHolder holder) {
@@ -163,7 +206,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
         return metaForm;
     }
 
-    private AbstractMetaItem readItem(Element s, MemoryConfigHolder holder, Document xmlDocument) {
+    private IMetaInput readItem(Element s, MemoryConfigHolder holder, Document xmlDocument) {
 
         for (InputItemBuilder builder : this.builders) {
             if (builder.support(s, holder, xmlDocument)) {

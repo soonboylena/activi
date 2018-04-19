@@ -8,7 +8,6 @@ public class MetaField implements IMetaInput {
     private AbstractMetaItem metaItem;
     private boolean readOnly = false;
     private boolean required = false;
-    private boolean isBusinessKey = false;
 
     private String caption;
     private String description;
@@ -22,15 +21,11 @@ public class MetaField implements IMetaInput {
         return getMetaItem().getKey();
     }
 
-    public String getName() {
-        return getMetaItem().getName();
-    }
-
     public String getDescription() {
         return this.description == null ? getMetaItem().getDescription() : this.description;
     }
 
-    public String getType() {
+    public MetaInputType getType() {
         return getMetaItem().getType();
     }
 
@@ -38,17 +33,10 @@ public class MetaField implements IMetaInput {
         getMetaItem().setKey(key);
     }
 
-    public void setName(String name) {
-        getMetaItem().setName(name);
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setType(String type) {
-        getMetaItem().setType(type);
-    }
 
     public boolean isReadOnly() {
         return readOnly;
@@ -73,4 +61,5 @@ public class MetaField implements IMetaInput {
     public void setSort(int sort) {
         this.sort = sort;
     }
+
 }

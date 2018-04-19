@@ -10,6 +10,7 @@ public class MetaForm extends MetaCollection<MetaField> {
 
     private String caption;
     private Map<String, Relation> relations = new HashMap<>();
+    private String description;
 
     /**
      * 如果这个form是relation里边的form，可能会有key重复的情况；
@@ -51,5 +52,13 @@ public class MetaForm extends MetaCollection<MetaField> {
 
     public boolean contains(String key) {
         return metaPool != null && metaPool.containsKey(key);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

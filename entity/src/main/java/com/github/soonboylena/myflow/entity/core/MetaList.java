@@ -31,6 +31,10 @@ public class MetaList implements IMeta {
         return getMetaForm().getMetaPool();
     }
 
+    public String getBusinessKey() {
+        return metaForm.getBusinessKey();
+    }
+
     //    public static MetaList fromMetaForm(MetaForm metaForm) {
 //        this.metaForm = metaForm;
 

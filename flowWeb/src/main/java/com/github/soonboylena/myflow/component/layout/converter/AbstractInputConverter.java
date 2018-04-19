@@ -20,7 +20,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     public boolean support(IMeta metaItem) {
         if (metaItem instanceof MetaField) {
             MetaField field = (MetaField) metaItem;
-            return Objects.equals(field.getType(), getType().literal());
+            return Objects.equals(field.getType().name(), getType().literal());
         }
         return false;
     }
@@ -46,7 +46,6 @@ public abstract class AbstractInputConverter implements UIConverter {
 
         if (container != null) {
             container.addContent(labelInput);
-            return container;
         }
         return labelInput;
     }

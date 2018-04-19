@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.entity.config.builder.xml;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.core.AbstractMetaItem;
+import com.github.soonboylena.myflow.entity.core.MetaItemString;
 import org.dom4j.Element;
 
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class XmlStringItemBuilder extends AbstractXmlItemBuilder {
     }
 
     @Override
-    protected AbstractMetaItem instanceItem() {
-        return new AbstractMetaItem();
+    protected MetaItemString instanceItem() {
+        return new MetaItemString();
     }
 }

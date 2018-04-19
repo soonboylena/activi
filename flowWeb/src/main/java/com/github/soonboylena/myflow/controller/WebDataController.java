@@ -60,7 +60,7 @@ public class WebDataController {
     @GetMapping("list/{formKey}")
     public List<Map<String, Object>> list(@PathVariable("formKey") String formKey) {
         List<Map<String, Object>> all = webFormSvs.findAll(formKey);
-        logger.info("数据一览数目：{}", all.size());
+        logger.info("{} 数据一览数目：{}", formKey, all.size());
         return all;
     }
 

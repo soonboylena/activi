@@ -1,6 +1,6 @@
 <root>
     <items>
-        <item key="customName" name="custom" caption="客户名称" description="客户名称" type="string"/>
+        <item key="customName"  caption="客户名称" description="客户名称" type="string"/>
         <item key="customerType" caption="客户分类" description="客户分类" type="select">
             <option key="a">分类1</option>
             <option key="b">分类2</option>
@@ -18,23 +18,24 @@
     <forms>
         <form key="customer" caption="用户">
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
-            <field ref="customName" required="true" isBusinessName="true"/>
+            <field ref="customName" required="true"/>
             <field ref="customerType"/>
         </form>
 
         <form key="company" caption="公司">
             <!--isBussinessName : 这个表单的实例数据，用这个字段做为显示项-->
-            <field ref="companyName" required="true" isBusinessName="true"/>
+            <field ref="companyName" required="true"/>
         </form>
 
         <form key="contact" caption="联系人信息">
-            <field ref="contactName" required="true" isBusinessName="true"/>
+            <field ref="contactName" required="true"/>
             <field ref="contactTel" required="true"/>
         </form>
 
         <form key="company2" caption="客户信息">
-            <field ref="companyName" required="true" isBusinessName="true"/>
+            <field ref="companyName" required="true"/>
             <field ref="customerType" required="true"/>
+            <field type="form" formKey="customer"/>
             <relations>
                 <!--一个relation里边可以放多个form，前提是type一样-->
                 <!--如果不想指定type，可以留空，form的key将会做为type-->
