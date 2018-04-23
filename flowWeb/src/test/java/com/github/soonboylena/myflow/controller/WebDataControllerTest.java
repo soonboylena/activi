@@ -29,7 +29,7 @@ public class WebDataControllerTest extends ControllerTest {
     public void listResources() throws Exception {
         MvcResult mvcResult = mockMvc.perform
                 (
-                        get(UrlManager.getResources("company2").asUrlString())
+                        get(UrlManager.getResources("customer").asUrlString())
                                 .contextPath(UrlManager.prefix)
                 )
                 .andExpect(status().isOk())

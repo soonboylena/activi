@@ -95,6 +95,7 @@
             <groupId>com.github.soonboylena</groupId>
             <artifactId>persistent-neo4j</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <!--<classifier>exec</classifier>-->
         </dependency>
 
     </dependencies>

@@ -17,8 +17,8 @@ public interface MenuNodeGraphRepository extends Neo4jRepository<MenuNode, Long>
     /**
      * 第3层节点（右侧按钮）
      */
-    @Query("match(:MenuNode)-->(p:MenuNode)-[y:AUTHORITY_ENTITY]->(q:AuthorityEntity) where q.express in {0}  return *")
-    public List<MenuNode> findMenuByExpress(Set<String> entitySet);
+    @Query("match(s:MenuNode)-->(p:MenuNode)-[y:AUTHORITY_ENTITY]->(q:AuthorityEntity) where q.express in {0} and s.currentKey = {1} return p,y,q")
+    public List<MenuNode> findMenuByExpress(Set<String> entitySet, String parentKey);
 
     /**
      * 只包含二层结点

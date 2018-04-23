@@ -128,7 +128,7 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         expresses.add("menu-system-auth");
         expresses.add("menu-system-user");
 
-        List<MenuNode> menuTreesByExpress = repository.findMenuByExpress(expresses);
+        List<MenuNode> menuTreesByExpress = repository.findMenuByExpress(expresses,"systemSetting");
 //        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress("p11");
         print(menuTreesByExpress, "测试根据权限取菜单");
     }

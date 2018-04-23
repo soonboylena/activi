@@ -72,11 +72,18 @@ public class MenuService {
         }
 
         Set<String> collect = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        if (logger.isDebugEnabled()) {
+            logger.debug("左边menu的key： {}", parentKey);
+            logger.debug("-- 当前用户权限");
+            for (String s : collect) {
+                logger.debug("--- {}", s);
+            }
+        }
 
 //        List<MenuItem> menuByParentKeyAndExpress = menuItemGR.findMenuByParentKeyAndExpress(parentKey, collect);
 //        return menuByParentKeyAndExpress.stream().map(this::fromDb).collect(Collectors.toList());
 
-        List<MenuNode> menuByExpress = menuRepository.findMenuByExpress(collect);
+        List<MenuNode> menuByExpress = menuRepository.findMenuByExpress(collect, parentKey);
         return menuByExpress.stream().map(this::fromDb).collect(Collectors.toList());
     }
 
