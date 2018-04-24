@@ -26,13 +26,14 @@ public class UserService {
     @Autowired
     private PasswordEncoder encryption;
 
+
     public List<LoginInfoEntity> findUserLikeName(String name) {
         return loginInfoRepository.findAllByUsernameLike(name);
     }
 
     public boolean exist(String username) {
-        boolean exists = loginInfoRepository.existsByUsername(username);
-        return exists;
+        Boolean exists = loginInfoRepository.existsLoginInfoEntitiesByUsername(username);
+        return exists != null && exists;
     }
 
     public LoginInfoEntity findUserById(Long id) {

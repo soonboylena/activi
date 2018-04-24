@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.net.Authenticator;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
- * 机于Neo4j的实现
+ * 基于Neo4j的实现
  */
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -46,13 +46,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<String> findRoleMenu(Long roleId) {
-//        AuthorityEntity one = repository.findOne(roleId);
-//        if (one == null) {
-//            return null;
-//        }
-
         List<AuthorityEntity> authorities = repository.findPermissionByRoleId(roleId);
-
         List<String> menuKeys = new ArrayList<>();
         if (null != authorities) {
             authorities.forEach(element -> menuKeys.add(element.getExpress()));
@@ -87,5 +81,33 @@ public class RoleServiceImpl implements RoleService {
         role.setExpress(entity.getExpress());
         role.setDescription(entity.getDescription());
         return role;
+    }
+
+    /**
+     * 将roleId对应的权限与权限关联,要求两者都提前存在
+     *
+     * @param roleId
+     * @param authIds
+     * @return
+     */
+    public AuthorityEntity updateRoleWithPermissions(Long roleId, List<Long> authIds) {
+
+        Optional<AuthorityEntity> byId = repository.findById(roleId);
+        AuthorityEntity entity = byId.orElseThrow(() -> new RuntimeException("不存在的角色： id:  " + roleId));
+        repository.deletePermission(roleId);
+        logger.info("角色权限清空： 角色：[{}:{}:{}]", roleId, entity.getTitle(), entity.getExpress());
+
+        if (authIds == null || authIds.isEmpty()) {
+            return entity;
+        }
+
+        Iterable<AuthorityEntity> authorityEntities = repository.findAllById(authIds);
+        entity.addAuthority(
+                StreamSupport
+                        .stream(authorityEntities.spliterator(), false).toArray(AuthorityEntity[]::new));
+
+        AuthorityEntity save = repository.save(entity);
+        logger.info("角色权限变更： 角色：{}, 权限：{}", roleId, authIds);
+        return save;
     }
 }

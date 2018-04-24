@@ -37,15 +37,13 @@ public class RoleController {
     @PostMapping("/add")
     public Message<Boolean> addNewRole(@RequestBody Role role) {
 
+        Role bak = roleService.saveRole(role);
 
-//        RoleEntity bak = roleService.saveRole(roleEntity);
-//
-//        if (null != bak) {
-//            return new Message<>("添加角色成功", true);
-//        } else {
-//            return new Message<>("添加角色失败", false);
-//        }
-        return null;
+        if (null != bak) {
+            return new Message<>("添加角色成功", true);
+        } else {
+            return new Message<>("添加角色失败", false);
+        }
     }
 
     @GetMapping("/roles")
@@ -54,10 +52,11 @@ public class RoleController {
         return list;
     }
 
-    @PostMapping("/menus")
-    public List<String> getMenuListByRole(@RequestParam Long roleId) {
+    @GetMapping("/{id:\\d+}/menus")
+    public List<String> getMenuListByRole(@PathVariable("id") Long roleId) {
         return roleService.findRoleMenu(roleId);
     }
+
 
     @PostMapping("/authority/renewal")
     public Message updateRoleAuthority(@RequestBody Map<String, Object> map) {
@@ -79,33 +78,13 @@ public class RoleController {
         return message;
     }
 
-    @PostMapping("/menus/update/{role}")
-    public Message updateRoleMenuRelation(@PathVariable String role, @RequestBody List<String> menuList) {
-        Assert.notNull(menuList, "menuList不能为空");
+    @PostMapping("/{id:\\d+}/menus")
+    public Message updateRoleMenuRelation(@PathVariable("id") Long roleId, @RequestBody List<Long> authIds) {
 
-        List<Menu> menus = menuService.findMenuByCurrentKeys(menuList);
-
-        Set<AuthorityEntity> authorityEntities = new HashSet<>();
-        menus.forEach(element -> {
-            //TODO
-//            if (element.getAuthorityEntity() != null) {
-//                authorityEntities.add(element.getAuthorityEntity());
-//            }
-        });
-
-//        RoleEntity bak = roleService.findRoleByRoleName(role);
-//        bak.setAuthorities(authorityEntities);
-//
-//        RoleEntity tmp = roleService.saveRole(bak);
-
-        Message message = null;
-//        if (null == tmp) {
-//            message = new Message(500, "服务器出错, 更新失败");
-//        } else {
-//            message = new Message(200, "更新成功");
-//        }
-
-        return message;
+        Assert.notNull(authIds, "menuList不能为空");
+        AuthorityEntity entity = roleService.updateRoleWithPermissions(roleId, authIds);
+        assert entity != null;
+        return new Message(200, "更新成功！");
     }
 
     @PostMapping("/update")

@@ -3,13 +3,11 @@ package com.github.soonboylena.myflow.Auth.controller;
 import com.github.soonboylena.myflow.Auth.bean.Message;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
-import com.github.soonboylena.myflow.Auth.service.RoleServiceImpl;
 import com.github.soonboylena.myflow.Auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,30 +30,21 @@ public class UserController {
 
 
     @GetMapping("/users")
-    public List<LoginInfoEntity> listAll(@RequestParam(required = false) String name) {
+    public Iterable<LoginInfoEntity> listAll() {
 //        if (name == null) {
 //            List<LoginInfoEntity> userEntities = userService.listAllUser();
 //            //waken hibernate to fetch data for me
 //            userEntities.forEach(element -> element.getAuthorities().toString());
 //            return userEntities;
 //        }
-        return userService.findUserLikeName(name);
+        return userService.listAllUser();
     }
 
 
-    @GetMapping("/user/check/{username}")
-    public Message checkCanUse(@PathVariable String username) {
+    @GetMapping("/user/isExist/{username}")
+    public boolean checkCanUse(@PathVariable String username) {
         username = username.trim();
-        boolean exist = userService.exist(username);
-        Message<Boolean> message = new Message<>();
-        message.setData(!exist);
-        message.setCode(200);
-        if (exist) {
-            message.setDescription("用户名已存在");
-        } else {
-            message.setDescription("用户名可用");
-        }
-        return message;
+        return userService.exist(username);
     }
 
     @PostMapping("/user/add")

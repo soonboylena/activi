@@ -8,9 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AuthorityGraphRepositoryTest extends NeoBaseTest {
 
@@ -104,5 +102,14 @@ public class AuthorityGraphRepositoryTest extends NeoBaseTest {
         print(byId.get(), "查找张三");
 
 
+    }
+
+    @Test
+    public void findAuthByMenuIds() {
+        Set<Long> ids = new HashSet<>();
+        ids.add(10L);
+        ids.add(121L);
+        Iterable<AuthorityEntity> authByMenuIds = repository.findAllById(ids);
+        print(authByMenuIds, "根据节点绑定权限");
     }
 }

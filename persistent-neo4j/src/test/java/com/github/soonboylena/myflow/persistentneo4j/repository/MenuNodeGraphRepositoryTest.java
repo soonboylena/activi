@@ -136,7 +136,9 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
     @Test
     public void findAllMenuNodeAndItem() {
-        List<MenuNode> allMenuNodeAndItem = repository.findAllMenuNodeAndItem();
-        print(allMenuNodeAndItem, "测试取得所有菜单");
+//        List<MenuNode> allMenuNodeAndItem = repository.findAllMenuNodeAndItem();
+//        print(allMenuNodeAndItem, "测试取得所有菜单");
+        Iterable<MenuNode> all = repository.findAll();
+        print(all, "测试取得所有菜单");
     }
 }

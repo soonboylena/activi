@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.persistentneo4j.repository;
 
+import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.QueryResult;
@@ -43,6 +44,8 @@ public interface MenuNodeGraphRepository extends Neo4jRepository<MenuNode, Long>
      */
     @Query("match p= ()-[*0..]-()-[*0..]->(:AuthorityEntity) return p")
     public List<MenuNode> findAllMenuNodeAndItem();
+
+
 
 }
 

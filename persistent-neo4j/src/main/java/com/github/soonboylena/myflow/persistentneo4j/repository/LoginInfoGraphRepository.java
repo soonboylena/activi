@@ -11,7 +11,9 @@ public interface LoginInfoGraphRepository extends Neo4jRepository<LoginInfoEntit
 
     public List<LoginInfoEntity> findAllByUsernameLike(String username);
 
-    public boolean existsByUsername(String username);
+//    public boolean existsByUsername(String username);
+
+    public Boolean existsLoginInfoEntitiesByUsername(String username);
 
     public List<LoginInfoEntity> findByUsername(String username);
 }
