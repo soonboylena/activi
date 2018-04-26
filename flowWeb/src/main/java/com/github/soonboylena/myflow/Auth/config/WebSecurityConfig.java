@@ -2,8 +2,10 @@ package com.github.soonboylena.myflow.Auth.config;
 
 import com.github.soonboylena.myflow.Auth.security.AjaxAuthFailHandler;
 import com.github.soonboylena.myflow.Auth.security.AjaxAuthSuccessHandler;
+import com.github.soonboylena.myflow.Auth.security.CustomUserDetailService;
 import com.github.soonboylena.myflow.Auth.security.UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -68,4 +68,10 @@ public class AuthorityEntity extends BaseModel {
         this.express = express;
     }
 
+    /**
+     * 清空权限
+     */
+    public void cleanPermissions() {
+        authorities.clear();
+    }
 }

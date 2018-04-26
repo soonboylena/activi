@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
+import com.github.soonboylena.myflow.entity.config.RefreshHolderBuilder;
 import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
 import com.github.soonboylena.myflow.entity.config.builder.xml.XmlConfigureBuilder;
 import org.springframework.boot.SpringApplication;
@@ -25,8 +26,14 @@ public class ActivitiApplication {
 
     @Bean
     public ConfigureHolder configureHolder() {
+
+//        String path = "classpath:/entityXml/entity.xml";
+        String path = "file:/home/sunb/IdeaProjects/activi/flowWeb/xml/entity.xml";
         ConfigureBuilder builder = new XmlConfigureBuilder();
-        return builder.build("classpath:entity.xml");
+        RefreshHolderBuilder refreshHolderBuilder = new RefreshHolderBuilder();
+        // 支持热更新
+        ConfigureHolder holder = refreshHolderBuilder.register(path, builder);
+        return holder;
     }
 
 //    @Bean
