@@ -29,7 +29,7 @@ public class DynamicFormQueryService {
      */
     public FormEntity findById(MetaForm metaForm, Long id) {
 
-        Optional<DynamicEntity> byId = repository.findById(id);
+        Optional<DynamicEntity> byId = repository.findById(id, 2);
 
         if (!byId.isPresent()) {
             return null;

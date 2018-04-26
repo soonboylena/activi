@@ -9,6 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -73,5 +74,20 @@ public class AuthorityEntity extends BaseModel {
      */
     public void cleanPermissions() {
         authorities.clear();
+    }
+
+    /**
+     * 去掉参数之外的权限
+     *
+     * @param authIds
+     */
+    public void cleanPermissionsExcept(List<Long> authIds) {
+        for (AuthorityEntity authority : authorities) {
+            Long id = authority.getId();
+            if (authIds.contains(id)) {
+                continue;
+            }
+            authorities.remove(authority);
+        }
     }
 }

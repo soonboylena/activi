@@ -91,12 +91,11 @@ public class RoleServiceImpl implements RoleService {
      * @param authIds
      * @return
      */
-    @Transactional
     public AuthorityEntity updateRoleWithPermissions(Long roleId, List<Long> authIds) {
 
         Optional<AuthorityEntity> byId = repository.findById(roleId);
         AuthorityEntity entity = byId.orElseThrow(() -> new RuntimeException("不存在的角色： id:  " + roleId));
-        repository.deletePermission(roleId);
+//        repository.deletePermission(roleId);
         logger.info("角色权限清空： 角色：[{}:{}:{}]", roleId, entity.getTitle(), entity.getExpress());
 
         entity.cleanPermissions();

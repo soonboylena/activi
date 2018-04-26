@@ -36,7 +36,7 @@
         <form key="company2" caption="客户信息">
             <field ref="companyName" required="true"/>
             <field ref="customerType" required="true"/>
-            <field type="form" formKey="customer"/>
+            <!--<field type="form" formKey="customer"/>-->
             <relations>
                 <!--一个relation里边可以放多个form，前提是type一样-->
                 <!--如果不想指定type，可以留空，form的key将会做为type-->
