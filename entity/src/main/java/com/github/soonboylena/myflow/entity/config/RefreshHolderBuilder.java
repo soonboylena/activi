@@ -20,6 +20,8 @@ public class RefreshHolderBuilder {
 
     private final ResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 
+    private boolean stop = false;
+
     public ConfigureHolder register(String location, ConfigureBuilder builder) {
 
         Resource resource = defaultResourceLoader.getResource(location);
@@ -39,9 +41,9 @@ public class RefreshHolderBuilder {
                 logger.trace("监控文件所在文件夹：{}", parent);
                 Path path = Paths.get(parent);
 
-                boolean stop = false;
 
                 WatchKey watchKey = path.register(watchService
+//                        , ENTRY_CREATE
                         , ENTRY_MODIFY
                         , OVERFLOW
 //                        , ENTRY_DELETE
@@ -61,23 +63,24 @@ public class RefreshHolderBuilder {
                         WatchEvent<Path> ev = (WatchEvent<Path>) event;
                         Path change = ev.context();
                         logger.trace("changedFile: {}", change);
-                        // TODO : chage格式为什么有后缀？
-                        if (!change.toString().startsWith(fileName)) {
+                        //  注意：intellij 编辑文件默认会使用 safe write 方式
+                        if (!change.toString().equals(fileName)) {
                             break;
                         }
 
                         if (kind == OVERFLOW) {
                             logger.debug("文件 {} overflow", change);
                             Thread.yield();
-                            continue;
-                        } else if (kind == ENTRY_DELETE) {
-                            stop = true;
-                            logger.debug("文件 {} 被删除了，不再监控配置文件", change);
                             break;
-                        } else if (kind == ENTRY_MODIFY) {
+                        } else if (kind == ENTRY_MODIFY ) {
                             logger.debug("文件 {} 被更改了，重新读取配置", change);
-                            ConfigureHolder newHolder = builder.build(location);
-                            refreshableConfigHolder.refresh(newHolder);
+                            try {
+                                ConfigureHolder newHolder = builder.build(location);
+                                refreshableConfigHolder.refresh(newHolder);
+                            } catch (Exception e) {
+                                logger.warn("文件重新加载时出错。", e);
+                                break;
+                            }
                             logger.debug("文件 {} 重新加载完毕", change);
                         }
                         boolean valid = key.reset();
@@ -96,5 +99,9 @@ public class RefreshHolderBuilder {
         dirWatcherThread.start();
         // 支持热更新
         return refreshableConfigHolder;
+    }
+
+    public void stop() {
+        this.stop = true;
     }
 }
