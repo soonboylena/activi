@@ -141,9 +141,9 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
     }
 
     private MetaField readFieldForm(Element xmlField, MemoryConfigHolder holder) {
-        String formKey = xmlField.attributeValue("formKey");
+        String formKey = xmlField.attributeValue("ref");
         if (StringUtils.isEmpty(formKey)) {
-            throw new ConfigBuildException("field关联的formKey没有设置: " + formKey);
+            throw new ConfigBuildException("field关联的ref没有设置: " + formKey);
         }
 
         MetaForm metaForm = holder.getMetaForm(formKey);
@@ -151,10 +151,13 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             throw new ConfigBuildException("field关联的 form 没有找到. 有可能是form没正确的设置，或者是顺序不对。被依赖的form要放到前边: " + formKey);
         }
 
+        String relationName = xmlField.attributeValue("relationName");
+
         MetaItemResource resource = new MetaItemResource();
         resource.setKey(metaForm.getKey());
         resource.setCaption(metaForm.getCaption());
         resource.setDescription(metaForm.getDescription());
+        resource.setRelationName(relationName);
 
         return new MetaField(resource);
     }
@@ -175,35 +178,48 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
     }
 
     private MetaForm readRelation(MetaForm metaForm, Element form, MemoryConfigHolder holder) {
+
         Element relationsNode = form.element("relations");
         if (relationsNode == null) return metaForm;
-        List relations = relationsNode.elements("relation");
+        List relations = relationsNode.elements("relateTo");
         if (relations == null || relations.isEmpty()) return metaForm;
         for (Object relation : relations) {
+
             Element _relation = (Element) relation;
-//                <relation type="contact">
-            String type = _relation.attributeValue("type");
-            List nextForms = _relation.elements("form");
-            if (nextForms == null) {
-                continue;
-            }
 
-            for (int i = 0; i < nextForms.size(); i++) {
-                Element nextForm = (Element) nextForms.get(i);
+            String ref = _relation.attributeValue("ref");
+            if (ref != null && !ref.trim().equals("")) {
+                String type = _relation.attributeValue("type");
+                MetaForm relatedForm = holder.getMetaForm(ref);
+                // TODO 突然不想写这个了
+                // 画面表格数据定义；
 
-                MetaForm nextMetaForm = readForm(nextForm, holder);
-//                nextMetaForm.setIndex(i);
-                // 如果没有指定relation的类型，就用form的key来进行代替
-                if (type == null || type.trim().isEmpty()) {
-                    metaForm.setRelation(metaForm.getKey(), nextMetaForm);
-                } else {
-                    metaForm.setRelation(type, nextMetaForm);
+            } else {
+                // 里边有嵌套的 form类型； form是有限数量的
+                String type = _relation.attributeValue("type");
+                List nextForms = _relation.elements("form");
+                if (nextForms == null) {
+                    continue;
+                }
+
+                for (Object nextForm1 : nextForms) {
+                    Element nextForm = (Element) nextForm1;
+
+                    MetaForm nextMetaForm = readForm(nextForm, holder);
+                    // 如果没有指定relation的类型，就用form的key来进行代替
+                    if (type == null || type.trim().isEmpty()) {
+                        metaForm.setRelation(metaForm.getKey(), nextMetaForm);
+                    } else {
+                        metaForm.setRelation(type, nextMetaForm);
+                    }
                 }
             }
+
 
         }
         return metaForm;
     }
+
 
     private IMetaInput readItem(Element s, MemoryConfigHolder holder, Document xmlDocument) {
 

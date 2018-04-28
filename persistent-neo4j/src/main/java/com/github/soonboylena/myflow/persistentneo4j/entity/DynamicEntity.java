@@ -32,8 +32,8 @@ public class DynamicEntity extends BaseModel {
     @Relationship(type = "relateTo")
     private Set<DynamicRelation> relateTo = new HashSet<>();
 
-    @Relationship(type = "relatedBy", direction = Relationship.INCOMING)
-    private Set<DynamicRelation> relatedBy = new HashSet<>();
+//    @Relationship(type = "relatedBy", direction = Relationship.INCOMING)
+//    private Set<DynamicRelation> relatedBy = new HashSet<>();
 
     public void addProperty(String key, Object data) {
         if (data == null) {
@@ -50,7 +50,7 @@ public class DynamicEntity extends BaseModel {
             for (DynamicEntity relatedEntity : relatedEntities) {
                 DynamicRelation dynamicRelation = new DynamicRelation(this, relatedEntity, type);
                 this.relateTo.add(dynamicRelation);
-                relatedEntity.relatedBy(dynamicRelation);
+//                relatedEntity.relatedBy(dynamicRelation);
             }
         }
     }
@@ -78,7 +78,7 @@ public class DynamicEntity extends BaseModel {
         this.relateTo = relationShips;
     }
 
-    public void relatedBy(DynamicRelation relation) {
-        this.relatedBy.add(relation);
-    }
+//    public void relatedBy(DynamicRelation relation) {
+//        this.relatedBy.add(relation);
+//    }
 }

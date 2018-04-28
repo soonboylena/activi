@@ -36,15 +36,16 @@
         <form key="company2" caption="客户信息">
             <field ref="companyName" required="true"/>
             <field ref="customerType" required="true"/>
-            <!--<field type="form" formKey="customer"/>-->
+            <field type="form" ref="customer" relateionName="test1"/>
             <relations>
                 <!--一个relation里边可以放多个form，前提是type一样-->
                 <!--如果不想指定type，可以留空，form的key将会做为type-->
-                <relation type="contact">
+                <relateTo type="contact">
                     <!--如果ref了，下边就不能再加别的东西了。加了也会被忽略-->
                     <form ref="contact" caption="联系人信息1"/>
                     <form ref="contact" caption="联系人信息2"/>
-                </relation>
+                </relateTo>
+                <relateTo type="work" ref="company"/>
             </relations>
         </form>
     </forms>

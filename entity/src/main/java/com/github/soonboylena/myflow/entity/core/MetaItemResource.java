@@ -11,9 +11,23 @@ import lombok.EqualsAndHashCode;
 public class MetaItemResource extends AbstractMetaItem {
 
     private String key;
+    private String relationName;
 
     @Override
     public MetaInputType getType() {
         return MetaInputType.resource;
+    }
+
+    /**
+     * 设定关系；如果为空就用key来替代
+     * @param relationName
+     */
+    public void setRelationName(String relationName) {
+        if (relationName == null || relationName.equals("")) {
+            this.relationName = key;
+        } else {
+            this.relationName = relationName;
+        }
+
     }
 }
