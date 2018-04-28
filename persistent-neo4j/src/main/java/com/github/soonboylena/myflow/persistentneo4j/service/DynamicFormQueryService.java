@@ -69,7 +69,7 @@ public class DynamicFormQueryService {
         for (Relation relation : relations) {
             List<MetaForm> relatedForms = relation.getRelatedForm();
             String type = relation.getType();
-            List<DynamicRelation> relationShip = dynamic.getRelationShip(type);
+            List<DynamicRelation> relationShip = dynamic.getRelationTo(type);
 
             for (int i = 0; i < relatedForms.size(); i++) {
                 MetaForm relatedForm = relatedForms.get(i);

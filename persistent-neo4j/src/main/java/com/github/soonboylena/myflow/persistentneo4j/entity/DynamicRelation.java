@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
-@RelationshipEntity(type = "hasRelation")
+@RelationshipEntity(type = "relateTo")
 @Data
 public class DynamicRelation {
 
@@ -30,6 +30,7 @@ public class DynamicRelation {
     @Property
     private String description;
 
+    @Property
     private String type;
 
 }

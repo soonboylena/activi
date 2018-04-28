@@ -29,9 +29,11 @@ public class DynamicEntity extends BaseModel {
     @Properties(allowCast = true)
     private Map<String, Object> properties = new HashMap<>();
 
-    @Relationship(type = "include")
-    private Set<DynamicRelation> relationShips = new HashSet<>();
+    @Relationship(type = "relateTo")
+    private Set<DynamicRelation> relateTo = new HashSet<>();
 
+    @Relationship(type = "relatedBy", direction = Relationship.INCOMING)
+    private Set<DynamicRelation> relatedBy = new HashSet<>();
 
     public void addProperty(String key, Object data) {
         if (data == null) {
@@ -47,7 +49,8 @@ public class DynamicEntity extends BaseModel {
         if (relatedEntities != null) {
             for (DynamicEntity relatedEntity : relatedEntities) {
                 DynamicRelation dynamicRelation = new DynamicRelation(this, relatedEntity, type);
-                this.relationShips.add(dynamicRelation);
+                this.relateTo.add(dynamicRelation);
+                relatedEntity.relatedBy(dynamicRelation);
             }
         }
     }
@@ -63,7 +66,19 @@ public class DynamicEntity extends BaseModel {
      * @param type
      * @return
      */
-    public List<DynamicRelation> getRelationShip(String type) {
-        return relationShips.stream().filter(s -> s.getType().equalsIgnoreCase(type)).collect(Collectors.toList());
+    public List<DynamicRelation> getRelationTo(String type) {
+        return relateTo.stream().filter(s -> s.getType().equalsIgnoreCase(type)).collect(Collectors.toList());
+    }
+
+    public Set<DynamicRelation> getRelationTo() {
+        return relateTo;
+    }
+
+    public void setRelationTo(Set<DynamicRelation> relationShips) {
+        this.relateTo = relationShips;
+    }
+
+    public void relatedBy(DynamicRelation relation) {
+        this.relatedBy.add(relation);
     }
 }

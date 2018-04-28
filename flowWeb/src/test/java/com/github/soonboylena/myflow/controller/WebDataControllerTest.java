@@ -41,7 +41,7 @@ public class WebDataControllerTest extends ControllerTest {
     public void data() throws Exception {
         MvcResult mvcResult = mockMvc.perform
                 (
-                        get(UrlManager.data("company2", 56L).asUrlString())
+                        get(UrlManager.data("company2", 57L).asUrlString())
                                 .contextPath(UrlManager.prefix)
                 )
                 .andExpect(status().isOk())
