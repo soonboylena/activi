@@ -21,6 +21,7 @@
         <module>flowWeb</module>
         <module>entity</module>
         <module>persistent-neo4j</module>
+        <module>workflow</module>
     </modules>
 
     <groupId>com.github.soonboylena</groupId>
