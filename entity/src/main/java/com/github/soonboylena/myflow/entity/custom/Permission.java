@@ -1,4 +1,4 @@
-package com.github.soonboylena.myflow.Auth.bean;
+package com.github.soonboylena.myflow.entity.custom;
 
 import lombok.Data;
 

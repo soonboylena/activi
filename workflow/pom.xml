@@ -50,10 +50,10 @@
 			<artifactId>activiti-spring-boot-starter-basic</artifactId>
 			<version>6.0.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-modeler</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.activiti</groupId>-->
+			<!--<artifactId>activiti-modeler</artifactId>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.h2database</groupId>

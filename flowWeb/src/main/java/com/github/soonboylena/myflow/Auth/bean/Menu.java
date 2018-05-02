@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.Auth.bean;
 
+import com.github.soonboylena.myflow.entity.custom.Permission;
 import lombok.Data;
 
 import java.util.ArrayList;

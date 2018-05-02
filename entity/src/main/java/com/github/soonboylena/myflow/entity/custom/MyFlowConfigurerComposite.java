@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class MyFlowConfigurerComposite implements MyFlowWebConfigurer {
+public class MyFlowConfigurerComposite implements MyFlowWebConfigurer {
 
     private List<MyFlowWebConfigurer> delegates = new ArrayList<>();
 

@@ -1,12 +1,13 @@
 package com.github.soonboylena.myflow.Auth.bean;
 
-import java.util.ArrayList;
+import com.github.soonboylena.myflow.entity.custom.Permission;
+import com.github.soonboylena.myflow.entity.custom.Role;
+
 import java.util.List;
 
-public class Role extends Permission {
+public class WebRole extends Role {
 
     private transient final static String PREFIX = "ROLE_";
-    private List<Permission> children = new ArrayList<>();
 
     public boolean isRole() {
         return true;
@@ -21,9 +22,9 @@ public class Role extends Permission {
         }
     }
 
-    public void addChildren(List<Permission> permission) {
+    public void addPermissions(List<Permission> permission) {
         if (permission != null) {
-            children.addAll(permission);
+            permissions.addAll(permission);
         }
     }
 

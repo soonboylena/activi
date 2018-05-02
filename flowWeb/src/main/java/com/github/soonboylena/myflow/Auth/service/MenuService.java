@@ -1,7 +1,7 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.Menu;
-import com.github.soonboylena.myflow.Auth.bean.Permission;
+import com.github.soonboylena.myflow.entity.custom.Permission;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
 import com.github.soonboylena.myflow.persistentneo4j.repository.MenuNodeGraphRepository;

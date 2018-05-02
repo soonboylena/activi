@@ -1,15 +1,13 @@
 package com.github.soonboylena.myflow.Auth.service;
 
-import com.github.soonboylena.myflow.Auth.bean.Role;
+import com.github.soonboylena.myflow.Auth.bean.WebRole;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.AuthorityGraphRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.net.Authenticator;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -26,7 +24,7 @@ public class RoleServiceImpl implements RoleService {
 
     //    @CacheEvict(value = "MenuService_getTopMenu", allEntries = true)
     @Override
-    public Role saveRole(Role role) {
+    public WebRole saveRole(WebRole role) {
 
         AuthorityEntity roleEntity = toDb(role);
         AuthorityEntity bak = repository.save(roleEntity);
@@ -37,9 +35,9 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<Role> findAllRoles() {
+    public List<WebRole> findAllRoles() {
         List<AuthorityEntity> roleEntityList = repository.findAllRole();
-        List<Role> collect = roleEntityList.stream().map(this::fromDb).collect(Collectors.toList());
+        List<WebRole> collect = roleEntityList.stream().map(this::fromDb).collect(Collectors.toList());
         logger.debug("取得所有角色，size：{}", collect.size());
         return collect;
     }
@@ -56,27 +54,27 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findRoleByRoleName(String express) {
+    public WebRole findRoleByRoleName(String express) {
         AuthorityEntity roleEntity = repository.findFirstByExpress(express);
         return fromDb(roleEntity);
     }
 
     @Override
-    public Role findRoleById(Long id) {
+    public WebRole findRoleById(Long id) {
         Optional<AuthorityEntity> byId = repository.findById(id);
         if (!byId.isPresent()) return null;
         return fromDb(byId.get());
     }
 
-    private AuthorityEntity toDb(Role role) {
+    private AuthorityEntity toDb(WebRole role) {
         AuthorityEntity entity = new AuthorityEntity(role.getExpress());
         entity.setTitle(role.getTitle());
         entity.setDescription(role.getDescription());
         return entity;
     }
 
-    private Role fromDb(AuthorityEntity entity) {
-        Role role = new Role();
+    private WebRole fromDb(AuthorityEntity entity) {
+        WebRole role = new WebRole();
         role.setId(entity.getId());
         role.setTitle(entity.getTitle());
         role.setExpress(entity.getExpress());

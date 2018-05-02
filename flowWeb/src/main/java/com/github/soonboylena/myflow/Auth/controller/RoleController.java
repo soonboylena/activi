@@ -1,7 +1,6 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
-import com.github.soonboylena.myflow.Auth.bean.Menu;
-import com.github.soonboylena.myflow.Auth.bean.Role;
+import com.github.soonboylena.myflow.Auth.bean.WebRole;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.Auth.bean.Message;
 import com.github.soonboylena.myflow.Auth.service.AuthorityService;
@@ -11,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lungern xiii.at.cn@gmail.com
@@ -35,9 +32,9 @@ public class RoleController {
     private AuthorityService authorityService;
 
     @PostMapping("/add")
-    public Message<Boolean> addNewRole(@RequestBody Role role) {
+    public Message<Boolean> addNewRole(@RequestBody WebRole role) {
 
-        Role bak = roleService.saveRole(role);
+        WebRole bak = roleService.saveRole(role);
 
         if (null != bak) {
             return new Message<>("添加角色成功", true);
@@ -47,8 +44,8 @@ public class RoleController {
     }
 
     @GetMapping("/roles")
-    public List<Role> getRoles() {
-        List<Role> list = roleService.findAllRoles();
+    public List<WebRole> getRoles() {
+        List<WebRole> list = roleService.findAllRoles();
         return list;
     }
 
@@ -63,10 +60,10 @@ public class RoleController {
         List<Long> authorityIds = (List<Long>) map.get("authorityIds");
         Long roleId = (Long) map.get("roleId");
         List<AuthorityEntity> authorityList = authorityService.findAuthoritiesInIds(authorityIds);
-        Role roleEntity = roleService.findRoleById(roleId);
+        WebRole roleEntity = roleService.findRoleById(roleId);
         // TODO
 //        roleEntity.setAuthorities(new HashSet<>(authorityList));
-        Role bak = roleService.saveRole(roleEntity);
+        WebRole bak = roleService.saveRole(roleEntity);
         Message<String> message = new Message<>();
         if (null != bak) {
             message.setCode(200);
@@ -88,11 +85,11 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    public Message<Boolean> updateRole(@RequestBody Role role) {
+    public Message<Boolean> updateRole(@RequestBody WebRole role) {
 //        if ("".equals(role.getId())) {
 //            return new Message<>("角色id不能为空", false);
 //        }
-//        Role temp = roleService.findRoleById(role.getId());
+//        WebRole temp = roleService.findRoleById(role.getId());
 //        role.setAuthorities(temp.getAuthorities());
 ////        roleEntity.setUsers(temp.getUsers());
 //        RoleEntity bak = roleService.saveRole(roleEntity);

@@ -1,14 +1,17 @@
 package com.github.soonboylena.myflow.Auth.controller;
 
 import com.github.soonboylena.myflow.Auth.bean.Message;
+import com.github.soonboylena.myflow.Auth.bean.WebUser;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.Auth.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author lungern xiii.at.cn@gmail.com
@@ -48,13 +51,16 @@ public class UserController {
     }
 
     @PostMapping("/user/add")
-    public Message addUser(@RequestBody LoginInfoEntity user) {
-        Assert.notNull(user.getTitle(), "昵称不能为空");
-        Assert.notNull(user.getUsername(), "用户名不能为空");
-        user.setTitle(user.getTitle().trim());
-        user.setUsername(user.getUsername().trim());
-        Assert.hasText(user.getTitle(), "昵称不能为空白字符");
-        Assert.hasText(user.getUsername(), "用户名不能为空白字符");
+    public Message addUser(@RequestBody WebUser user) {
+
+        String nickName = StringUtils.trim(user.getUserNickName());
+        String userName = StringUtils.trim(user.getUsername());
+
+        Objects.requireNonNull(nickName);
+        Objects.requireNonNull(userName);
+
+        user.setUserNickName(nickName);
+        user.setUsername(userName);
         userService.saveUser(user);
         return new Message(200, "添加成功");
     }

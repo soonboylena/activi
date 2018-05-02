@@ -1,17 +1,17 @@
 package com.github.soonboylena.myflow.Auth.service;
 
-import com.github.soonboylena.myflow.Auth.bean.Role;
+import com.github.soonboylena.myflow.Auth.bean.WebRole;
 
 import java.util.List;
 
 public interface RoleService {
-    Role saveRole(Role role);
+    WebRole saveRole(WebRole role);
 
-    List<Role> findAllRoles();
+    List<WebRole> findAllRoles();
 
     List<String> findRoleMenu(Long roleId);
 
-    Role findRoleByRoleName(String roleType);
+    WebRole findRoleByRoleName(String roleType);
 
-    Role findRoleById(Long id);
+    WebRole findRoleById(Long id);
 }
