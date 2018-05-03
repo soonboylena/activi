@@ -3,6 +3,7 @@ package com.github.soonboylena.myflow.springmyflow.config;
 
 import com.github.soonboylena.myflow.entity.custom.MyFlowConfigurerComposite;
 import com.github.soonboylena.myflow.entity.custom.MyFlowWebConfigurer;
+import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
@@ -16,6 +17,8 @@ import java.util.List;
 public class DelegatingMyFlowWebConfiguration {
 
     private final MyFlowConfigurerComposite configurers = new MyFlowConfigurerComposite();
+    private UserRoleAwareRegistry userRoleAwareRegistry = new UserRoleAwareRegistry();
+
 
     @Autowired(required = false)
     public void setConfigurers(List<MyFlowWebConfigurer> configurers) {
@@ -24,4 +27,16 @@ public class DelegatingMyFlowWebConfiguration {
         }
     }
 
+    public void registryUserRoleAware(UserRoleAwareRegistry userRoleAwareRegistry) {
+        configurers.addUseRoleAware(userRoleAwareRegistry);
+    }
+
+    public MyFlowConfigurerComposite getConfigurers() {
+        return configurers;
+    }
+
+    public UserRoleAwareRegistry getUserRoleAwareRegistry() {
+        if (this.userRoleAwareRegistry == null) userRoleAwareRegistry = new UserRoleAwareRegistry();
+        return userRoleAwareRegistry;
+    }
 }
