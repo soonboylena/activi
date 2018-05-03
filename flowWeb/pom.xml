@@ -76,9 +76,9 @@
         </dependency>
         <!--activiti rest-->
         <!--<dependency>-->
-            <!--<groupId>org.activiti</groupId>-->
-            <!--<artifactId>activiti-spring-boot-starter-rest-api</artifactId>-->
-            <!--<version>6.0.0</version>-->
+        <!--<groupId>org.activiti</groupId>-->
+        <!--<artifactId>activiti-spring-boot-starter-rest-api</artifactId>-->
+        <!--<version>6.0.0</version>-->
         <!--</dependency>-->
         <!--activiti actuator-->
         <!--<dependency>-->
@@ -90,6 +90,12 @@
             <groupId>com.github.soonboylena</groupId>
             <artifactId>entity</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.soonboylena.myflow</groupId>
+            <artifactId>spring-myflow</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.soonboylena</groupId>
@@ -106,7 +112,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!--<configuration>-->
-                    <!--<classifier>exec</classifier>-->
+                <!--<classifier>exec</classifier>-->
                 <!--</configuration>-->
             </plugin>
         </plugins>

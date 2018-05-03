@@ -3,6 +3,8 @@ package com.github.soonboylena.myflow.Auth.service;
 import com.github.soonboylena.myflow.Auth.bean.WebUser;
 import com.github.soonboylena.myflow.entity.custom.Permission;
 import com.github.soonboylena.myflow.entity.custom.Role;
+import com.github.soonboylena.myflow.entity.custom.User;
+import com.github.soonboylena.myflow.framework.service.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;
@@ -30,6 +32,9 @@ public class UserService {
     private LoginInfoGraphRepository loginInfoRepository;
 
     @Autowired
+    private MflUserService userService;
+
+    @Autowired
     private PasswordEncoder encryption;
 
 
@@ -46,30 +51,16 @@ public class UserService {
         return loginInfoRepository.findById(id).orElseGet(null);
     }
 
-    public LoginInfoEntity saveUser(WebUser user) {
+    public void saveUser(WebUser user) {
 
-        LoginInfoEntity entity = new LoginInfoEntity();
-        entity.setTitle(user.getUserNickName());
-        entity.setUsername(user.getUsername());
-        entity.setPassword(encryption.encode(user.getPassword()));
+        User user1 = new User();
+        user1.setUserNickName(user.getTitle());
+        user1.setUsername(user.getUsername());
+        user1.setPassword(encryption.encode(user.getPassword()));
 
-        Set<Role> roles = user.getRoles();
-        Set<AuthorityEntity> neoRoles = new HashSet<>(roles.size());
-        for (Role role : roles) {
-            AuthorityEntity neoRole = new AuthorityEntity(role.getTitle(), role.getExpress());
-            neoRole.setId(role.getId());
-            neoRole.setDescription(role.getDescription());
+        user1.setRoles(user.getAuthorities());
 
-            Set<Permission> permissions = role.getPermissions();
-            for (Permission permission : permissions) {
-                AuthorityEntity neoPermission = new AuthorityEntity(permission.getTitle(), permission.getExpress());
-                neoPermission.setId(permission.getId());
-                neoPermission.setDescription(permission.getDescription());
-            }
-            neoRoles.add(neoRole);
-        }
-        entity.setAuthorities(neoRoles);
-        return loginInfoRepository.save(entity);
+        userService.saveUser(user1);
     }
 
     public LoginInfoEntity updateUser(LoginInfoEntity loginInfoEntity, boolean shouldEncrypt) {

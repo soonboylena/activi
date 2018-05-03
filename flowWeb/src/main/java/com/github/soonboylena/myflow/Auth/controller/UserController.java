@@ -53,13 +53,13 @@ public class UserController {
     @PostMapping("/user/add")
     public Message addUser(@RequestBody WebUser user) {
 
-        String nickName = StringUtils.trim(user.getUserNickName());
+        String nickName = StringUtils.trim(user.getTitle());
         String userName = StringUtils.trim(user.getUsername());
 
         Objects.requireNonNull(nickName);
         Objects.requireNonNull(userName);
 
-        user.setUserNickName(nickName);
+        user.setTitle(nickName);
         user.setUsername(userName);
         userService.saveUser(user);
         return new Message(200, "添加成功");

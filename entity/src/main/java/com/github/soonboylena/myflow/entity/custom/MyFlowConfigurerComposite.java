@@ -1,5 +1,7 @@
 package com.github.soonboylena.myflow.entity.custom;
 
+import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,11 +16,9 @@ public class MyFlowConfigurerComposite implements MyFlowWebConfigurer {
         }
     }
 
-//    public void registValidator(EntityValidatorConfigure validator) {
-//        for (MyFlowWebConfigurer delegate : delegates) {
-//            delegate.registValidator(validator);
-//        }
-//    }
-
-
+    public void addUseRoleAware(UserRoleAwareRegistry userRoleAwareRegistry) {
+        for (MyFlowWebConfigurer delegate : delegates) {
+            delegate.addUseRoleAware(userRoleAwareRegistry);
+        }
+    }
 }

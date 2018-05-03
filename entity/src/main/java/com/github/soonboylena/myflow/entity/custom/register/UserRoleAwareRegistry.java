@@ -6,4 +6,6 @@ import java.util.List;
 public class UserRoleAwareRegistry {
 
     List<UserRoleAware> awares = new ArrayList<>();
+
+
 }

@@ -7,13 +7,12 @@ import com.github.soonboylena.myflow.entity.config.builder.InputItemBuilder;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.entity.exceptions.ConfigBuildException;
 import com.github.soonboylena.myflow.entity.support.XmlConfigureReader;
-import javafx.geometry.HorizontalDirection;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,7 +100,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             MetaField metaField;
 
             String type = xmlField.attributeValue("type");
-            if (!StringUtils.isEmpty(type)) {
+            if (!StringUtils.isBlank(type)) {
                 metaField = readFieldForm(xmlField, holder);
             } else {
                 metaField = readAsRef(xmlField, holder);

@@ -2,7 +2,9 @@ package com.github.soonboylena.myflow.entity.custom;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -33,5 +35,16 @@ public class User {
     private boolean credentialsNonExpired;
 
     private Set<Role> roles = new HashSet<>();
+
+    // 其他的用户属性
+    Map<String, Object> otherProperties = new HashMap<>();
+
+    public void set(String key, Object propertyValue) {
+        otherProperties.put(key, propertyValue);
+    }
+
+    public Object get(String key) {
+        return otherProperties.get(key);
+    }
 
 }
