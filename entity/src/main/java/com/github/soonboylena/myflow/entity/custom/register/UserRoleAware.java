@@ -6,4 +6,5 @@ public interface UserRoleAware {
 
     public void beforeSaveUser(User user);
 
+    void afterSaveUser(User user);
 }

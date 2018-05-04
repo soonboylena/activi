@@ -5,7 +5,17 @@ import java.util.List;
 
 public class UserRoleAwareRegistry {
 
-    List<UserRoleAware> awares = new ArrayList<>();
+    private List<UserRoleAware> awares = new ArrayList<>();
 
+    public List<UserRoleAware> getAwares() {
+        return awares;
+    }
 
+    public void setAwares(List<UserRoleAware> awares) {
+        this.awares = awares;
+    }
+
+    public void addUserRoleAware(UserRoleAware userRoleAware) {
+        awares.add(userRoleAware);
+    }
 }
