@@ -1,8 +1,8 @@
 package com.github.soonboylena.myflow.springmyflow.config;
 
 
+import com.github.soonboylena.myflow.entity.custom.MyFlowConfigurer;
 import com.github.soonboylena.myflow.entity.custom.MyFlowConfigurerComposite;
-import com.github.soonboylena.myflow.entity.custom.MyFlowWebConfigurer;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ public class DelegatingMyFlowWebConfiguration {
 
 
     @Autowired(required = false)
-    public void setConfigurers(List<MyFlowWebConfigurer> configurers) {
+    public void setConfigurers(List<MyFlowConfigurer> configurers) {
         if (!CollectionUtils.isEmpty(configurers)) {
             this.configurers.addMyFlowWebConfigures(configurers);
         }

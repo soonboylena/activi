@@ -1,11 +1,11 @@
-package com.github.soonboylena.myflow.springmyflow.config.forActiviti;
+package com.github.soonboylena.myflow.workflow.mflConfig;
 
-import com.github.soonboylena.myflow.entity.custom.MyFlowWebConfigurer;
+import com.github.soonboylena.myflow.entity.custom.MyFlowConfigurer;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ActivitiConfigurer implements MyFlowWebConfigurer {
+public class ActivitiConfigurer implements MyFlowConfigurer {
 
     @Override
     public void addUseRoleAware(UserRoleAwareRegistry userRoleAwareRegistry) {

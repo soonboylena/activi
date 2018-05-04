@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class MyFlowConfigurerComposite implements MyFlowWebConfigurer {
+public class MyFlowConfigurerComposite implements MyFlowConfigurer {
 
-    private List<MyFlowWebConfigurer> delegates = new ArrayList<>();
+    private List<MyFlowConfigurer> delegates = new ArrayList<>();
 
-    public void addMyFlowWebConfigures(Collection<MyFlowWebConfigurer> configurerCollections) {
+    public void addMyFlowWebConfigures(Collection<MyFlowConfigurer> configurerCollections) {
         if (configurerCollections != null) {
             delegates.addAll(configurerCollections);
         }
     }
 
     public void addUseRoleAware(UserRoleAwareRegistry userRoleAwareRegistry) {
-        for (MyFlowWebConfigurer delegate : delegates) {
+        for (MyFlowConfigurer delegate : delegates) {
             delegate.addUseRoleAware(userRoleAwareRegistry);
         }
     }

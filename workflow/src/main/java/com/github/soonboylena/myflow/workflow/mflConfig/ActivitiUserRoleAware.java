@@ -1,4 +1,4 @@
-package com.github.soonboylena.myflow.springmyflow.config.forActiviti;
+package com.github.soonboylena.myflow.workflow.mflConfig;
 
 import com.github.soonboylena.myflow.entity.custom.User;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAware;

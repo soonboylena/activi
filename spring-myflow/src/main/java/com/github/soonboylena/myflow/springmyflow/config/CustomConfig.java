@@ -34,7 +34,7 @@ public class CustomConfig {
 
 //    @Bean
 //    @Primary
-//    public MyFlowWebConfigurer myFlowWebConfigurer(DelegatingMyFlowWebConfiguration delegatingMyFlowWebConfiguration) {
+//    public MyFlowConfigurer myFlowWebConfigurer(DelegatingMyFlowWebConfiguration delegatingMyFlowWebConfiguration) {
 //        return delegatingMyFlowWebConfiguration.getConfigurers();
 //    }
 }
