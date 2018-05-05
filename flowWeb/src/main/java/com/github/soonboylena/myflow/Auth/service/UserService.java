@@ -11,6 +11,7 @@ import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -51,6 +52,7 @@ public class UserService {
         return loginInfoRepository.findById(id).orElseGet(null);
     }
 
+    @Transactional
     public void saveUser(WebUser user) {
 
         User user1 = new User();

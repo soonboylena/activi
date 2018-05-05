@@ -17,17 +17,20 @@ public class CustomConfig {
     @Autowired
     LoginInfoGraphRepository loginInfoGraphRepository;
 
+    @Autowired
+    DelegatingMyFlowWebConfiguration delegatingMyFlowWebConfiguration;
+
     @Bean
-    public UserRoleAwareRegistry userRoleAwareRegistry(DelegatingMyFlowWebConfiguration delegatingMyFlowWebConfiguration) {
+    public UserRoleAwareRegistry userRoleAwareRegistry() {
         return delegatingMyFlowWebConfiguration.getUserRoleAwareRegistry();
     }
 
     @Bean
     @ConditionalOnMissingBean(MflUserService.class)
-    public MflUserService mflUserService(DelegatingMyFlowWebConfiguration delegatingMyFlowWebConfiguration) {
+    public MflUserService mflUserService() {
         MflUserService neo4jUserService = new Neo4jUserService(loginInfoGraphRepository);
         DelegatingUserService delegatingUserService = new DelegatingUserService(neo4jUserService);
-        UserRoleAwareRegistry userRoleAwareRegistry = userRoleAwareRegistry(delegatingMyFlowWebConfiguration);
+        UserRoleAwareRegistry userRoleAwareRegistry = userRoleAwareRegistry();
         delegatingUserService.setRegistry(userRoleAwareRegistry);
         return delegatingUserService;
     }

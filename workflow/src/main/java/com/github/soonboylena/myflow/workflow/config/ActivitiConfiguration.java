@@ -4,7 +4,10 @@ import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -27,19 +30,19 @@ public class ActivitiConfiguration {
 
     private final ResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 
+    private static final Logger logger = LoggerFactory.getLogger(ActivitiConfiguration.class);
+
     @Bean
-    public ProcessEngineConfiguration processEngineConfiguration(DataSource dataSource, PlatformTransactionManager transactionManager) {
+    public ProcessEngineConfiguration processEngineConfiguration(@Qualifier("dataSource") DataSource dataSource, PlatformTransactionManager transactionManager) {
         SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
         processEngineConfiguration.setDataSource(dataSource);
 
         processEngineConfiguration.setDatabaseSchemaUpdate(String.valueOf(properties.isSchemaUpdate()));
-        processEngineConfiguration.setDatabaseType(properties.getType());
+//        processEngineConfiguration.setDatabaseType(properties.getType());
 
         String[] resourcePaths = properties.getResourcePaths();
 
         Resource[] resources = readResources(resourcePaths);
-
-
         processEngineConfiguration.setDeploymentResources(resources);
 
         processEngineConfiguration.setTransactionManager(transactionManager);
@@ -68,15 +71,14 @@ public class ActivitiConfiguration {
             }
 
         }
-        return resourceList.toArray(new Resource[]{});
+        return resourceList.toArray(new Resource[resourceList.size()]);
     }
 
     private Resource[] readResource(String process0) {
         try {
-            Resource[] resources = ResourcePatternUtils.getResourcePatternResolver(defaultResourceLoader).getResources(process0);
-            return resources;
+            return ResourcePatternUtils.getResourcePatternResolver(defaultResourceLoader).getResources(process0);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("读取配置指定的资源文件时发生IO错误。", e);
             return null;
         }
     }

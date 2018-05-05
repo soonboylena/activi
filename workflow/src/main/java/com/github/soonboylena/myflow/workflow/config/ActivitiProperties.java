@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ActivitiProperties {
 
-    private String type;
+    //    private String type;
     private boolean schemaUpdate = true;
     private String[] resourcePaths;
 }

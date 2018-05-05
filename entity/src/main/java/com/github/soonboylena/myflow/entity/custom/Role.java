@@ -14,4 +14,7 @@ public class Role {
     protected String description;
     protected Set<Permission> permissions = new HashSet<>();
 
+    public void addPermission(Permission p) {
+        permissions.add(p);
+    }
 }

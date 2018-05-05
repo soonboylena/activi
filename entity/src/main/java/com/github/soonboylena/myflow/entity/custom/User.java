@@ -13,6 +13,8 @@ import java.util.Set;
 @Data
 public class User {
 
+    private Long id;
+
     // 登录名
     private String username;
 
@@ -47,4 +49,7 @@ public class User {
         return otherProperties.get(key);
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 }

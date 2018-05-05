@@ -23,14 +23,15 @@ public class DelegatingUserService implements MflUserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
 
         logger.debug("delegate userService: {}", user);
-
+        User savedUser;
         if (registry == null) {
 
             logger.debug("实际执行： {}", wrappedUserService.getClass().getName());
-            wrappedUserService.saveUser(user);
+            savedUser = wrappedUserService.saveUser(user);
+            return savedUser;
         } else {
             List<UserRoleAware> awares = registry.getAwares();
             for (UserRoleAware aware : awares) {
@@ -38,13 +39,14 @@ public class DelegatingUserService implements MflUserService {
                 aware.beforeSaveUser(user);
             }
             logger.debug("实际执行： {}", wrappedUserService.getClass().getName());
-            wrappedUserService.saveUser(user);
+            savedUser = wrappedUserService.saveUser(user);
 
             for (UserRoleAware aware : awares) {
                 logger.debug("后置处理： {}", aware.getClass().getName());
-                aware.afterSaveUser(user);
+                aware.afterSaveUser(savedUser);
             }
         }
+        return savedUser;
     }
 
     public void setRegistry(UserRoleAwareRegistry registry) {

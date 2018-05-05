@@ -4,7 +4,10 @@ import com.github.soonboylena.myflow.entity.custom.User;
 
 public interface UserRoleAware {
 
-    public void beforeSaveUser(User user);
+    default void beforeSaveUser(User user) {
+    }
 
-    void afterSaveUser(User user);
+
+    default void afterSaveUser(User user) {
+    }
 }

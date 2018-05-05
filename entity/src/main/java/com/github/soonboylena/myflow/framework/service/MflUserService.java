@@ -4,5 +4,5 @@ import com.github.soonboylena.myflow.entity.custom.User;
 
 public interface MflUserService {
 
-    public void saveUser(User user);
+    public User saveUser(User user);
 }

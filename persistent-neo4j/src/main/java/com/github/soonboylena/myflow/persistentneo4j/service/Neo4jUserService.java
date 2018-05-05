@@ -20,9 +20,53 @@ public class Neo4jUserService implements MflUserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
 
+        LoginInfoEntity entity = user2LoginInfo(user);
+        LoginInfoEntity save = loginInfoGraphRepository.save(entity);
+        return loginInfo2User(save);
+    }
+
+    private User loginInfo2User(LoginInfoEntity save) {
+        User user = new User();
+        user.setId(save.getId());
+        user.setUserNickName(save.getTitle());
+        user.setUsername(save.getUsername());
+        user.setPassword(save.getPassword());
+
+        Set<AuthorityEntity> authorities = save.getAuthorities();
+        if (authorities == null) return user;
+
+        for (AuthorityEntity authority : authorities) {
+
+            Role role = new Role();
+            role.setId(authority.getId());
+            role.setExpress(authority.getExpress());
+            role.setTitle(authority.getTitle());
+            role.setDescription(authority.getDescription());
+
+            Set<AuthorityEntity> permissions = authority.getAuthorities();
+            if (permissions != null) {
+                for (AuthorityEntity permission : permissions) {
+                    Permission p = new Permission();
+                    p.setId(permission.getId());
+                    p.setExpress(permission.getExpress());
+                    p.setTitle(permission.getTitle());
+                    p.setDescription(permission.getDescription());
+
+                    role.addPermission(p);
+                }
+            }
+
+            user.addRole(role);
+        }
+        return user;
+
+    }
+
+    private LoginInfoEntity user2LoginInfo(User user) {
         LoginInfoEntity entity = new LoginInfoEntity();
+        entity.setId(user.getId());
         entity.setTitle(user.getUserNickName());
         entity.setUsername(user.getUsername());
         entity.setPassword(user.getPassword());
@@ -43,7 +87,6 @@ public class Neo4jUserService implements MflUserService {
             neoRoles.add(neoRole);
         }
         entity.setAuthorities(neoRoles);
-
-        LoginInfoEntity save = loginInfoGraphRepository.save(entity);
+        return entity;
     }
 }

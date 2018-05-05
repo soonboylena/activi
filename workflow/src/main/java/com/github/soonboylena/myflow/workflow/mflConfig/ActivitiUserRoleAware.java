@@ -2,18 +2,44 @@ package com.github.soonboylena.myflow.workflow.mflConfig;
 
 import com.github.soonboylena.myflow.entity.custom.User;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAware;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.impl.persistence.entity.UserEntityImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActivitiUserRoleAware implements UserRoleAware {
 
+    private static final Logger logger = LoggerFactory.getLogger(ActivitiUserRoleAware.class);
+
+    private IdentityService identityService;
+
+    ActivitiUserRoleAware(IdentityService identityService) {
+        this.identityService = identityService;
+    }
+
     @Override
     public void beforeSaveUser(User user) {
-
-        System.out.println("-------------------------------");
     }
 
     @Override
     public void afterSaveUser(User user) {
 
-        System.out.println("===============================");
+        Long id = user.getId();
+        String idStr = id.toString();
+
+        org.activiti.engine.identity.User activitiUser = identityService.createUserQuery().userId(idStr).singleResult();
+        logger.debug("id:{}, activiti里边用户名:{}", idStr, activitiUser == null ? "activiti里边没找到这个用户" : activitiUser.getFirstName());
+
+        if (activitiUser == null) {
+            logger.info("将在activiti库中建立id为 [{}] 的用户. 用户名: {} ", user.getUsername());
+            activitiUser = identityService.newUser(id.toString());
+        }
+
+        activitiUser.setFirstName(user.getUsername());
+        activitiUser.setLastName(user.getUsername());
+        activitiUser.setPassword(user.getPassword());
+
+        identityService.saveUser(activitiUser);
     }
+
 }
