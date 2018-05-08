@@ -23,6 +23,7 @@
         <module>persistent-neo4j</module>
         <module>workflow</module>
         <module>spring-myflow</module>
+        <module>form</module>
     </modules>
 
     <groupId>com.github.soonboylena</groupId>

@@ -1,11 +1,8 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.WebUser;
-import com.github.soonboylena.myflow.entity.custom.Permission;
-import com.github.soonboylena.myflow.entity.custom.Role;
 import com.github.soonboylena.myflow.entity.custom.User;
-import com.github.soonboylena.myflow.framework.service.MflUserService;
-import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
+import com.github.soonboylena.myflow.framework.web.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author lungern xiii.at.cn@gmail.com

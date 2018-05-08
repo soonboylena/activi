@@ -2,7 +2,7 @@ package com.github.soonboylena.myflow.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.soonboylena.myflow.BaseTest;
-import com.github.soonboylena.myflow.vModel.uiAction.UrlObject;
+import com.github.soonboylena.myflow.dynamic.vModel.uiAction.UrlObject;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;

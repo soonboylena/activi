@@ -22,15 +22,15 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
-    @GetMapping("/usable/{currentKey}")
-    public Message<Boolean> checkIfUse(@PathVariable String currentKey) {
-        boolean exists = menuService.existsByCurrentKey(currentKey);
-        if (exists) {
-            return new Message<>("此id已被占用", false);
-        } else {
-            return new Message<>("此id可用", true);
-        }
-    }
+//    @GetMapping("/usable/{currentKey}")
+//    public Message<Boolean> checkIfUse(@PathVariable String currentKey) {
+//        boolean exists = menuService.existsByCurrentKey(currentKey);
+//        if (exists) {
+//            return new Message<>("此id已被占用", false);
+//        } else {
+//            return new Message<>("此id可用", true);
+//        }
+//    }
 
 //    @PostMapping("/add/{pId}")
 //    public Message<Boolean> addMenu(@RequestBody Menu menu, @PathVariable("pId") Long pId) {
@@ -45,7 +45,6 @@ public class MenuController {
 
     @PostMapping("/update")
     public Message<Boolean> editMenu(@RequestBody Menu menu) {
-        Assert.hasText(menu.getCode(), "菜单的key值不能为空");
         menuService.updateMenu(menu);
         return new Message<>("添加成功", true);
     }
@@ -63,7 +62,6 @@ public class MenuController {
 
     @PostMapping
     public Message<Boolean> update(@RequestBody Menu menu) {
-//        System.out.println(menu);
         menuService.updateMenu(menu);
         return new Message<>("更新成功", true);
     }

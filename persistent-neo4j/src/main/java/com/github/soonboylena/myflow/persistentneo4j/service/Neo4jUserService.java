@@ -3,7 +3,7 @@ package com.github.soonboylena.myflow.persistentneo4j.service;
 import com.github.soonboylena.myflow.entity.custom.Permission;
 import com.github.soonboylena.myflow.entity.custom.Role;
 import com.github.soonboylena.myflow.entity.custom.User;
-import com.github.soonboylena.myflow.framework.service.MflUserService;
+import com.github.soonboylena.myflow.framework.web.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;

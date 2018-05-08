@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.workflow;
 
-import com.github.soonboylena.myflow.workflow.controller.TestController;
+import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
@@ -21,18 +21,38 @@ public class WorkflowApplicationTests {
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private FormService formService;
+
     @Test
     public void contextLoads() {
 
         log.info("success");
 
-        List<String> collect = repositoryService.createProcessDefinitionQuery().list()
-                .stream()
-                .map(ProcessDefinition::getName)
-                .collect(Collectors.toList());
+        List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().latestVersion().list();
 
-        for (String s : collect) {
-            System.out.println(s);
+        for (ProcessDefinition processDefinition : list) {
+            String id = processDefinition.getId();
+            String tenantId = processDefinition.getTenantId();
+            String deploymentId = processDefinition.getDeploymentId();
+            String name = processDefinition.getName();
+            int version = processDefinition.getVersion();
+
+            String out = String.format("id: [%s],tenantId: [%s],deploymentId: [%s],name: [%s], version: [%s]", id, tenantId, deploymentId, name, version);
+            System.out.println(out);
+
+        }
+
+    }
+
+    @Test
+    public void FormEngineTest() {
+
+        List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().latestVersion().list();
+
+        for (ProcessDefinition processDefinition : list) {
+            Object renderedStartForm = formService.getRenderedStartForm(processDefinition.getId());
+//            System.out.println(renderedStartForm);
         }
 
     }

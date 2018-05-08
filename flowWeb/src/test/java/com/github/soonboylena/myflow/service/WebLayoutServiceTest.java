@@ -1,7 +1,8 @@
 package com.github.soonboylena.myflow.service;
 
 import com.github.soonboylena.myflow.BaseTest;
-import com.github.soonboylena.myflow.vModel.UiContainer;
+import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
+import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

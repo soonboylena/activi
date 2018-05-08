@@ -1,1 +1,0 @@
-package com.github.soonboylena.myflow.vModel.uiComponent;import com.github.soonboylena.myflow.vModel.UiContainer;/** * Created with IntelliJ IDEA. * Description: * Project Name:    spring-boot-admin * LoginInfoEntity:            sunb * Date:            2017-10-25 * Time:            14:42 */public interface UiItem extends UiContainer {}

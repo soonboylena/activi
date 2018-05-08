@@ -1,0 +1,1 @@
+package com.github.soonboylena.myflow.dynamic.vModel.uiComponent;import com.github.soonboylena.myflow.dynamic.vModel.AbstractDwc;public class BoMeta extends AbstractDwc<BoMetaDefine> {    private transient static final String TYPE = "m-boMeta";    @Override    public String getType() {        return TYPE;    }}

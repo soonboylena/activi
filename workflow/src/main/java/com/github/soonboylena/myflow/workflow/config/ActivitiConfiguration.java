@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.workflow.config;
 
+import com.github.soonboylena.myflow.workflow.mflConfig.MflFormEngine;
 import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
@@ -20,17 +21,19 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
 public class ActivitiConfiguration {
+
+    private static final Logger logger = LoggerFactory.getLogger(ActivitiConfiguration.class);
 
     @Autowired
     private ActivitiProperties properties;
 
     private final ResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivitiConfiguration.class);
 
     @Bean
     public ProcessEngineConfiguration processEngineConfiguration(@Qualifier("dataSource") DataSource dataSource, PlatformTransactionManager transactionManager) {
@@ -38,14 +41,13 @@ public class ActivitiConfiguration {
         processEngineConfiguration.setDataSource(dataSource);
 
         processEngineConfiguration.setDatabaseSchemaUpdate(String.valueOf(properties.isSchemaUpdate()));
-//        processEngineConfiguration.setDatabaseType(properties.getType());
 
         String[] resourcePaths = properties.getResourcePaths();
-
         Resource[] resources = readResources(resourcePaths);
         processEngineConfiguration.setDeploymentResources(resources);
-
         processEngineConfiguration.setTransactionManager(transactionManager);
+
+        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine()));
 
         return processEngineConfiguration;
     }
@@ -54,10 +56,9 @@ public class ActivitiConfiguration {
 
         List<Resource> resourceList = new ArrayList<>();
 
+        // 默认路径
         String process0 = "classpath:/processes/*";
-
         Resource[] read = readResource(process0);
-
         if (read != null) {
             resourceList.addAll(Arrays.asList(read));
         }

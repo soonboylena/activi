@@ -1,7 +1,7 @@
 package com.github.soonboylena.myflow.springmyflow.config;
 
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
-import com.github.soonboylena.myflow.framework.service.MflUserService;
+import com.github.soonboylena.myflow.framework.web.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;
 import com.github.soonboylena.myflow.persistentneo4j.service.Neo4jUserService;
 import org.springframework.beans.factory.annotation.Autowired;

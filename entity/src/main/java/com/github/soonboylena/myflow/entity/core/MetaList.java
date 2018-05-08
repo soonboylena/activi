@@ -35,34 +35,6 @@ public class MetaList implements IMeta {
         return metaForm.getBusinessKey();
     }
 
-    //    public static MetaList fromMetaForm(MetaForm metaForm) {
-//        this.metaForm = metaForm;
-
-//        if (metaForm == null) {
-//            return null;
-//        }
-//
-//        MetaList list = new MetaList();
-//        list.setMetaPool(metaForm.getMetaPool());
-//        list.setBusinessKey(metaForm.getBusinessKey());
-//        list.setKey(metaForm.getKey());
-//        list.setCaption(metaForm.getCaption());
-//        return list;
-//    }
-
-//    public void addDatum(Map<String, Object> datum) {
-//        if (datum != null) {
-//            data.add(datum);
-//        }
-//    }
-//
-//    public Map<String, Object> getDatum(int index) {
-//
-//        if (data.size() > index) {
-//            return data.get(index);
-//        }
-//        return null;
-//    }
 
 
 }

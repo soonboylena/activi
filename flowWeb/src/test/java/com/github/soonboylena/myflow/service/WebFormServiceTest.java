@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.service;
 
 import com.github.soonboylena.myflow.BaseTest;
+import com.github.soonboylena.myflow.dynamic.service.WebFormService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

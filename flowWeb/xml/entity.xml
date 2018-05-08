@@ -14,6 +14,12 @@
         <!--联系人电话-->
         <item key="contactTel" caption="联系人电话" description="联系人电话" type="string"/>
 
+        <!--请假-->
+        <item key="leaveStartTime" caption="开始日" description="开始日" type="string"/>
+        <item key="leaveEndTime" caption="结束日" description="结束日" type="string"/>
+        <item key="leaveReason" caption="原因" description="原因" type="string"/>
+
+
     </items>
     <forms>
         <form key="customer" caption="用户">
@@ -47,6 +53,11 @@
                 </relateTo>
                 <relateTo type="work" ref="company"/>
             </relations>
+        </form>
+        <form key="leave">
+            <field ref="leaveStartTime"/>
+            <field ref="leaveEndTime"/>
+            <field ref="leaveReason"/>
         </form>
     </forms>
     <transfers>

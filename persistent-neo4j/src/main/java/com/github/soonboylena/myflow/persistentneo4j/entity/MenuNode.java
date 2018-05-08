@@ -20,14 +20,9 @@ public class MenuNode extends BaseModel {
 
     private int menuOrder = 0;
 
-    @Index(unique = true)
-    private String currentKey;
-
     private String title;
 
     private String icon;
-
-    private String parentKey;
 
     private String url;
 
@@ -40,14 +35,11 @@ public class MenuNode extends BaseModel {
     public MenuNode() {
     }
 
-    public MenuNode(String currentKey, String parentKey, String title) {
-        this.currentKey = currentKey;
-        this.parentKey = parentKey;
+    public MenuNode(String title) {
         this.title = title;
     }
 
     public void addItem(MenuNode item) {
         items.add(item);
-        item.setParentKey(this.getCurrentKey());
     }
 }

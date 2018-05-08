@@ -10,7 +10,7 @@ import java.util.List;
 public class Menu {
 
     private Long id;
-    private String code;
+    private Long parentId;
     private String url;
     private String title;
     private String picUrl;
@@ -23,6 +23,7 @@ public class Menu {
 
     public void addSubMenu(Menu item) {
         children.add(item);
+        item.setParentId(this.id);
     }
 
     public void setAuth(Permission auth) {
@@ -31,5 +32,9 @@ public class Menu {
 
     public boolean isLeaf() {
         return children == null || children.isEmpty();
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }

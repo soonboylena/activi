@@ -67,15 +67,15 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
         MenuNode node = new MenuNode();
         node.setTitle("系统设置");
-        node.setCurrentKey("systemSetting");
+//        node.setCurrentKey("systemSetting");
 
-        MenuNode userItem = new MenuNode("user", node.getCurrentKey(), "用户管理");
+        MenuNode userItem = new MenuNode("用户管理");
         userItem.setIcon("person-stalker");
         userItem.setUrl("?at=/layoutContent/systemSetting/user");
         userItem.setAuthorityEntity(new AuthorityEntity("用户管理权限", "menu-system-user"));
         node.addItem(userItem);
 
-        MenuNode authItem = new MenuNode("auth", node.getCurrentKey(), "权限管理");
+        MenuNode authItem = new MenuNode("权限管理");
         authItem.setIcon("ios-toggle-outline");
         authItem.setUrl("?at=/layoutContent/systemSetting/auth");
         authItem.setAuthorityEntity(new AuthorityEntity("权限管理菜单权限", "menu-system-auth"));
@@ -87,17 +87,16 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
 
         MenuNode customer = new MenuNode();
         customer.setTitle("客户管理");
-        customer.setCurrentKey("customerManage");
 
-        MenuNode customerAdd = new MenuNode("user", customer.getCurrentKey(), "添加客户");
+        MenuNode customerAdd = new MenuNode("添加客户");
         customerAdd.setIcon("person-stalker");
         customerAdd.setUrl("/api/page/init/company2?at=/layoutContent/customs/page");
         customerAdd.setAuthorityEntity(new AuthorityEntity("添加客户权限", "menu-customer-add"));
         customer.addItem(customerAdd);
-//        repository.save(customer);
+        repository.save(customer);
 
 
-        MenuNode customerList = new MenuNode("users", customer.getCurrentKey(), "客户一览");
+        MenuNode customerList = new MenuNode("客户一览");
         customerList.setIcon("person-stalker");
         customerList.setUrl("/api/list/layout/company2?at=/layoutContent/customs/page");
         customerList.setAuthorityEntity(new AuthorityEntity("显示客户一览权限", "menu-customer-list"));
@@ -128,17 +127,15 @@ public class MenuNodeGraphRepositoryTest extends NeoBaseTest {
         expresses.add("menu-system-auth");
         expresses.add("menu-system-user");
 
-        List<MenuNode> menuTreesByExpress = repository.findMenuByExpress(expresses,"systemSetting");
-//        List<MenuNode> menuTreesByExpress = repository.findMenuTreesByExpress("p11");
-        print(menuTreesByExpress, "测试根据权限取菜单");
+//        List<MenuNode> menuTreesByExpress = repository.findMenuByExpress(expresses, "systemSetting");
     }
 
 
     @Test
     public void findAllMenuNodeAndItem() {
-//        List<MenuNode> allMenuNodeAndItem = repository.findAllMenuNodeAndItem();
-//        print(allMenuNodeAndItem, "测试取得所有菜单");
-        Iterable<MenuNode> all = repository.findAll();
-        print(all, "测试取得所有菜单");
+        List<MenuNode> allMenuNodeAndItem = repository.findAllMenuNodeAndItem();
+        print(allMenuNodeAndItem, "测试取得所有菜单");
+//        Iterable<MenuNode> all = repository.findAll();
+//        print(all, "测试取得所有菜单");
     }
 }

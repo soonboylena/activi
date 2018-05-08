@@ -1,0 +1,1 @@
+package com.github.soonboylena.myflow.dynamic.vModel.contant;/** * Created with IntelliJ IDEA. * Description: * Project Name:    spring-boot-admin * LoginInfoEntity:            sunb * Date:            2017-11-24 * Time:            10:42 */public enum TodoType {}

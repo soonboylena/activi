@@ -30,7 +30,7 @@ public class ModuleController {
     }
 
     @RequestMapping("leftMenu")
-    public List<Menu> leftMenu(@RequestParam() String id, @AuthenticationPrincipal User user) {
+    public List<Menu> leftMenu(@RequestParam() Long id, @AuthenticationPrincipal User user) {
         return menuService.getSubMenus(id, user);
     }
 

@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.controller;
 
-import com.github.soonboylena.myflow.support.UrlManager;
+import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;

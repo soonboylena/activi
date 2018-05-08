@@ -1,9 +1,7 @@
 package com.github.soonboylena.myflow.persistentneo4j.repository;
 
-import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.MenuNode;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.annotation.QueryResult;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,13 +11,13 @@ import java.util.Set;
 @Repository
 public interface MenuNodeGraphRepository extends Neo4jRepository<MenuNode, Long> {
 
-    public boolean existsByCurrentKey(String currentKey);
+//    public boolean existsByCurrentKey(String currentKey);
 
     /**
      * 第3层节点（右侧按钮）
      */
-    @Query("match(s:MenuNode)-->(p:MenuNode)-[y:AUTHORITY_ENTITY]->(q:AuthorityEntity) where q.express in {0} and s.currentKey = {1} return p,y,q")
-    public List<MenuNode> findMenuByExpress(Set<String> entitySet, String parentKey);
+    @Query("match(s:MenuNode)-->(p:MenuNode)-[y:AUTHORITY_ENTITY]->(q:AuthorityEntity) where q.express in {0} and ID(s) = {1} return p,y,q")
+    public List<MenuNode> findMenuByExpress(Set<String> entitySet, Long parentId);
 
     /**
      * 只包含二层结点
@@ -42,9 +40,8 @@ public interface MenuNodeGraphRepository extends Neo4jRepository<MenuNode, Long>
      *
      * @return
      */
-    @Query("match p= ()-[*0..]-()-[*0..]->(:AuthorityEntity) return p")
+    @Query("match p=(:MenuNode)-[*]-(:AuthorityEntity) return p")
     public List<MenuNode> findAllMenuNodeAndItem();
-
 
 
 }

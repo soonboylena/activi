@@ -34,19 +34,16 @@ public class MenuService {
         // TODO ALL MENU
         List<MenuNode> menuList = menuRepository.findAllMenuNodeAndItem();
         return menuList.stream()
-                .filter(m -> m.getParentKey() == null) // TODO 去掉重复的那些接点。这个需要改findAllMenuNodeAndItem方法；
-                .map(this::fromDb).collect(Collectors.toList());
+//                .filter(m -> m.getAuthorityEntity() == null) // TODO 去掉重复的那些接点。这个需要改findAllMenuNodeAndItem方法；
+                .map(this::fromDb)
+                .filter(m -> !(m.getParentId() != null && m.getAuth() != null))
+                .collect(Collectors.toList());
     }
 
-    public boolean existsByCurrentKey(String currentKey) {
-        return menuRepository.existsByCurrentKey(currentKey);
-    }
+//    public boolean existsByCurrentKey(String currentKey) {
+//        return menuRepository.existsByCurrentKey(currentKey);
+//    }
 
-    public List<Menu> findMenuByCurrentKeys(List<String> keyList) {
-//        List<MenuNode> menuList = menuRepository.findAllByCurrentKeyIn(keyList);
-//        return menuList;
-        return null;
-    }
 
     public List<Menu> getUserMenu(UserDetails user) {
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
@@ -64,7 +61,7 @@ public class MenuService {
     }
 
 
-    public List<Menu> getSubMenus(String parentKey, User user) {
+    public List<Menu> getSubMenus(Long parentId, User user) {
 
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         if (authorities == null || authorities.isEmpty()) {
@@ -73,7 +70,7 @@ public class MenuService {
 
         Set<String> collect = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         if (logger.isDebugEnabled()) {
-            logger.debug("左边menu的key： {}", parentKey);
+            logger.debug("左边menu的id： {}", parentId);
             logger.debug("-- 当前用户权限");
             for (String s : collect) {
                 logger.debug("--- {}", s);
@@ -83,7 +80,7 @@ public class MenuService {
 //        List<MenuItem> menuByParentKeyAndExpress = menuItemGR.findMenuByParentKeyAndExpress(parentKey, collect);
 //        return menuByParentKeyAndExpress.stream().map(this::fromDb).collect(Collectors.toList());
 
-        List<MenuNode> menuByExpress = menuRepository.findMenuByExpress(collect, parentKey);
+        List<MenuNode> menuByExpress = menuRepository.findMenuByExpress(collect, parentId);
         return menuByExpress.stream().map(this::fromDb).collect(Collectors.toList());
     }
 
@@ -105,7 +102,6 @@ public class MenuService {
         node.setUrl(menu.getUrl());
         node.setTitle(menu.getTitle());
         node.setIcon(menu.getIcon());
-        node.setCurrentKey(menu.getCode());
         List<Menu> items = menu.getChildren();
         if (items != null) {
             for (Menu item : items) {
@@ -131,7 +127,6 @@ public class MenuService {
 
     private Menu fromDb(MenuNode menuNode) {
         Menu menu = new Menu();
-        menu.setCode(menuNode.getCurrentKey());
         menu.setUrl(menuNode.getUrl());
         menu.setTitle(menuNode.getTitle());
         menu.setIcon(menuNode.getIcon());

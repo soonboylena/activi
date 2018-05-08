@@ -1,11 +1,11 @@
 package com.github.soonboylena.myflow.persistentneo4j.service;
 
 import com.github.soonboylena.myflow.entity.core.*;
+import com.github.soonboylena.myflow.framework.web.FormQueryService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.DynamicRelation;
 import com.github.soonboylena.myflow.persistentneo4j.repository.DynamicFormGraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class DynamicFormQueryService {
+public class DynamicFormQueryService implements FormQueryService {
 
     @Autowired
     private DynamicFormGraphRepository repository;
@@ -27,6 +27,7 @@ public class DynamicFormQueryService {
      * @param id
      * @return
      */
+    @Override
     public FormEntity findById(MetaForm metaForm, Long id) {
 
         Optional<DynamicEntity> byId = repository.findById(id, 2);
@@ -83,6 +84,7 @@ public class DynamicFormQueryService {
     }
 
 
+    @Override
     public ListEntity findByMeta(MetaForm metaForm) {
         List<DynamicEntity> nodes = repository.findByLabel(metaForm.getKey());
         MetaList metaList = new MetaList(metaForm);

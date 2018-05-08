@@ -1,14 +1,14 @@
 package com.github.soonboylena.myflow.controller;
 
-import com.github.soonboylena.myflow.service.WebLayoutService;
-import com.github.soonboylena.myflow.support.UrlManager;
-import com.github.soonboylena.myflow.vModel.UiObject;
-import com.github.soonboylena.myflow.vModel.contant.ButtonType;
-import com.github.soonboylena.myflow.vModel.uiAction.SubmitAction;
-import com.github.soonboylena.myflow.vModel.uiAction.UrlObject;
-import com.github.soonboylena.myflow.vModel.uiComponent.Button;
-import com.github.soonboylena.myflow.vModel.uiComponent.Page;
-import com.github.soonboylena.myflow.vModel.uiComponent.UrlSection;
+import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
+import com.github.soonboylena.myflow.dynamic.vModel.contant.ButtonType;
+import com.github.soonboylena.myflow.dynamic.vModel.uiAction.SubmitAction;
+import com.github.soonboylena.myflow.dynamic.vModel.uiAction.UrlObject;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Button;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
+import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
+import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
