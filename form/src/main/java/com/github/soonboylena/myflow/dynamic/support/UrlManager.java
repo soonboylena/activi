@@ -1,6 +1,6 @@
-package com.github.soonboylena.myflow.support;
+package com.github.soonboylena.myflow.dynamic.support;
 
-import com.github.soonboylena.myflow.vModel.uiAction.UrlObject;
+import com.github.soonboylena.myflow.dynamic.vModel.uiAction.UrlObject;
 import org.springframework.http.HttpMethod;
 
 public class UrlManager {
@@ -82,5 +82,41 @@ public class UrlManager {
      */
     public static UrlObject getResources(String formKey) {
         return new UrlObject(prefix + "/data/key/{formKey}/resources", HttpMethod.GET, ChainMap.get().put("formKey", formKey).ok());
+    }
+
+
+    //=====================================
+    //====================流程=============
+    //=====================================
+
+    /**
+     * 流程入口
+     *
+     * @param processId
+     * @return
+     */
+    public static UrlObject processInit(String processId) {
+        return new UrlObject(prefix + "/process/{processId}/init", ChainMap.get().put("processId", processId).ok());
+    }
+
+    /**
+     * 流程表单布局
+     *
+     * @param processId
+     * @return
+     */
+    public static UrlObject processLayout(String processId) {
+        return new UrlObject(prefix + "/process/{processId}/start/layout"
+                , ChainMap.get()
+                .put("processId", processId)
+                .ok());
+    }
+
+    public static UrlObject processStart(String processId) {
+        return new UrlObject(prefix + "/process/start/{processId}"
+                , HttpMethod.PUT
+                , ChainMap.get()
+                .put("processId", processId)
+                .ok());
     }
 }
