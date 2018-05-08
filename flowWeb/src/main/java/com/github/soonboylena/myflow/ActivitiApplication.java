@@ -1,14 +1,8 @@
 package com.github.soonboylena.myflow;
 
-import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
-import com.github.soonboylena.myflow.entity.config.RefreshHolderBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.xml.XmlConfigureBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude = {
@@ -26,17 +20,6 @@ public class ActivitiApplication {
 
     }
 
-    @Bean
-    public ConfigureHolder configureHolder() {
-
-//        String path = "classpath:/entityXml/entity.xml";
-        String path = "file:/home/sunb/IdeaProjects/activi/flowWeb/xml/entity.xml";
-        ConfigureBuilder builder = new XmlConfigureBuilder();
-        RefreshHolderBuilder refreshHolderBuilder = new RefreshHolderBuilder();
-        // 支持热更新
-        ConfigureHolder holder = refreshHolderBuilder.register(path, builder);
-        return holder;
-    }
 
 //    @Bean
 //    CommandLineRunner init(final RuntimeService runtimeService) {

@@ -11,6 +11,9 @@ import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import org.activiti.engine.FormService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,9 @@ public class ProcessController {
 
     @Autowired
     private WebLayoutService webLayoutService;
+
+    @Autowired
+    private RepositoryService repositoryService;
 
     @Autowired
     private FormService formService;
@@ -38,7 +44,9 @@ public class ProcessController {
 
         Page page = new Page();
 
-        Object renderedStartForm = formService.getRenderedStartForm(processId);
+        ProcessDefinition leave = repositoryService.createProcessDefinitionQuery().processDefinitionKey("leave").active().latestVersion().singleResult();
+
+        Object renderedStartForm = formService.getRenderedStartForm(leave.getId());
 
         if (!(renderedStartForm instanceof MetaForm)) {
             throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formkey的后缀是否是.mfl");

@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.workflow.config;
 
+import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.workflow.mflConfig.MflFormEngine;
 import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -32,6 +33,9 @@ public class ActivitiConfiguration {
     @Autowired
     private ActivitiProperties properties;
 
+    @Autowired
+    private ConfigureHolder configureHolder;
+
     private final ResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 
 
@@ -47,7 +51,7 @@ public class ActivitiConfiguration {
         processEngineConfiguration.setDeploymentResources(resources);
         processEngineConfiguration.setTransactionManager(transactionManager);
 
-        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine()));
+        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine(configureHolder)));
 
         return processEngineConfiguration;
     }

@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.workflow.mflConfig;
 
+import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.entity.exceptions.NoMatchedKeyException;
@@ -24,7 +25,11 @@ public class MflFormEngine implements FormEngine {
 
     private JuelFormEngine origEngine = new JuelFormEngine();
 
-    private MemoryConfigHolder configHolder;
+    private ConfigureHolder configHolder;
+
+    public MflFormEngine(ConfigureHolder configHolder) {
+        this.configHolder = configHolder;
+    }
 
     @Override
     public String getName() {

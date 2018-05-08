@@ -5,7 +5,7 @@ import org.springframework.http.HttpMethod;
 
 public class UrlManager {
 
-    public static final String prefix = "/api";
+    public static final String prefix = "";
 
     //=======================================================================================================================
 
