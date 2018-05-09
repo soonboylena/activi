@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.springmyflow.config;
 
-import com.github.soonboylena.myflow.entity.custom.User;
+import com.github.soonboylena.myflow.entity.custom.MflUser;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAware;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAwareRegistry;
 import com.github.soonboylena.myflow.framework.web.MflUserService;
@@ -23,10 +23,10 @@ public class DelegatingUserService implements MflUserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public MflUser saveUser(MflUser user) {
 
         logger.debug("delegate userService: {}", user);
-        User savedUser;
+        MflUser savedUser;
         if (registry == null) {
 
             logger.debug("实际执行： {}", wrappedUserService.getClass().getName());

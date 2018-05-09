@@ -1,7 +1,6 @@
 package com.github.soonboylena.myflow.workflow.mflConfig;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
-import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.entity.exceptions.NoMatchedKeyException;
 import org.activiti.engine.form.StartFormData;
@@ -11,17 +10,11 @@ import org.activiti.engine.impl.form.JuelFormEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
+import static com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil.formKeySuffix;
 
 public class MflFormEngine implements FormEngine {
 
     private static final Logger logger = LoggerFactory.getLogger(MflFormEngine.class);
-
-    // 代理引擎的名字
-    public static final String EngineName = "dynamicForm_engine";
-
-    //
-    public static final String formKeySuffix = ".mfl";
 
     private JuelFormEngine origEngine = new JuelFormEngine();
 
@@ -41,11 +34,10 @@ public class MflFormEngine implements FormEngine {
     public Object renderStartForm(StartFormData startForm) {
         String formKey = startForm.getFormKey();
 
-        logger.trace("检测formKey：{}");
         if (formKey != null && formKey.endsWith(formKeySuffix)) {
 
-            logger.info("使用动态表单引擎处理...");
             String noSuffixFormKey = formKey.replace(formKeySuffix, "");
+            logger.info("使用动态表单引擎处理. metaKey:{}", noSuffixFormKey);
             MetaForm metaForm = configHolder.getMetaForm(noSuffixFormKey);
             if (metaForm == null) {
                 throw new NoMatchedKeyException(noSuffixFormKey, "form");

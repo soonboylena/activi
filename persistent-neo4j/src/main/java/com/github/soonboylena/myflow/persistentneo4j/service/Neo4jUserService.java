@@ -1,8 +1,8 @@
 package com.github.soonboylena.myflow.persistentneo4j.service;
 
+import com.github.soonboylena.myflow.entity.custom.MflUser;
 import com.github.soonboylena.myflow.entity.custom.Permission;
 import com.github.soonboylena.myflow.entity.custom.Role;
-import com.github.soonboylena.myflow.entity.custom.User;
 import com.github.soonboylena.myflow.framework.web.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
@@ -20,15 +20,15 @@ public class Neo4jUserService implements MflUserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public MflUser saveUser(MflUser user) {
 
         LoginInfoEntity entity = user2LoginInfo(user);
         LoginInfoEntity save = loginInfoGraphRepository.save(entity);
         return loginInfo2User(save);
     }
 
-    private User loginInfo2User(LoginInfoEntity save) {
-        User user = new User();
+    private MflUser loginInfo2User(LoginInfoEntity save) {
+        MflUser user = new MflUser();
         user.setId(save.getId());
         user.setUserNickName(save.getTitle());
         user.setUsername(save.getUsername());
@@ -64,7 +64,7 @@ public class Neo4jUserService implements MflUserService {
 
     }
 
-    private LoginInfoEntity user2LoginInfo(User user) {
+    private LoginInfoEntity user2LoginInfo(MflUser user) {
         LoginInfoEntity entity = new LoginInfoEntity();
         entity.setId(user.getId());
         entity.setTitle(user.getUserNickName());

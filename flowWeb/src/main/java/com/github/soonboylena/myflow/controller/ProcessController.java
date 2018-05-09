@@ -1,63 +1,64 @@
 package com.github.soonboylena.myflow.controller;
 
+import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.dynamic.vModel.contant.ButtonType;
+import com.github.soonboylena.myflow.dynamic.vModel.uiAction.MessageAction;
 import com.github.soonboylena.myflow.dynamic.vModel.uiAction.SubmitAction;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Button;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
-import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
-import com.github.soonboylena.myflow.dynamic.support.UrlManager;
-import com.github.soonboylena.myflow.entity.core.IMeta;
-import com.github.soonboylena.myflow.entity.core.MetaForm;
-import org.activiti.engine.FormService;
+import com.github.soonboylena.myflow.service.ProcessService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("process")
 public class ProcessController {
 
-    @Autowired
-    private WebLayoutService webLayoutService;
 
     @Autowired
     private RepositoryService repositoryService;
 
+
     @Autowired
-    private FormService formService;
+    private ProcessService processService;
 
-
-    @GetMapping("{processId}/init")
-    public UrlSection init(@PathVariable("processId") String processId) {
-        return new UrlSection(UrlManager.processLayout(processId));
+    @GetMapping("{processDefinitionKey}/init")
+    public UrlSection init(@PathVariable("processDefinitionKey") String processDefinitionKey) {
+        // 取最新流程
+        ProcessDefinition leave = repositoryService
+                .createProcessDefinitionQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .active()
+                .latestVersion()
+                .singleResult();
+        String processDefinitionId = leave.getId();
+        return new UrlSection(UrlManager.processLayout(processDefinitionId));
     }
 
-    @GetMapping("/{processId}/start/layout")
-    public UiObject layout(@PathVariable("processId") String processId) {
+    @GetMapping("/{processDefinitionId}/start/layout")
+    public UiObject layout(@PathVariable("processDefinitionId") String processDefinitionId) {
 
         Page page = new Page();
 
-        ProcessDefinition leave = repositoryService.createProcessDefinitionQuery().processDefinitionKey("leave").active().latestVersion().singleResult();
+        processService.generateLayout(processDefinitionId, page);
 
-        Object renderedStartForm = formService.getRenderedStartForm(leave.getId());
-
-        if (!(renderedStartForm instanceof MetaForm)) {
-            throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formkey的后缀是否是.mfl");
-        }
-
-        webLayoutService.buildFormLayout((MetaForm) renderedStartForm, page);
-
-        SubmitAction clientAction = new SubmitAction(UrlManager.processStart(processId));
+        // 按钮
+        SubmitAction clientAction = new SubmitAction(UrlManager.processStart(processDefinitionId));
         Button button = new Button("提交", ButtonType.primary, clientAction);
 
         page.addBtn(button);
         return page;
+    }
+
+    @PostMapping("/{processDefinitionId}/start")
+    public MessageAction startProcess(@PathVariable("processDefinitionId") String processDefinitionId, @RequestBody Map<String, Map<String, Object>> rawDataMap) {
+        processService.startProcess(processDefinitionId, rawDataMap);
+        return MessageAction.message("办理完了");
     }
 }

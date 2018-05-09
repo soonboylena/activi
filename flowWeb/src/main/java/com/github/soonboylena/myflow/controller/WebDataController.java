@@ -48,7 +48,7 @@ public class WebDataController {
             return action;
         }
 
-        return MessageAction.error("没有接收到提交的数据！");
+        return MessageAction.message("没有接收到提交的数据！");
     }
 
     @GetMapping("/{formKey}/{id}")

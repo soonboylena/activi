@@ -1,6 +1,7 @@
 package com.github.soonboylena.myflow.Auth.security;
 
 
+import com.github.soonboylena.myflow.Auth.bean.SecurityUserImpl;
 import com.github.soonboylena.myflow.persistentneo4j.entity.AuthorityEntity;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.AuthorityGraphRepository;
@@ -55,7 +56,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList(authStrings.toArray(new String[authStrings.size()]));
 
-        return new User(loginInfoEntity.getUsername(), loginInfoEntity.getPassword(), authorityList);
+        SecurityUserImpl securityUser = new SecurityUserImpl(loginInfoEntity.getUsername(), loginInfoEntity.getPassword(), authorityList);
+        securityUser.setId(loginInfoEntity.getId());
+        return securityUser;
     }
 
     private void collectAuthString(AuthorityEntity authority, Set<String> authStrings) {

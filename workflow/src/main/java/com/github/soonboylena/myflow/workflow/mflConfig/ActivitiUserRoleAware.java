@@ -1,9 +1,8 @@
 package com.github.soonboylena.myflow.workflow.mflConfig;
 
-import com.github.soonboylena.myflow.entity.custom.User;
+import com.github.soonboylena.myflow.entity.custom.MflUser;
 import com.github.soonboylena.myflow.entity.custom.register.UserRoleAware;
 import org.activiti.engine.IdentityService;
-import org.activiti.engine.impl.persistence.entity.UserEntityImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,11 +17,11 @@ public class ActivitiUserRoleAware implements UserRoleAware {
     }
 
     @Override
-    public void beforeSaveUser(User user) {
+    public void beforeSaveUser(MflUser user) {
     }
 
     @Override
-    public void afterSaveUser(User user) {
+    public void afterSaveUser(MflUser user) {
 
         Long id = user.getId();
         String idStr = id.toString();

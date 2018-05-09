@@ -53,11 +53,12 @@
                 <relateTo type="work" ref="company"/>
             </relations>
         </form>
-        <form key="leave" caption="请假申请">
-            <field ref="leaveStartTime" />
-            <field ref="leaveEndTime"/>
+        <form key="leave" caption="任务单">
+            <field ref="leaveStartTime" caption="开始"/>
+            <field ref="leaveEndTime" caption="结束"/>
             <!--rowspan: max 代表占一行。或者自己指定一个数值-->
-            <field ref="leaveReason" rowspan="3" caption="请假原因"/>
+            <field ref="leaveReason" rowspan="3" caption="备注"/>
+
         </form>
     </forms>
     <transfers>

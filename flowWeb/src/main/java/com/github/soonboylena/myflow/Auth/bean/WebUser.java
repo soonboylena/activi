@@ -8,6 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * view model
+ * 就是用来存放用户模型的，维护用户时候用这个类
+ * 不继承任何接口
+ */
 @Data
 public class WebUser {
 

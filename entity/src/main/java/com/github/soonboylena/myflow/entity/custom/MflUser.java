@@ -11,7 +11,7 @@ import java.util.Set;
  * 用户实体
  */
 @Data
-public class User {
+public class MflUser {
 
     private Long id;
 

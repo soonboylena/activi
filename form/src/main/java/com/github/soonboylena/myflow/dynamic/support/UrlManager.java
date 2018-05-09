@@ -105,18 +105,18 @@ public class UrlManager {
      * @param processId
      * @return
      */
-    public static UrlObject processLayout(String processId) {
-        return new UrlObject(prefix + "/process/{processId}/start/layout"
+    public static UrlObject processLayout(String processDefinitionId) {
+        return new UrlObject(prefix + "/process/{processDefinitionId}/start/layout"
                 , ChainMap.get()
-                .put("processId", processId)
+                .put("processDefinitionId", processDefinitionId)
                 .ok());
     }
 
-    public static UrlObject processStart(String processId) {
-        return new UrlObject(prefix + "/process/start/{processId}"
-                , HttpMethod.PUT
+    public static UrlObject processStart(String processDefinitionId) {
+        return new UrlObject(prefix + "/process/{processDefinitionId}/start"
+                , HttpMethod.POST
                 , ChainMap.get()
-                .put("processId", processId)
+                .put("processDefinitionId", processDefinitionId)
                 .ok());
     }
 }

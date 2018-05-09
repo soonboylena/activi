@@ -1,7 +1,7 @@
 package com.github.soonboylena.myflow.Auth.service;
 
 import com.github.soonboylena.myflow.Auth.bean.WebUser;
-import com.github.soonboylena.myflow.entity.custom.User;
+import com.github.soonboylena.myflow.entity.custom.MflUser;
 import com.github.soonboylena.myflow.framework.web.MflUserService;
 import com.github.soonboylena.myflow.persistentneo4j.entity.LoginInfoEntity;
 import com.github.soonboylena.myflow.persistentneo4j.repository.LoginInfoGraphRepository;
@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public void saveUser(WebUser user) {
 
-        User user1 = new User();
+        MflUser user1 = new MflUser();
         user1.setUserNickName(user.getTitle());
         user1.setUsername(user.getUsername());
         user1.setPassword(encryption.encode(user.getPassword()));

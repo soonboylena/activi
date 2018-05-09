@@ -22,9 +22,10 @@ public class MessageAction extends AbstractAction {
         this.alert = alert;
     }
 
-    public static MessageAction error(String alert) {
+    public static MessageAction message(String alert) {
         MessageAction action = new MessageAction();
         action.setAlert(alert);
         return action;
     }
+
 }

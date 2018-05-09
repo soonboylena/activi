@@ -40,7 +40,7 @@ public class DynamicEntity extends BaseModel {
             logger.warn("尝试将[{}]的property [{}] 为null。该处理将被忽略", getTitle(), key);
             return;
         }
-        logger.trace("[{}]: \\{{}:{}\\}", getTitle(), key, data);
+        logger.trace("[{}]: {{}:{}}", getTitle(), key, data);
         properties.put(key, data);
     }
 
