@@ -9,6 +9,7 @@ import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Form;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Row;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
+import com.github.soonboylena.myflow.entity.support.Consts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +31,6 @@ public class FormConverter implements UIConverter {
     private int colsInRow = 4;
 
 
-    //栅格布局宽度
-    private static final int GRID_LAYOUT_COL_NUMBER = 24;
-
     private List<RowBreaker> breakers = new ArrayList<>();
 
     public FormConverter(ConverterManager converterManager) {
@@ -49,7 +47,7 @@ public class FormConverter implements UIConverter {
 
         MetaForm metaForm = (MetaForm) meta;
 
-        this.unit = GRID_LAYOUT_COL_NUMBER / colsInRow;
+        this.unit = Consts.GRID_LAYOUT_COL_NUMBER / colsInRow;
         Collection<MetaField> fields = metaForm.getMetas();
 
         Form s = new Form(metaForm.getKey(), metaForm.getCaption());
@@ -68,7 +66,7 @@ public class FormConverter implements UIConverter {
         for (MetaField metaField : fields) {
 
             // 设定每个项目宽度是1。 需要的话可以单独处理这个值
-            int span = 1;
+            int span = metaField.getRowSpan();
 
             // 如果游标处于0位 或者已经放不下了
             if (cursor == 0 || colsInRow - cursor < span || isBreakPoint(totalIndex, cursor, span, colsInRow, metaForm)) {

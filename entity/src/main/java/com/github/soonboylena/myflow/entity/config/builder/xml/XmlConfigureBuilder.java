@@ -6,6 +6,7 @@ import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
 import com.github.soonboylena.myflow.entity.config.builder.InputItemBuilder;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.entity.exceptions.ConfigBuildException;
+import com.github.soonboylena.myflow.entity.support.Consts;
 import com.github.soonboylena.myflow.entity.support.XmlConfigureReader;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -29,6 +30,7 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
     public XmlConfigureBuilder() {
         builders.add(new XmlStringItemBuilder());
         builders.add(new XmlSelectItemBuilder());
+        builders.add(new XmlTextItemBuilder());
     }
 
     @Override
@@ -114,6 +116,16 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
             String required = xmlField.attributeValue("required");
             Boolean bRequired = Boolean.valueOf(required);
             metaField.setRequired(bRequired);
+
+            String rowspan = xmlField.attributeValue("rowspan");
+            if (rowspan != null) {
+                if (rowspan.equals("max")) {
+                    metaField.setRowSpan(Consts.GRID_LAYOUT_COL_NUMBER);
+                } else if (rowspan.matches("\\d+")) {
+                    metaField.setRowSpan(Integer.valueOf(rowspan));
+                }
+            }
+
             // 覆盖值
             String caption = xmlField.attributeValue("caption");
             if (caption != null) {

@@ -4,7 +4,8 @@ public enum WebItemType {
 
     StringType("string", "nInput"),
     SelectType("select", "nSelect"),
-    ResourceType("resource", "nResource");
+    ResourceType("resource", "nResource"),
+    TextType("text", "nText");
 
     private String literal;
     private String webType;

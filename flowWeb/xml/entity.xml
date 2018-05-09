@@ -17,8 +17,7 @@
         <!--请假-->
         <item key="leaveStartTime" caption="开始日" description="开始日" type="string"/>
         <item key="leaveEndTime" caption="结束日" description="结束日" type="string"/>
-        <item key="leaveReason" caption="原因" description="原因" type="string"/>
-
+        <item key="leaveReason" caption="原因" description="原因" type="text"/>
 
     </items>
     <forms>
@@ -54,10 +53,11 @@
                 <relateTo type="work" ref="company"/>
             </relations>
         </form>
-        <form key="leave">
-            <field ref="leaveStartTime"/>
+        <form key="leave" caption="请假申请">
+            <field ref="leaveStartTime" />
             <field ref="leaveEndTime"/>
-            <field ref="leaveReason"/>
+            <!--rowspan: max 代表占一行。或者自己指定一个数值-->
+            <field ref="leaveReason" rowspan="3" caption="请假原因"/>
         </form>
     </forms>
     <transfers>

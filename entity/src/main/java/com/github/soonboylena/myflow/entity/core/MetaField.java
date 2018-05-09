@@ -5,9 +5,14 @@ import lombok.Data;
 @Data
 public class MetaField implements IMetaInput {
 
+    // 实际item
     private AbstractMetaItem metaItem;
+    // 是否是只读
     private boolean readOnly = false;
+    // 是否必填
     private boolean required = false;
+    // 组件宽度
+    private int rowSpan = 1;
 
     private String caption;
     private String description;
@@ -62,4 +67,7 @@ public class MetaField implements IMetaInput {
         this.sort = sort;
     }
 
+    public void setRowSpan(Integer rowSpan) {
+        this.rowSpan = rowSpan;
+    }
 }

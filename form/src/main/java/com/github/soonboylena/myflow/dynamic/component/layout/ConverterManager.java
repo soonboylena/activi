@@ -30,6 +30,7 @@ public class ConverterManager {
         converterList.add(new SelectOneConverter());
         converterList.add(new ListConverter(this));
         converterList.add(new ResourceInputConverter());
+        converterList.add(new TextInputConverter());
     }
 
     /**
