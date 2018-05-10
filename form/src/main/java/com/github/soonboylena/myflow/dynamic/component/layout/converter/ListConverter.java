@@ -35,7 +35,7 @@ public class ListConverter implements UIConverter {
     }
 
     @Override
-    public UiObject meta2Page(IMeta meta, UiContainer container) {
+    public UiObject meta2Page(IMeta meta, UiContainer container, StatusStrategy statusStrategy) {
 
         MetaList metaList = (MetaList) meta;
 

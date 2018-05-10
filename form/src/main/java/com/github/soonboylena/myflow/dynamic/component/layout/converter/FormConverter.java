@@ -43,7 +43,7 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public UiObject meta2Page(IMeta meta, UiContainer container) {
+    public UiObject meta2Page(IMeta meta, UiContainer container, StatusStrategy statusStrategy) {
 
         MetaForm metaForm = (MetaForm) meta;
 
@@ -80,7 +80,7 @@ public class FormConverter implements UIConverter {
                 metaField.setRequired(true);
             }
 
-            currentRow.addContent(swapWithCol(metaField, cursor, span));
+            currentRow.addContent(swapWithCol(metaField, cursor, span, statusStrategy));
 
             //调整游标
             totalIndex += span;
@@ -191,9 +191,9 @@ public class FormConverter implements UIConverter {
         return false;
     }
 
-    private UiObject swapWithCol(MetaField metaField, int cursor, int span) {
+    private UiObject swapWithCol(MetaField metaField, int cursor, int span, StatusStrategy statusStrategy) {
         Column c = new Column(0, span * unit);
-        UiObject convert = converterManager.meta2Page(metaField, c);
+        UiObject convert = converterManager.meta2Page(metaField, c, statusStrategy);
         return c;
     }
 

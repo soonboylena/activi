@@ -25,7 +25,7 @@ public abstract class AbstractInputConverter implements UIConverter {
     }
 
     @Override
-    public UiObject meta2Page(IMeta metaItem, UiContainer container) {
+    public UiObject meta2Page(IMeta metaItem, UiContainer container, StatusStrategy statusStrategy) {
 
         MetaField metaInput = (MetaField) metaItem;
 
@@ -34,7 +34,7 @@ public abstract class AbstractInputConverter implements UIConverter {
         MetaField field = (MetaField) metaItem;
         MapUiObject<String, Object> mapUiObject = new MapUiObject<>(getType().webType());
         mapUiObject.put("name", field.getKey());
-        mapUiObject.put("readonly", field.isReadOnly());
+        mapUiObject.put("readonly", statusStrategy.isReadonly(metaInput));
         mapUiObject.put("required", field.isRequired());
 
 

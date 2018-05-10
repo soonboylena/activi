@@ -39,6 +39,16 @@ public class ConverterManager {
      * @param metaItem
      * @return
      */
+    public UiObject meta2Page(IMeta metaItem, UiContainer container, StatusStrategy statusStrategy) {
+
+        for (UIConverter uiConverter : converterList) {
+            if (uiConverter.support(metaItem)) {
+                return uiConverter.meta2Page(metaItem, container, statusStrategy);
+            }
+        }
+        return container;
+    }
+
     public UiObject meta2Page(IMeta metaItem, UiContainer container) {
 
         for (UIConverter uiConverter : converterList) {

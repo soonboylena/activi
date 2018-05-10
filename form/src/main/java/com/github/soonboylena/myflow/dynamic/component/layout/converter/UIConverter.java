@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public interface UIConverter {
 
+    DefaultStatusStrategy DEFAULT_STATUS_STRATEGY = new DefaultStatusStrategy();
+
     public boolean support(IMeta metaItem);
 
     /**
@@ -24,7 +26,11 @@ public interface UIConverter {
      * @param container 指定的父容器
      * @return 如果指定了父容器，返回父容器；如果没有指定，由实现类自己处理返回UiObject;
      */
-    public UiObject meta2Page(IMeta metaItem, UiContainer container);
+    default public UiObject meta2Page(IMeta metaItem, UiContainer container) {
+        return meta2Page(metaItem, container, DEFAULT_STATUS_STRATEGY);
+    }
+
+    public UiObject meta2Page(IMeta meta, UiContainer container, StatusStrategy strategy);
 
     // 用meta和data构造IEntity
     public IEntity pageData2Entity(IMeta meta, Object data);
