@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,8 +24,8 @@ public class ProcessServiceTest {
 
     @Test
     public void myTask() {
-        List<Task> tasks = service.myTask("levelUser1");
-        for (Task task : tasks) {
+        List<Map<String, Object>> tasks = service.myTask("levelUser2");
+        for (Map<String, Object> task : tasks) {
             System.out.println(task);
         }
     }

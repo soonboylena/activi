@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProcessService {
@@ -124,10 +124,19 @@ public class ProcessService {
         }
     }
 
-    public List<Task> myTask(String userId) {
-        List<Task> list = taskService.createTaskQuery().taskCandidateOrAssigned(userId).orderByTaskId().desc().list();
+    public List<Map<String, Object>> myTask(String userName) {
+        List<Task> list = taskService.createTaskQuery().taskCandidateOrAssigned(userName).orderByTaskId().desc().list();
+        List<Map<String, Object>> collect = list.stream().map(this::task2Map).collect(Collectors.toList());
+        return collect;
+    }
 
-        return list;
+    private Map<String, Object> task2Map(Task task) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("taskId", task.getId());
+        map.put("taskName", task.getName());
+        map.put("createDate", task.getCreateTime().getTime());
+        map.put("owner", task.getOwner());
+        return map;
     }
 
 }

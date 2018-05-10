@@ -11,7 +11,6 @@ import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
 import com.github.soonboylena.myflow.service.ProcessService;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +66,14 @@ public class ProcessController {
         return MessageAction.message("办理完了");
     }
 
+    /**
+     * 任务一览
+     *
+     * @return
+     */
     @GetMapping("myTask")
-    public MessageAction myProcess() {
-        List<Task> tasks = processService.myTask(SecurityUtil.currentUserName());
-        return MessageAction.message(String.valueOf(tasks.size()));
+    public List<Map<String, Object>> myProcess() {
+        List<Map<String, Object>> tasks = processService.myTask(SecurityUtil.currentUserName());
+        return tasks;
     }
 }
