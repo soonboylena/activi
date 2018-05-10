@@ -3,7 +3,11 @@
   <process id="leave" name="请假流程" isExecutable="true">
     <documentation>请假流程演示</documentation>
     <startEvent id="startevent1" name="Start" activiti:initiator="applyUserId" activiti:formKey="leave.mfl"></startEvent>
-    <userTask id="deptLeaderAudit" name="部门领导审批" activiti:candidateUsers="levelUser1"></userTask>
+    <userTask id="deptLeaderAudit" name="部门领导审批3" activiti:assignee="levelUser1">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
     <exclusiveGateway id="exclusivegateway5" name="Exclusive Gateway"></exclusiveGateway>
     <userTask id="modifyApply" name="调整申请" activiti:assignee="${applyUserId}">
       <extensionElements>

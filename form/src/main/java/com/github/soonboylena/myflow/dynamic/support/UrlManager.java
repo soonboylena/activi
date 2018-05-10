@@ -105,10 +105,10 @@ public class UrlManager {
      * @param processId
      * @return
      */
-    public static UrlObject processLayout(String processDefinitionId) {
-        return new UrlObject(prefix + "/process/{processDefinitionId}/start/layout"
+    public static UrlObject processLayout(String processDefinitionKey) {
+        return new UrlObject(prefix + "/process/{processDefinitionKey}/start/layout"
                 , ChainMap.get()
-                .put("processDefinitionId", processDefinitionId)
+                .put("processDefinitionKey", processDefinitionKey)
                 .ok());
     }
 

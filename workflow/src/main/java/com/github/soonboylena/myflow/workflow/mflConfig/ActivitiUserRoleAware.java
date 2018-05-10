@@ -30,8 +30,8 @@ public class ActivitiUserRoleAware implements UserRoleAware {
         logger.debug("id:{}, activiti里边用户名:{}", idStr, activitiUser == null ? "activiti里边没找到这个用户" : activitiUser.getFirstName());
 
         if (activitiUser == null) {
-            logger.info("将在activiti库中建立id为 [{}] 的用户. 用户名: {} ", user.getUsername());
-            activitiUser = identityService.newUser(id.toString());
+            logger.info("将在activiti库中建立id为 [{}] 的用户. 用户名: {} ", id.toString(), user.getUsername());
+            activitiUser = identityService.newUser(user.getUsername());
         }
 
         activitiUser.setFirstName(user.getUsername());

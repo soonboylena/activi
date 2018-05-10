@@ -3,14 +3,16 @@ package com.github.soonboylena.myflow.service;
 import com.github.soonboylena.myflow.Auth.util.SecurityUtil;
 import com.github.soonboylena.myflow.dynamic.service.WebFormService;
 import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
+import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil;
-import org.activiti.engine.FormService;
-import org.activiti.engine.IdentityService;
-import org.activiti.engine.RuntimeService;
+import org.activiti.engine.*;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ProcessService {
@@ -39,15 +41,42 @@ public class ProcessService {
     private IdentityService identityService;
 
     @Autowired
-    private RuntimeService runtimeService;
+    private RepositoryService repositoryService;
+
+    @Autowired
+    private TaskService taskService;
+
+
+    public ProcessDefinition latestProcessDefinition(String processDefinitionKey) {
+        // 取最新流程
+        return repositoryService
+                .createProcessDefinitionQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .active()
+                .latestVersion()
+                .singleResult();
+    }
+
+    /**
+     * 打开启动新流程的画面
+     *
+     * @param processDefinitionKey
+     * @return
+     */
+    public UrlSection initProcess(String processDefinitionKey) {
+        return new UrlSection(UrlManager.processLayout(processDefinitionKey));
+    }
 
     /**
      * 生成布局
      *
-     * @param processDefinitionId 流程id
-     * @param page                容器
+     * @param processDefinition 流程
+     * @param page              容器
      */
-    public void generateLayout(String processDefinitionId, Page page) {
+    public void generateLayout(ProcessDefinition processDefinition, Page page) {
+
+
+        String processDefinitionId = processDefinition.getId();
         // 头节点
         Object renderedStartForm = formService.getRenderedStartForm(processDefinitionId);
 
@@ -86,11 +115,19 @@ public class ProcessService {
         ProcessInstance processInstance;
         try {
             identityService.setAuthenticatedUserId(SecurityUtil.currentUserId());
-            processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey.toString(), Collections.emptyMap());
+//            processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey.toString(), Collections.emptyMap());
+            processInstance = formService.submitStartFormData(processDefinitionId, Collections.emptyMap());
             logger.info("流程 {} 已经启动。流程id：{}", processDefinitionId, processInstance.getId());
+
         } finally {
             identityService.setAuthenticatedUserId(null);
         }
+    }
+
+    public List<Task> myTask(String userId) {
+        List<Task> list = taskService.createTaskQuery().taskCandidateOrAssigned(userId).orderByTaskId().desc().list();
+
+        return list;
     }
 
 }

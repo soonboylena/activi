@@ -1,9 +1,6 @@
 package com.github.soonboylena.myflow.workflow;
 
-import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
-import com.github.soonboylena.myflow.entity.config.RefreshHolderBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.ConfigureBuilder;
-import com.github.soonboylena.myflow.entity.config.builder.xml.XmlConfigureBuilder;
+import com.github.soonboylena.myflow.springmyflow.config.CommonConfig;
 import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -13,14 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ComponentScan(basePackages = "com.github.soonboylena")
+@Import(CommonConfig.class)
 public class WorkflowApplicationTests {
     private final static Logger log = LoggerFactory.getLogger(WorkflowApplicationTests.class);
     @Autowired
@@ -28,7 +27,6 @@ public class WorkflowApplicationTests {
 
     @Autowired
     private FormService formService;
-
 
     @Test
     public void contextLoads() {

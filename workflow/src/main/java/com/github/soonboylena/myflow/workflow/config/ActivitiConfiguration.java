@@ -6,6 +6,7 @@ import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.activiti.spring.autodeployment.ResourceParentFolderAutoDeploymentStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,16 @@ public class ActivitiConfiguration {
 
         String[] resourcePaths = properties.getResourcePaths();
         Resource[] resources = readResources(resourcePaths);
+
+        if (logger.isInfoEnabled()) {
+            logger.info(" -- 加载的Activiti流程文件:");
+            for (Resource resource : resources) {
+                logger.info("  - {}", resource.getDescription());
+            }
+        }
         processEngineConfiguration.setDeploymentResources(resources);
         processEngineConfiguration.setTransactionManager(transactionManager);
+//        processEngineConfiguration.setDeploymentMode(ResourceParentFolderAutoDeploymentStrategy.DEPLOYMENT_MODE);
 
         processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine(configureHolder)));
 

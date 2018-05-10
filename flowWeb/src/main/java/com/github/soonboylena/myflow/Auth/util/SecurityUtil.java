@@ -12,4 +12,8 @@ public class SecurityUtil {
     public static String currentUserId() {
         return currentUser().getId().toString();
     }
+
+    public static String currentUserName() {
+        return currentUser().getUsername();
+    }
 }

@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.controller;
 
+import com.github.soonboylena.myflow.Auth.util.SecurityUtil;
 import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.dynamic.vModel.contant.ButtonType;
@@ -9,11 +10,12 @@ import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Button;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
 import com.github.soonboylena.myflow.service.ProcessService;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,31 +24,27 @@ public class ProcessController {
 
 
     @Autowired
-    private RepositoryService repositoryService;
-
-
-    @Autowired
     private ProcessService processService;
 
     @GetMapping("{processDefinitionKey}/init")
     public UrlSection init(@PathVariable("processDefinitionKey") String processDefinitionKey) {
-        // 取最新流程
-        ProcessDefinition leave = repositoryService
-                .createProcessDefinitionQuery()
-                .processDefinitionKey(processDefinitionKey)
-                .active()
-                .latestVersion()
-                .singleResult();
-        String processDefinitionId = leave.getId();
-        return new UrlSection(UrlManager.processLayout(processDefinitionId));
+
+        return processService.initProcess(processDefinitionKey);
     }
 
-    @GetMapping("/{processDefinitionId}/start/layout")
-    public UiObject layout(@PathVariable("processDefinitionId") String processDefinitionId) {
+    @GetMapping("/{processDefinitionKey}/start/layout")
+    public UiObject layout(@PathVariable("processDefinitionKey") String processDefinitionKey) {
 
         Page page = new Page();
 
-        processService.generateLayout(processDefinitionId, page);
+        ProcessDefinition processDefinition = processService.latestProcessDefinition(processDefinitionKey);
+        processService.generateLayout(processDefinition, page);
+
+        String processDefinitionId = processDefinition.getId();
+        String name = processDefinition.getName();
+        int version = processDefinition.getVersion();
+
+        page.setSubTitle(String.format("%s:%s", name, version));
 
         // 按钮
         SubmitAction clientAction = new SubmitAction(UrlManager.processStart(processDefinitionId));
@@ -56,9 +54,22 @@ public class ProcessController {
         return page;
     }
 
+    /**
+     * 流程启动
+     *
+     * @param processDefinitionId
+     * @param rawDataMap
+     * @return
+     */
     @PostMapping("/{processDefinitionId}/start")
     public MessageAction startProcess(@PathVariable("processDefinitionId") String processDefinitionId, @RequestBody Map<String, Map<String, Object>> rawDataMap) {
         processService.startProcess(processDefinitionId, rawDataMap);
         return MessageAction.message("办理完了");
+    }
+
+    @GetMapping("myTask")
+    public MessageAction myProcess() {
+        List<Task> tasks = processService.myTask(SecurityUtil.currentUserName());
+        return MessageAction.message(String.valueOf(tasks.size()));
     }
 }
