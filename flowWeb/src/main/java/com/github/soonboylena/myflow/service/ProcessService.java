@@ -124,18 +124,40 @@ public class ProcessService {
         }
     }
 
+    /**
+     * 根据用户名取待办列表
+     *
+     * @param userName
+     * @return
+     */
     public List<Map<String, Object>> myTask(String userName) {
         List<Task> list = taskService.createTaskQuery().taskCandidateOrAssigned(userName).orderByTaskId().desc().list();
-        List<Map<String, Object>> collect = list.stream().map(this::task2Map).collect(Collectors.toList());
-        return collect;
+        return list.stream().map(this::task2Map).collect(Collectors.toList());
     }
 
+    /**
+     * 签收任务
+     */
+
+    public boolean claim(String taskId, String userName) {
+        taskService.claim(taskId, userName);
+        logger.debug("task:{} 已经被{}签收. ", taskId, userName);
+        return true;
+    }
+
+    /**
+     * 任务列表转map
+     *
+     * @param task
+     * @return
+     */
     private Map<String, Object> task2Map(Task task) {
         Map<String, Object> map = new HashMap<>();
         map.put("taskId", task.getId());
         map.put("taskName", task.getName());
         map.put("createDate", task.getCreateTime().getTime());
         map.put("owner", task.getOwner());
+        map.put("claimed", task.getAssignee() != null);
         return map;
     }
 

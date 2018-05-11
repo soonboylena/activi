@@ -11,6 +11,8 @@ import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
 import com.github.soonboylena.myflow.service.ProcessService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.Map;
 @RequestMapping("process")
 public class ProcessController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
     @Autowired
     private ProcessService processService;
@@ -73,7 +76,15 @@ public class ProcessController {
      */
     @GetMapping("myTask")
     public List<Map<String, Object>> myProcess() {
-        List<Map<String, Object>> tasks = processService.myTask(SecurityUtil.currentUserName());
+        String s = SecurityUtil.currentUserName();
+        List<Map<String, Object>> tasks = processService.myTask(s);
+        logger.debug("用户 {} 取待办 {} 条", s, tasks.size());
         return tasks;
+    }
+
+    @GetMapping("task/{taskId}/claim")
+    public boolean claim(@PathVariable("taskId") String taskId) {
+        boolean claim = processService.claim(taskId, SecurityUtil.currentUserName());
+        return claim;
     }
 }
