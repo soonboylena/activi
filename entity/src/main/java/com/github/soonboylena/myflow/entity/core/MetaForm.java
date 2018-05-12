@@ -3,7 +3,9 @@ package com.github.soonboylena.myflow.entity.core;
 
 import lombok.EqualsAndHashCode;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 public class MetaForm extends MetaCollection<MetaField> {
@@ -12,11 +14,6 @@ public class MetaForm extends MetaCollection<MetaField> {
     private Map<String, Relation> relations = new HashMap<>();
     private String description;
 
-    /**
-     * 如果这个form是relation里边的form，可能会有key重复的情况；
-     * 加了index避免在画面上key值相同
-     */
-    private Integer index;
 
     @Override
     public String getCaption() {
@@ -31,20 +28,10 @@ public class MetaForm extends MetaCollection<MetaField> {
         relations.put(type, relation);
     }
 
-    public String getKeyIndex() {
-        if (index == null || index == 0) {
-            return getKey();
-        }
-        return getKey() + "[" + index + "]";
-    }
-
     public void setCaption(String caption) {
         this.caption = caption;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
 
     public Collection<Relation> getRelations() {
         return relations.values();
