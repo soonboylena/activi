@@ -6,10 +6,14 @@ import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
 import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
+import com.github.soonboylena.myflow.entity.core.FormEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil;
 import org.activiti.engine.*;
+import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.impl.form.FormEngine;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -80,13 +84,31 @@ public class ProcessService {
         // 头节点
         Object renderedStartForm = formService.getRenderedStartForm(processDefinitionId);
 
+        validAndBuild(renderedStartForm, page);
+    }
+
+    private void validAndBuild(Object form, Page page) {
+
         // 校验
         // 如果有问题 看看 MflFormEngine里边的逻辑
-        if (!(renderedStartForm instanceof MetaForm)) {
+        if (!(form instanceof FormEntity)) {
             throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
         }
         // 生成画面
-        webLayoutService.buildFormLayout((MetaForm) renderedStartForm, page);
+        webLayoutService.buildFormLayout(((FormEntity) form).acquireMeta(), page);
+    }
+
+
+    /**
+     * 生成布局： 任务
+     * (参考)MflFormEngine
+     *
+     * @param taskId
+     * @param page
+     */
+    public void generateTaskLayout(String taskId, Page page) {
+        Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
+        validAndBuild(renderedTaskForm, page);
     }
 
     /**
@@ -116,7 +138,8 @@ public class ProcessService {
         try {
             identityService.setAuthenticatedUserId(SecurityUtil.currentUserId());
 //            processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey.toString(), Collections.emptyMap());
-            processInstance = formService.submitStartFormData(processDefinitionId, Collections.emptyMap());
+
+            processInstance = formService.submitStartFormData(processDefinitionId, WorkFlowUtil.formKeyMap(entity, businessKey));
             logger.info("流程 {} 已经启动。流程id：{}", processDefinitionId, processInstance.getId());
 
         } finally {

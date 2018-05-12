@@ -30,7 +30,6 @@ public class ProcessController {
 
     @GetMapping("{processDefinitionKey}/init")
     public UrlSection init(@PathVariable("processDefinitionKey") String processDefinitionKey) {
-
         return processService.initProcess(processDefinitionKey);
     }
 
@@ -82,9 +81,26 @@ public class ProcessController {
         return tasks;
     }
 
+    /**
+     * 任务签收
+     *
+     * @param taskId
+     * @return
+     */
     @GetMapping("task/{taskId}/claim")
     public boolean claim(@PathVariable("taskId") String taskId) {
         boolean claim = processService.claim(taskId, SecurityUtil.currentUserName());
         return claim;
     }
+
+    /**
+     * 任务处理画面
+     */
+    @GetMapping("/task/{taskId}/handle/layout")
+    public UiObject handleLayout(@PathVariable("taskId") String taskId) {
+        Page page = new Page();
+        processService.generateTaskLayout(taskId, page);
+        return page;
+    }
+
 }

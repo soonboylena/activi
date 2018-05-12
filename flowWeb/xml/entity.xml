@@ -58,7 +58,13 @@
             <field ref="leaveEndTime" caption="结束"/>
             <!--rowspan: max 代表占一行。或者自己指定一个数值-->
             <field ref="leaveReason" rowspan="3" caption="备注"/>
-
+        </form>
+        <form key="leaderAudit" caption="部门审核">
+            <relations>
+                <relateTo type="leave">
+                    <form ref="leave" caption="申请信息"/>
+                </relateTo>
+            </relations>
         </form>
     </forms>
     <transfers>
