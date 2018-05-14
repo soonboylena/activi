@@ -65,7 +65,7 @@ public class WebLayoutService {
         Page page = new Page();
         MetaForm metaForm = formEntity.acquireMeta();
         buildFormLayout(metaForm, page);
-        KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<Map<String, Object>>();
+        KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<>();
         converterManager.entityData2PageMap(formEntity, map);
         page.setData(map.noConflictMap());
         return page;
