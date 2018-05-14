@@ -3,7 +3,9 @@ package com.github.soonboylena.myflow.service;
 import com.github.soonboylena.myflow.Auth.util.SecurityUtil;
 import com.github.soonboylena.myflow.dynamic.service.WebFormService;
 import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
+import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.dynamic.support.UrlManager;
+import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
 import com.github.soonboylena.myflow.entity.core.FormEntity;
@@ -75,19 +77,18 @@ public class ProcessService {
      * 生成布局
      *
      * @param processDefinition 流程
-     * @param page              容器
      */
-    public void generateLayout(ProcessDefinition processDefinition, Page page) {
+    public Page generateLayout(ProcessDefinition processDefinition) {
 
 
         String processDefinitionId = processDefinition.getId();
         // 头节点
         Object renderedStartForm = formService.getRenderedStartForm(processDefinitionId);
 
-        validAndBuild(renderedStartForm, page);
+        return validAndBuild(renderedStartForm);
     }
 
-    private void validAndBuild(Object form, Page page) {
+    private Page validAndBuild(Object form) {
 
         // 校验
         // 如果有问题 看看 MflFormEngine里边的逻辑
@@ -95,7 +96,8 @@ public class ProcessService {
             throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
         }
         // 生成画面
-        webLayoutService.buildFormLayout(((FormEntity) form).acquireMeta(), page);
+        Page page = webLayoutService.buildFormLayout((FormEntity) form);
+        return page;
     }
 
 
@@ -104,11 +106,10 @@ public class ProcessService {
      * (参考)MflFormEngine
      *
      * @param taskId
-     * @param page
      */
-    public void generateTaskLayout(String taskId, Page page) {
+    public Page generateTaskLayout(String taskId) {
         Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
-        validAndBuild(renderedTaskForm, page);
+        return validAndBuild(renderedTaskForm);
     }
 
     /**

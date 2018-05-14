@@ -36,10 +36,8 @@ public class ProcessController {
     @GetMapping("/{processDefinitionKey}/start/layout")
     public UiObject layout(@PathVariable("processDefinitionKey") String processDefinitionKey) {
 
-        Page page = new Page();
-
         ProcessDefinition processDefinition = processService.latestProcessDefinition(processDefinitionKey);
-        processService.generateLayout(processDefinition, page);
+        Page page = processService.generateLayout(processDefinition);
 
         String processDefinitionId = processDefinition.getId();
         String name = processDefinition.getName();
@@ -98,9 +96,7 @@ public class ProcessController {
      */
     @GetMapping("/task/{taskId}/handle/layout")
     public UiObject handleLayout(@PathVariable("taskId") String taskId) {
-        Page page = new Page();
-        processService.generateTaskLayout(taskId, page);
-        return page;
+        return processService.generateTaskLayout(taskId);
     }
 
 }

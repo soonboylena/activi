@@ -6,6 +6,7 @@ import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Column;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Form;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Row;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
@@ -98,6 +99,17 @@ public class FormConverter implements UIConverter {
         }
         container.setCaption(metaForm.getCaption());
         return container;
+    }
+
+
+    public Page entity2Page(FormEntity entity, StatusStrategy statusStrategy) {
+        MetaForm metaForm = entity.acquireMeta();
+        Page page = new Page(metaForm.getCaption());
+
+        meta2Page(metaForm, page, statusStrategy);
+        KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<>();
+        page.setData(map.noConflictMap());
+        return page;
     }
 
     @Override

@@ -1,14 +1,19 @@
 package com.github.soonboylena.myflow.dynamic.service;
 
-import com.github.soonboylena.myflow.dynamic.component.layout.WebLayoutBuilder;
+import com.github.soonboylena.myflow.dynamic.component.layout.ConverterManager;
+import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
+import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
+import com.github.soonboylena.myflow.entity.core.FormEntity;
+import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.entity.core.MetaList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -19,7 +24,7 @@ import java.util.Objects;
 public class WebLayoutService {
 
     @Autowired
-    private WebLayoutBuilder layoutBuilder;
+    private ConverterManager converterManager;
 
     @Autowired
     private ConfigureHolder holder;
@@ -46,7 +51,24 @@ public class WebLayoutService {
      */
     public UiContainer buildFormLayout(MetaForm metaForm, UiContainer container) {
         container.setCaption(metaForm.getCaption());
-        return layoutBuilder.build(metaForm, container);
+        return (UiContainer) converterManager.meta2Page(metaForm, container);
+    }
+
+    /**
+     * 生成画面的layout + 数据
+     *
+     * @param
+     * @param
+     * @return
+     */
+    public Page buildFormLayout(FormEntity formEntity) {
+        Page page = new Page();
+        MetaForm metaForm = formEntity.acquireMeta();
+        buildFormLayout(metaForm, page);
+        KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<Map<String, Object>>();
+        converterManager.entityData2PageMap(formEntity, map);
+        page.setData(map.noConflictMap());
+        return page;
     }
 
     /**
@@ -55,13 +77,12 @@ public class WebLayoutService {
      * @param formKey
      * @return
      */
-    public UiContainer listLayout(String formKey) {
+    public UiObject listLayout(String formKey) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         MetaList metaList = new MetaList(metaForm);
 
         Page page = new Page(metaForm.getCaption(), "一览");
-        UiContainer build = layoutBuilder.build(metaList, page);
-        return build;
+        return converterManager.meta2Page(metaList, page);
     }
 }

@@ -56,6 +56,9 @@ public abstract class AbstractInputConverter implements UIConverter {
     @Override
     public void entityData2PageMap(IEntity entity, Map topMap) {
         FieldEntity fe = (FieldEntity) entity;
-        topMap.put(fe.acquireMeta().getKey(), fe.getData());
+        Object data = fe.getData();
+        if (data != null) {
+            topMap.put(fe.acquireMeta().getKey(), data);
+        }
     }
 }

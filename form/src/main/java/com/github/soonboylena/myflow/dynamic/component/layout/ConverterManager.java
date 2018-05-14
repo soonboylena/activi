@@ -3,6 +3,8 @@ package com.github.soonboylena.myflow.dynamic.component.layout;
 import com.github.soonboylena.myflow.dynamic.component.layout.converter.*;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
+import com.github.soonboylena.myflow.entity.core.FormEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,8 @@ public class ConverterManager {
 
     @PostConstruct
     public void setDefaultConvert() {
-        converterList.add(new FormConverter(this));
+        FormConverter formConverter = new FormConverter(this);
+        converterList.add(formConverter);
         converterList.add(new StringInputConverter());
         converterList.add(new SelectOneConverter());
         converterList.add(new ListConverter(this));

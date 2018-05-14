@@ -20,7 +20,7 @@ public class WebListController {
     public UiObject list(@PathVariable("formKey") String formKey) {
 
         // 页面加数据的url。dataurl的处理在WebDataController里边
-        UiContainer uiContainer = layoutSvs.listLayout(formKey);
+        UiObject uiContainer = layoutSvs.listLayout(formKey);
         return uiContainer;
     }
 }
