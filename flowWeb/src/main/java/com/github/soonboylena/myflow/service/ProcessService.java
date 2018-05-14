@@ -96,8 +96,7 @@ public class ProcessService {
             throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
         }
         // 生成画面
-        Page page = webLayoutService.buildFormLayout((FormEntity) form);
-        return page;
+        return webLayoutService.buildFormLayout((FormEntity) form);
     }
 
 
