@@ -38,5 +38,5 @@ public interface UIConverter {
     public IEntity pageData2Entity(IMeta meta, Object data);
 
     // 从IEntity里边取数据,放到Map里边给画面用
-    public Map<String, Object> entityData2PageMap(IEntity entity);
+    public Object entityData2PageMap(IEntity entity);
 }

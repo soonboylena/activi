@@ -71,8 +71,7 @@ public class WebFormService {
             throw new IllegalArgumentException("formKey： [" + formKey + "] 无法找到配置");
         }
 
-        KeyConflictCollection<Map<String, Object>> keyConflictCollection = putIntoCollection(rawData);
-        return converterManager.read(metaForm, keyConflictCollection);
+        return converterManager.read(metaForm, rawData);
     }
 
     /**
@@ -91,7 +90,7 @@ public class WebFormService {
         IEntity entity = queryService.findById(metaForm, id);
         if (entity == null) return Collections.emptyMap();
 
-        Map<String, Object> data = converterManager.entityData2PageMap(entity);
+        Map<String, Object> data = (Map<String, Object>) converterManager.entityData2PageMap(entity);
 
         return data;
     }
@@ -102,16 +101,16 @@ public class WebFormService {
      * @param formKey
      * @return
      */
-    public List<Map<String, Object>> findAll(String formKey) {
+    public List<Object> findAll(String formKey) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         Objects.requireNonNull(metaForm);
 
         ListEntity byMeta = queryService.findByMeta(metaForm);
 //        KeyConflictCollection<Map<String, Object>> dataMap = new KeyConflictCollection<>();
-        Map<String, Object> stringObjectMap = converterManager.entityData2PageMap(byMeta);
+        Object o = converterManager.entityData2PageMap(byMeta);
 
-        return (List<Map<String, Object>>) stringObjectMap.get(metaForm.getKey());
+        return (List<Object>) o;
     }
 
     /**
@@ -126,13 +125,15 @@ public class WebFormService {
         MetaForm metaForm = holder.getMetaForm(formKey);
         Objects.requireNonNull(metaForm);
 
-        List<Map<String, Object>> all = this.findAll(formKey);
+        List<Object> all = this.findAll(formKey);
 
         String businessKey = metaForm.getBusinessKey();
 
         List<Map<String, Object>> rtnList = new ArrayList<>();
 
-        for (Map<String, Object> stringObjectMap : all) {
+        for (Object object : all) {
+
+            Map<String, Object> stringObjectMap = (Map<String, Object>) object;
 
             Object id = stringObjectMap.get("id");
             Object value = stringObjectMap.get(businessKey);

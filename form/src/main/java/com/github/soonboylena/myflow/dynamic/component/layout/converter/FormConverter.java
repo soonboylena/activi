@@ -133,27 +133,25 @@ public class FormConverter implements UIConverter {
         }
 
         MetaForm metaForm = (MetaForm) meta;
-        KeyConflictCollection<Map<String, Object>> collection = (KeyConflictCollection<Map<String, Object>>) map;
-        return read(metaForm, collection, 0);
+        return read(metaForm, (Map<String, Object>) map);
 
 
     }
 
-    private FormEntity read(MetaForm metaForm, KeyConflictCollection<Map<String, Object>> collection, int index) {
+    private FormEntity read(MetaForm metaForm, Map<String, Object> collection) {
 
         Objects.requireNonNull(metaForm);
         FormEntity formEntity = new FormEntity(metaForm);
         Collection<MetaField> metas = metaForm.getMetas();
 
-        Map<String, Object> _map = collection.get(metaForm.getKey(), index);
 
-        if (_map == null) {
+        if (collection == null) {
             return formEntity;
         }
 
         for (MetaField metaField : metas) {
             String key = metaField.getKey();
-            Object o = _map.get(key);
+            Object o = collection.get(key);
             // 转成 IEntity ； 里边的meta信息不要
             IEntity read = converterManager.read(metaField, o);
             formEntity.addData(key, read.getData());
@@ -166,10 +164,11 @@ public class FormConverter implements UIConverter {
                 MetaForm relatedForm = relatedForms.get(i);
                 String key = relatedForm.getKey();
                 // 提前判断一下是否有这个下级form对应的数据；没有的话就不建了
-                if (collection.get(key, i) == null) {
+                String nextKey = String.format("_RELATION.%s[%s]", relation.getType(), i);
+                if (collection.get(nextKey) == null) {
                     continue;
                 }
-                FormEntity nextFormEntity = read(relatedForm, collection, i);
+                FormEntity nextFormEntity = read(relatedForm, (Map<String, Object>) collection.get(nextKey));
                 formEntity.addRelatedForm(relation.getType(), nextFormEntity);
             }
         }
@@ -191,8 +190,8 @@ public class FormConverter implements UIConverter {
         Map<String, Object> fieldsMap = new HashMap<>(fieldEntities.size());
 
         for (FieldEntity fieldEntity : fieldEntities) {
-            Map<String, Object> stringObjectMap = converterManager.entityData2PageMap(fieldEntity);
-            fieldsMap.putAll(stringObjectMap);
+            Object o = converterManager.entityData2PageMap(fieldEntity);
+            fieldsMap.put(fieldEntity.acquireMeta().getKey(), o);
         }
 
 

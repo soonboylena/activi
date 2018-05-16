@@ -77,7 +77,7 @@ public class ConverterManager {
         return null;
     }
 
-    public Map<String, Object> entityData2PageMap(IEntity entity) {
+    public Object entityData2PageMap(IEntity entity) {
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(entity.acquireMeta())) {
                 return uiConverter.entityData2PageMap(entity);

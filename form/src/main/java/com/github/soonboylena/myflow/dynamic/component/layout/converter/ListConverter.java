@@ -83,18 +83,18 @@ public class ListConverter implements UIConverter {
     }
 
     @Override
-    public Map<String, Object> entityData2PageMap(IEntity entity) {
+    public List<Object> entityData2PageMap(IEntity entity) {
 
-        List<Map<String, Object>> dataList = new ArrayList<>();
+        List<Object> dataList = new ArrayList<>();
 
         ListEntity listEntity = (ListEntity) entity;
         List<FormEntity> forms = listEntity.getFormEntities();
         for (FormEntity form : forms) {
-            Map<String, Object> stringObjectMap = converter.entityData2PageMap(form);
+            Object stringObjectMap = converter.entityData2PageMap(form);
             dataList.add(stringObjectMap);
         }
 
-        return Collections.singletonMap(listEntity.acquireMeta().getKey(), dataList);
+        return dataList;
     }
 
 }

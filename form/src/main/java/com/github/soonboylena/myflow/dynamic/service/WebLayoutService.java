@@ -65,7 +65,7 @@ public class WebLayoutService {
         Page page = new Page();
         MetaForm metaForm = formEntity.acquireMeta();
         buildFormLayout(metaForm, page);
-        Map<String, Object> data = converterManager.entityData2PageMap(formEntity);
+        Map<String, Object> data = (Map<String, Object>) converterManager.entityData2PageMap(formEntity);
         page.setData(data);
         return page;
     }

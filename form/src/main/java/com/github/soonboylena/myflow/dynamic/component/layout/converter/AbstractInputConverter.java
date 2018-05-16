@@ -55,13 +55,8 @@ public abstract class AbstractInputConverter implements UIConverter {
     protected abstract WebItemType getType();
 
     @Override
-    public Map<String, Object> entityData2PageMap(IEntity entity) {
+    public Object entityData2PageMap(IEntity entity) {
         FieldEntity fe = (FieldEntity) entity;
-        Object data = fe.getData();
-        if (data != null) {
-//            topMap.put(fe.acquireMeta().getKey(), data);
-            return Collections.singletonMap(fe.acquireMeta().getKey(), data);
-        }
-        return Collections.emptyMap();
+        return fe.getData();
     }
 }
