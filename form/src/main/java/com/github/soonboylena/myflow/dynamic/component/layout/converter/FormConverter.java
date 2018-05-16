@@ -48,12 +48,41 @@ public class FormConverter implements UIConverter {
 
         MetaForm metaForm = (MetaForm) meta;
 
-        this.unit = Consts.GRID_LAYOUT_COL_NUMBER / colsInRow;
-        Collection<MetaField> fields = metaForm.getMetas();
-
-        Form s = new Form(metaForm.getKey(), metaForm.getCaption());
+        Form s = asForm(metaForm, null, statusStrategy);
         container.addContent(s);
 
+        // 处理关系
+        for (Relation relation : metaForm.getRelations()) {
+            List<MetaForm> relatedForms = relation.getRelatedForm();
+            // 递归，把有关联的form装到容器里边； 这个过程中嵌套关系会变成Array
+
+            for (int i = 0; i < relatedForms.size(); i++) {
+                MetaForm relatedForm = relatedForms.get(i);
+                logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
+//                this.meta2Page(relatedForm, s, statusStrategy);
+                String nextKey = String.format("_RELATION.%s[%s]", relation.getType(), i);
+                Form form = this.asForm(relatedForm, nextKey, statusStrategy);
+                s.addContent(form);
+            }
+        }
+        container.setCaption(metaForm.getCaption());
+        return container;
+    }
+
+    private Form asForm(MetaForm metaForm, String prefix, StatusStrategy statusStrategy) {
+
+        this.unit = Consts.GRID_LAYOUT_COL_NUMBER / colsInRow;
+
+        Collection<MetaField> fields = metaForm.getMetas();
+
+        String key;
+        if (prefix == null) {
+            key = metaForm.getKey();
+        } else {
+            key = String.format("%s.%s", prefix, metaForm.getKey());
+        }
+
+        Form s = new Form(key, metaForm.getCaption());
         // 整体的游标
         int totalIndex = 0;
 
@@ -78,24 +107,13 @@ public class FormConverter implements UIConverter {
                 metaField.setRequired(true);
             }
 
-            currentRow.addContent(swapWithCol(metaField, cursor, span, meta.isReadonly() ? new ReadonlyStrategy() : statusStrategy));
+            currentRow.addContent(swapWithCol(metaField, cursor, span, metaForm.isReadonly() ? new ReadonlyStrategy() : statusStrategy));
 
             //调整游标
             totalIndex += span;
             cursor++;
         }
-
-        // 处理关系
-        for (Relation relation : metaForm.getRelations()) {
-            List<MetaForm> relatedForms = relation.getRelatedForm();
-            // 递归，把有关联的form装到容器里边； 这个过程中嵌套关系会变成Array
-            for (MetaForm relatedForm : relatedForms) {
-                logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
-                this.meta2Page(relatedForm, s, statusStrategy);
-            }
-        }
-        container.setCaption(metaForm.getCaption());
-        return container;
+        return s;
     }
 
 
