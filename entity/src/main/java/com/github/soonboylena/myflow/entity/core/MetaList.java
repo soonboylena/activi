@@ -10,6 +10,8 @@ public class MetaList implements IMeta {
 
     private MetaForm metaForm;
 
+    private boolean readonly;
+
     public MetaList(MetaForm metaForm) {
         this.metaForm = metaForm;
     }
@@ -35,6 +37,7 @@ public class MetaList implements IMeta {
         return metaForm.getBusinessKey();
     }
 
-
-
+    public boolean isReadonly() {
+        return readonly;
+    }
 }

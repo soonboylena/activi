@@ -20,6 +20,7 @@ public abstract class MetaCollection<T extends IMeta> implements IMetaInput {
         this.businessKey = businessKey;
     }
 
+
     @Override
     public String getKey() {
         return key;
@@ -47,5 +48,10 @@ public abstract class MetaCollection<T extends IMeta> implements IMetaInput {
 
     public int size() {
         return metaPool.size();
+    }
+
+    @Override
+    public boolean isReadonly() {
+        return false;
     }
 }

@@ -69,7 +69,7 @@
         <form key="leaderAudit" caption="部门审核">
             <relations>
                 <relateTo type="leave">
-                    <form ref="leave" caption="申请信息"/>
+                    <form ref="leave" caption="申请信息" readonly="true"/>
                 </relateTo>
             </relations>
 	    <field ref="leaderAudit"/>

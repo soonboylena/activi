@@ -8,7 +8,7 @@ public class MetaField implements IMetaInput {
     // 实际item
     private AbstractMetaItem metaItem;
     // 是否是只读
-    private boolean readOnly = false;
+    private boolean readonly = false;
     // 是否必填
     private boolean required = false;
     // 组件宽度
@@ -43,12 +43,12 @@ public class MetaField implements IMetaInput {
     }
 
 
-    public boolean isReadOnly() {
-        return readOnly;
+    public boolean isReadonly() {
+        return readonly;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
     }
 
     public String getCaption() {

@@ -11,6 +11,7 @@ public class MetaFormRef extends MetaForm {
 
     private String caption;
     private MetaForm form;
+    private boolean readonly;
 
     public MetaFormRef(MetaForm form) {
         this.form = form;
@@ -69,5 +70,14 @@ public class MetaFormRef extends MetaForm {
     @Override
     public boolean contains(String key) {
         return getMetaPool().containsKey(key);
+    }
+
+    @Override
+    public boolean isReadonly() {
+        return readonly;
+    }
+
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
     }
 }

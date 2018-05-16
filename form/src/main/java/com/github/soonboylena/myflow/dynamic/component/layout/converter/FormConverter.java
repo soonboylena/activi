@@ -78,7 +78,7 @@ public class FormConverter implements UIConverter {
                 metaField.setRequired(true);
             }
 
-            currentRow.addContent(swapWithCol(metaField, cursor, span, statusStrategy));
+            currentRow.addContent(swapWithCol(metaField, cursor, span, meta.isReadonly() ? new ReadonlyStrategy() : statusStrategy));
 
             //调整游标
             totalIndex += span;
@@ -91,7 +91,7 @@ public class FormConverter implements UIConverter {
             // 递归，把有关联的form装到容器里边； 这个过程中嵌套关系会变成Array
             for (MetaForm relatedForm : relatedForms) {
                 logger.debug("嵌套form： type：{}， 下个form caption:{}", relation.getType(), relatedForm.getCaption());
-                this.meta2Page(relatedForm, container);
+                this.meta2Page(relatedForm, container, statusStrategy);
             }
         }
         container.setCaption(metaForm.getCaption());

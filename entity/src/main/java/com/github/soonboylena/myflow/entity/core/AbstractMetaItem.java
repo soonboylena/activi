@@ -15,4 +15,9 @@ public abstract class AbstractMetaItem implements IMetaInput {
 
     final void setType(MetaInputType type) {
     }
+
+    @Override
+    public boolean isReadonly() {
+        return false;
+    }
 }

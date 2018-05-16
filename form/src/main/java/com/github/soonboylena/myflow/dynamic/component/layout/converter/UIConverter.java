@@ -21,6 +21,7 @@ public interface UIConverter {
 
     /**
      * 定义-->画面
+     * 采用默认状态策略；
      *
      * @param metaItem  定义类型
      * @param container 指定的父容器

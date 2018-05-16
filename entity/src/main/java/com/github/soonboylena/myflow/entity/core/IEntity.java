@@ -9,4 +9,5 @@ public interface IEntity {
     public IMeta acquireMeta();
 
     public Object getData();
+
 }

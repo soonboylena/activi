@@ -81,7 +81,10 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
                 throw new ConfigBuildException("ref:[" + refAttr + "] 指向的form不存在。");
             }
 
-            return new MetaFormRef(formCaption, metaForm);
+            MetaFormRef metaFormRef = new MetaFormRef(formCaption, metaForm);
+            String readonly = formElement.attributeValue("readonly");
+            metaFormRef.setReadonly(Boolean.valueOf(readonly));
+            return metaFormRef;
         }
 
         MetaForm form = new MetaForm();
@@ -110,8 +113,8 @@ public class XmlConfigureBuilder implements ConfigureBuilder {
 
             String readonly = xmlField.attributeValue("readonly");
             // readonly
-            Boolean bReadOnly = Boolean.valueOf(readonly);
-            metaField.setReadOnly(bReadOnly);
+            Boolean bReadonly = Boolean.valueOf(readonly);
+            metaField.setReadonly(bReadonly);
             // required
             String required = xmlField.attributeValue("required");
             Boolean bRequired = Boolean.valueOf(required);
