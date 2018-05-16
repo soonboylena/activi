@@ -60,8 +60,6 @@
         <form key="leave" caption="请假申请">
             <field ref="leaveStartTime" caption="请假开始日1"/>
             <field ref="leaveEndTime" caption="结束日"/>
-	                <field ref="companyName" required="true"/>
-<field type="form" ref="company2" relateionName="test1"/>
             <!--rowspan: max 代表占一行。或者自己指定一个数值-->
             <field ref="leaveReason" rowspan="3" caption="备注"/>
 
