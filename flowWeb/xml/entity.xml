@@ -19,6 +19,10 @@
         <item key="leaveEndTime" caption="结束日" description="结束日" type="string"/>
         <item key="leaveReason" caption="原因" description="原因" type="text"/>
 
+	<item key="leaderAudit" caption="部门审核" description="" type="select">
+ 	    <option key="agree">同意</option>
+            <option key="notAgree">不同意</option>
+	</item>
     </items>
     <forms>
         <form key="customer" caption="用户">
@@ -53,11 +57,14 @@
                 <relateTo type="work" ref="company"/>
             </relations>
         </form>
-        <form key="leave" caption="任务单">
-            <field ref="leaveStartTime" caption="开始"/>
-            <field ref="leaveEndTime" caption="结束"/>
+        <form key="leave" caption="请假申请">
+            <field ref="leaveStartTime" caption="请假开始日1"/>
+            <field ref="leaveEndTime" caption="结束日"/>
+	                <field ref="companyName" required="true"/>
+<field type="form" ref="company2" relateionName="test1"/>
             <!--rowspan: max 代表占一行。或者自己指定一个数值-->
             <field ref="leaveReason" rowspan="3" caption="备注"/>
+
         </form>
         <form key="leaderAudit" caption="部门审核">
             <relations>
@@ -65,6 +72,7 @@
                     <form ref="leave" caption="申请信息"/>
                 </relateTo>
             </relations>
+	    <field ref="leaderAudit"/>
         </form>
     </forms>
     <transfers>

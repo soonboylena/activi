@@ -106,7 +106,8 @@ public class MflFormEngine implements FormEngine {
                         // 假设：formEntity的relations结构跟meta的一样。而且能匹配的form一种类型里边只有一个
                         // 这里有可能有问题
                         logger.debug("将流程前步骤form保存到当前form中");
-                        formEntity.getRelations(relation.getType()).set(0, byId);
+//                        formEntity.getRelations(relation.getType()).set(0, byId);
+                        formEntity.addRelatedForm(relation.getType(), byId);
                     }
                 }
             }

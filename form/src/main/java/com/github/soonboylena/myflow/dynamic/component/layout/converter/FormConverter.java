@@ -53,9 +53,6 @@ public class FormConverter implements UIConverter {
 
         Form s = new Form(metaForm.getKey(), metaForm.getCaption());
         container.addContent(s);
-        if (fields == null || fields.isEmpty()) {
-            return s;
-        }
 
         // 整体的游标
         int totalIndex = 0;
@@ -179,7 +176,11 @@ public class FormConverter implements UIConverter {
         for (FieldEntity fieldEntity : fieldEntities) {
             converterManager.entityData2PageMap(fieldEntity, fieldsMap);
         }
-        fieldsMap.put("id", formEntity.getId());
+        Object id = formEntity.getId();
+        if (id != null) {
+            fieldsMap.put("id", formEntity.getId());
+        }
+
         topMap.put(metaForm.getKey(), fieldsMap);
 
         Collection<Relation> relations = metaForm.getRelations();

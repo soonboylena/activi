@@ -75,6 +75,7 @@ public class ProcessService {
 
     /**
      * 生成布局
+     * 流程头结点，不考虑数据、状态
      *
      * @param processDefinition 流程
      */
@@ -103,6 +104,7 @@ public class ProcessService {
     /**
      * 生成布局： 任务
      * (参考)MflFormEngine
+     * 过程结点，考虑数据以及状态
      *
      * @param taskId
      */
