@@ -3,14 +3,13 @@ package com.github.soonboylena.myflow.dynamic.component.layout;
 import com.github.soonboylena.myflow.dynamic.component.layout.converter.*;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
-import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
-import com.github.soonboylena.myflow.entity.core.FormEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -78,12 +77,12 @@ public class ConverterManager {
         return null;
     }
 
-    public void entityData2PageMap(IEntity entity, Map collection) {
+    public Map<String, Object> entityData2PageMap(IEntity entity) {
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(entity.acquireMeta())) {
-                uiConverter.entityData2PageMap(entity, collection);
-                return;
+                return uiConverter.entityData2PageMap(entity);
             }
         }
+        return Collections.emptyMap();
     }
 }

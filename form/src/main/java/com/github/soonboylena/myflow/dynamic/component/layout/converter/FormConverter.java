@@ -117,15 +117,13 @@ public class FormConverter implements UIConverter {
     }
 
 
-    public Page entity2Page(FormEntity entity, StatusStrategy statusStrategy) {
-        MetaForm metaForm = entity.acquireMeta();
-        Page page = new Page(metaForm.getCaption());
-
-        meta2Page(metaForm, page, statusStrategy);
-        KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<>();
-        page.setData(map.noConflictMap());
-        return page;
-    }
+//    public Page entity2Page(FormEntity entity, StatusStrategy statusStrategy) {
+//        MetaForm metaForm = entity.acquireMeta();
+//        Page page = new Page(metaForm.getCaption());
+//
+//        meta2Page(metaForm, page, statusStrategy);
+//        return page;
+//    }
 
     @Override
     public FormEntity pageData2Entity(IMeta meta, Object map) {
@@ -179,9 +177,9 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public void entityData2PageMap(IEntity entity, Map topMap) {
+    public Map<String, Object> entityData2PageMap(IEntity entity) {
 
-        if (entity == null) return;
+        if (entity == null) return null;
 
         FormEntity formEntity = (FormEntity) entity;
 
@@ -191,25 +189,36 @@ public class FormConverter implements UIConverter {
 
         List<FieldEntity> fieldEntities = formEntity.getFieldEntities();
         Map<String, Object> fieldsMap = new HashMap<>(fieldEntities.size());
+
         for (FieldEntity fieldEntity : fieldEntities) {
-            converterManager.entityData2PageMap(fieldEntity, fieldsMap);
+            Map<String, Object> stringObjectMap = converterManager.entityData2PageMap(fieldEntity);
+            fieldsMap.putAll(stringObjectMap);
         }
+
+
         Object id = formEntity.getId();
         if (id != null) {
             fieldsMap.put("id", formEntity.getId());
         }
 
-        topMap.put(metaForm.getKey(), fieldsMap);
+//        topMap.put(metaForm.getKey(), fieldsMap);
+
 
         Collection<Relation> relations = metaForm.getRelations();
         for (Relation relation : relations) {
             String type = relation.getType();
             List<FormEntity> thisTypeRelations = formEntity.getRelations(type);
-            for (FormEntity relatedFormEtt : thisTypeRelations) {
-                entityData2PageMap(relatedFormEtt, topMap);
+
+            for (int i = 0; i < thisTypeRelations.size(); i++) {
+                FormEntity relatedFormEtt = thisTypeRelations.get(i);
+                Map<String, Object> stringObjectMap = entityData2PageMap(relatedFormEtt);
+                String nextKey = String.format("_RELATION.%s[%s]", relation.getType(), i);
+                fieldsMap.put(nextKey, stringObjectMap);
             }
+
         }
 
+        return fieldsMap;
     }
 
     private boolean isBreakPoint(int totalIndex, int cursor, int span, int colsInRow, MetaForm metaForm) {

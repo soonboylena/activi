@@ -1,5 +1,6 @@
 package com.github.soonboylena.myflow.dynamic.component.layout.converter;
 
+import com.github.soonboylena.myflow.dynamic.support.WebItemType;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.FormItem;
@@ -8,8 +9,8 @@ import com.github.soonboylena.myflow.entity.core.FieldEntity;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 import com.github.soonboylena.myflow.entity.core.MetaField;
-import com.github.soonboylena.myflow.dynamic.support.WebItemType;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -54,11 +55,13 @@ public abstract class AbstractInputConverter implements UIConverter {
     protected abstract WebItemType getType();
 
     @Override
-    public void entityData2PageMap(IEntity entity, Map topMap) {
+    public Map<String, Object> entityData2PageMap(IEntity entity) {
         FieldEntity fe = (FieldEntity) entity;
         Object data = fe.getData();
         if (data != null) {
-            topMap.put(fe.acquireMeta().getKey(), data);
+//            topMap.put(fe.acquireMeta().getKey(), data);
+            return Collections.singletonMap(fe.acquireMeta().getKey(), data);
         }
+        return Collections.emptyMap();
     }
 }

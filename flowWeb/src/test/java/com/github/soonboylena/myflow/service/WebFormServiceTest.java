@@ -16,7 +16,7 @@ public class WebFormServiceTest extends BaseTest {
 
     @Test
     public void loadData() {
-        Map<String, Map<String, Object>> company2 = webFormService.findById("company2", 13L);
+        Map<String, Object> company2 = webFormService.findById("company2", 13L);
         Assert.assertEquals(3, company2.size());
         print(company2, "取回来的数据");
     }

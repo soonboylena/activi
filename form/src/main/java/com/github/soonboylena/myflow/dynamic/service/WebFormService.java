@@ -82,9 +82,8 @@ public class WebFormService {
      * @param id
      * @return
      */
-    public Map findById(String formKey, Long id) {
+    public Map<String, Object> findById(String formKey, Long id) {
 
-        KeyConflictCollection dataMap = new KeyConflictCollection();
 
         MetaForm metaForm = holder.getMetaForm(formKey);
         Objects.requireNonNull(metaForm);
@@ -92,9 +91,9 @@ public class WebFormService {
         IEntity entity = queryService.findById(metaForm, id);
         if (entity == null) return Collections.emptyMap();
 
-        converterManager.entityData2PageMap(entity, dataMap);
+        Map<String, Object> data = converterManager.entityData2PageMap(entity);
 
-        return dataMap.noConflictMap();
+        return data;
     }
 
     /**
@@ -109,10 +108,10 @@ public class WebFormService {
         Objects.requireNonNull(metaForm);
 
         ListEntity byMeta = queryService.findByMeta(metaForm);
-        KeyConflictCollection<Map<String, Object>> dataMap = new KeyConflictCollection<>();
-        converterManager.entityData2PageMap(byMeta, dataMap);
+//        KeyConflictCollection<Map<String, Object>> dataMap = new KeyConflictCollection<>();
+        Map<String, Object> stringObjectMap = converterManager.entityData2PageMap(byMeta);
 
-        return dataMap.entryList();
+        return (List<Map<String, Object>>) stringObjectMap.get(metaForm.getKey());
     }
 
     /**

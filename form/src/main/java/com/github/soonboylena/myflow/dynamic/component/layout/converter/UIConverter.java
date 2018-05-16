@@ -5,6 +5,7 @@ import com.github.soonboylena.myflow.dynamic.vModel.UiObject;
 import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.IMeta;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,5 +38,5 @@ public interface UIConverter {
     public IEntity pageData2Entity(IMeta meta, Object data);
 
     // 从IEntity里边取数据,放到Map里边给画面用
-    public void entityData2PageMap(IEntity entity, Map topMap);
+    public Map<String, Object> entityData2PageMap(IEntity entity);
 }

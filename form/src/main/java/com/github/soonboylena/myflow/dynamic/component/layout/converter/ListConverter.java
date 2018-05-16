@@ -10,6 +10,8 @@ import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -81,13 +83,18 @@ public class ListConverter implements UIConverter {
     }
 
     @Override
-    public void entityData2PageMap(IEntity entity, Map topMap) {
+    public Map<String, Object> entityData2PageMap(IEntity entity) {
+
+        List<Map<String, Object>> dataList = new ArrayList<>();
 
         ListEntity listEntity = (ListEntity) entity;
         List<FormEntity> forms = listEntity.getFormEntities();
         for (FormEntity form : forms) {
-            converter.entityData2PageMap(form, topMap);
+            Map<String, Object> stringObjectMap = converter.entityData2PageMap(form);
+            dataList.add(stringObjectMap);
         }
+
+        return Collections.singletonMap(listEntity.acquireMeta().getKey(), dataList);
     }
 
 }
