@@ -127,7 +127,7 @@ public class ProcessService {
         String formKey = WorkFlowUtil.noSuffixFormKey(startFormKey);
         logger.info("启动流程 processDefinitionId: {} ,formKey:{},", processDefinitionId, formKey);
         // 转成 IEntity接口
-        IEntity entity = webFormSvs.form2Entity(formKey, rawDataMap);
+        FormEntity entity = (FormEntity) webFormSvs.form2Entity(formKey, rawDataMap);
 
         // ============
         // 这个地方留定制校验
@@ -141,7 +141,9 @@ public class ProcessService {
             identityService.setAuthenticatedUserId(SecurityUtil.currentUserId());
 //            processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey.toString(), Collections.emptyMap());
 
-            processInstance = formService.submitStartFormData(processDefinitionId, WorkFlowUtil.formKeyMap(entity, businessKey));
+            Map<String, String> params = new HashMap<>();
+            entity.getXPathData(null, params);
+            processInstance = formService.submitStartFormData(processDefinitionId, params);
             logger.info("流程 {} 已经启动。流程id：{}", processDefinitionId, processInstance.getId());
 
         } finally {

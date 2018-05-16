@@ -80,32 +80,32 @@ public class FormEntity implements IEntity {
         return data.get("id");
     }
 
-//    /**
-//     * 传进来一个空的map，用数据填充
-//     * 使用 key._relation.relate[0]这样的“XPath”保证key不重
-//     */
-//    public void getXPathData(String suffix, Map<String, Object> valueMap) {
-//        String key;
-//        if (StringUtils.isBlank(suffix)) {
-//            key = metaCollection.getKey();
-//        } else {
-//            key = String.format("%s.%s", suffix, metaCollection.getKey());
-//        }
-//
-//        for (Map.Entry<String, Object> stringObjectEntry : this.data.entrySet()) {
-//            String fieldKey = String.format("%s.%s", key, stringObjectEntry.getKey());
-//            valueMap.put(fieldKey, stringObjectEntry.getValue());
-//        }
-//
-//        for (Map.Entry<String, List<FormEntity>> stringListEntry : this.relations.entrySet()) {
-//            String relationType = stringListEntry.getKey();
-//
-//            List<FormEntity> value = stringListEntry.getValue();
-//            for (int i = 0; i < value.size(); i++) {
-//                FormEntity formEntity = value.get(i);
-//                String relationKey = String.format("%s._RELATION.%s[%d]", key, relationType, i);
-//                formEntity.getXPathData(relationKey, valueMap);
-//            }
-//        }
-//    }
+    /**
+     * 传进来一个空的map，用数据填充
+     * 使用 key._relation.relate[0]这样的“XPath”保证key不重
+     */
+    public void getXPathData(String suffix, Map<String, String> valueMap) {
+        String key;
+        if (StringUtils.isBlank(suffix)) {
+            key = metaCollection.getKey();
+        } else {
+            key = String.format("%s.%s", suffix, metaCollection.getKey());
+        }
+
+        for (Map.Entry<String, Object> stringObjectEntry : this.data.entrySet()) {
+            String fieldKey = String.format("%s.%s", key, stringObjectEntry.getKey());
+            valueMap.put(fieldKey, String.valueOf(stringObjectEntry.getValue()));
+        }
+
+        for (Map.Entry<String, List<FormEntity>> stringListEntry : this.relations.entrySet()) {
+            String relationType = stringListEntry.getKey();
+
+            List<FormEntity> value = stringListEntry.getValue();
+            for (int i = 0; i < value.size(); i++) {
+                FormEntity formEntity = value.get(i);
+                String relationKey = String.format("%s._RELATION.%s[%d]", key, relationType, i);
+                formEntity.getXPathData(relationKey, valueMap);
+            }
+        }
+    }
 }
