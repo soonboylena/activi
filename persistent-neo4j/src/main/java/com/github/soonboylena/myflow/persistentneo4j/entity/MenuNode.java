@@ -26,6 +26,9 @@ public class MenuNode extends BaseModel {
 
     private String url;
 
+    // 层级
+    private int level = 1;
+
     @Relationship
     private List<MenuNode> items = new ArrayList<>();
 
@@ -41,5 +44,10 @@ public class MenuNode extends BaseModel {
 
     public void addItem(MenuNode item) {
         items.add(item);
+        item.setLevel(this.level + 1);
+    }
+
+    private void setLevel(int level) {
+        this.level = level;
     }
 }

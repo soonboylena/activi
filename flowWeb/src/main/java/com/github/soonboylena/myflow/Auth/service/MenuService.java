@@ -34,7 +34,7 @@ public class MenuService {
         // TODO ALL MENU
         List<MenuNode> menuList = menuRepository.findAllMenuNodeAndItem();
         return menuList.stream()
-//                .filter(m -> m.getAuthorityEntity() == null) // TODO 去掉重复的那些接点。这个需要改findAllMenuNodeAndItem方法；
+                .filter(m -> m.getLevel() == 1) // TODO 去掉重复的那些接点。这个需要改findAllMenuNodeAndItem方法；
                 .map(this::fromDb)
                 .filter(m -> !(m.getParentId() != null && m.getAuth() != null))
                 .collect(Collectors.toList());

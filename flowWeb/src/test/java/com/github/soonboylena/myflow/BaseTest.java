@@ -8,10 +8,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BaseTest {
-    protected ObjectMapper mapper = new ObjectMapper();
 
-    protected void print(Object build, String title) {
+    public static void print(Object build, String title) {
 
+        ObjectMapper mapper = new ObjectMapper();
         try {
             System.out.println("===================================");
             System.out.println("=" + title);
