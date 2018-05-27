@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author lungern xiii.at.cn@gmail.com
@@ -76,19 +78,18 @@ public class UserController {
     }
 
     @PostMapping("/user/changeRole/{userId:\\d+}")
-    public Message changeUserRole(@PathVariable Long userId, @RequestBody List<AuthorityEntity> roleList) {
-//        LoginInfoEntity user = userService.findUserById(userId);
-//
-//        user.setRoles(new HashSet<>(roleList));
-//        LoginInfoEntity bak = userService.updateUser(user, false);
-//        Message<Boolean> message;
-//        if (bak == null) {
-//            message = new Message<>("更新失败", false);
-//        } else {
-//            message = new Message<>("更新成功", true);
-//        }
-//        return message;
-        return null;
+    public Message changeUserRole(@PathVariable Long userId, @RequestBody Set<AuthorityEntity> roleList) {
+
+        LoginInfoEntity user = userService.findUserById(userId);
+        user.setAuthorities(roleList);
+        LoginInfoEntity bak = userService.updateUser(user, false);
+        Message<Boolean> message;
+        if (bak == null) {
+            message = new Message<>("更新失败", false);
+        } else {
+            message = new Message<>("更新成功", true);
+        }
+        return message;
     }
 
     @DeleteMapping("/user/del/{userId:\\d+}")

@@ -24,6 +24,7 @@
         <module>workflow</module>
         <module>spring-myflow</module>
         <module>form</module>
+        <module>flow-demo</module>
     </modules>
 
     <groupId>com.github.soonboylena</groupId>

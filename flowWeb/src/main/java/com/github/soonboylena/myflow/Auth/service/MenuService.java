@@ -36,7 +36,7 @@ public class MenuService {
         return menuList.stream()
                 .filter(m -> m.getLevel() == 1) // TODO 去掉重复的那些接点。这个需要改findAllMenuNodeAndItem方法；
                 .map(this::fromDb)
-                .filter(m -> !(m.getParentId() != null && m.getAuth() != null))
+//                .filter(m -> !(m.getParentId() != null && m.getAuth() != null))
                 .collect(Collectors.toList());
     }
 
@@ -102,6 +102,7 @@ public class MenuService {
         node.setUrl(menu.getUrl());
         node.setTitle(menu.getTitle());
         node.setIcon(menu.getIcon());
+        node.setLevel(menu.getLevel());
         List<Menu> items = menu.getChildren();
         if (items != null) {
             for (Menu item : items) {
@@ -131,6 +132,7 @@ public class MenuService {
         menu.setTitle(menuNode.getTitle());
         menu.setIcon(menuNode.getIcon());
         menu.setId(menuNode.getId());
+        menu.setLevel(menuNode.getLevel());
 
         AuthorityEntity authorityEntity = menuNode.getAuthorityEntity();
         if (authorityEntity != null) {

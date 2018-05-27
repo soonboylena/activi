@@ -16,6 +16,7 @@ public class Menu {
     private String picUrl;
     private String icon;
     private String description;
+    private int level;
     private int menuOrder = 0;
 
     List<Menu> children = new ArrayList<>();
@@ -36,5 +37,13 @@ public class Menu {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

@@ -47,7 +47,7 @@ public class MenuNode extends BaseModel {
         item.setLevel(this.level + 1);
     }
 
-    private void setLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 }

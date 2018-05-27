@@ -4,7 +4,6 @@ import com.github.soonboylena.myflow.Auth.bean.Menu;
 import com.github.soonboylena.myflow.Auth.bean.Message;
 import com.github.soonboylena.myflow.Auth.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
