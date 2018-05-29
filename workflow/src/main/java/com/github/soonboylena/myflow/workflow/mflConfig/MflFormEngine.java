@@ -24,6 +24,11 @@ import java.util.Map;
 
 import static com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil.formKeySuffix;
 
+
+@Deprecated
+/***
+ * 先不用外置表单了，用动态表单比较方便
+ */
 public class MflFormEngine implements FormEngine {
 
     private static final Logger logger = LoggerFactory.getLogger(MflFormEngine.class);

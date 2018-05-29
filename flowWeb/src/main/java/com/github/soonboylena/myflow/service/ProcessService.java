@@ -14,14 +14,18 @@ import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.FormType;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.impl.form.FormEngine;
+import org.activiti.engine.impl.form.StartFormDataImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -83,10 +87,18 @@ public class ProcessService {
 
 
         String processDefinitionId = processDefinition.getId();
-        // 头节点
-        Object renderedStartForm = formService.getRenderedStartForm(processDefinitionId);
+        StartFormDataImpl startFormData = (StartFormDataImpl) formService.getStartFormData(processDefinitionId);
+        startFormData.setProcessDefinition(null);
 
-        return validAndBuild(renderedStartForm);
+        List<FormProperty> formProperties = startFormData.getFormProperties();
+        for (FormProperty formProperty : formProperties) {
+            FormType type = formProperty.getType();
+
+
+        }
+
+        return null;
+
     }
 
     private Page validAndBuild(Object form) {

@@ -63,8 +63,10 @@ public class ActivitiConfiguration {
         processEngineConfiguration.setDeploymentResources(resources);
         processEngineConfiguration.setTransactionManager(transactionManager);
 //        processEngineConfiguration.setDeploymentMode(ResourceParentFolderAutoDeploymentStrategy.DEPLOYMENT_MODE);
+//        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine(configureHolder, formQueryService)));
 
-        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine(configureHolder, formQueryService)));
+        // TODO 从这里加自定义的FormType
+//        processEngineConfiguration.setCustomFormTypes();
 
         return processEngineConfiguration;
     }
