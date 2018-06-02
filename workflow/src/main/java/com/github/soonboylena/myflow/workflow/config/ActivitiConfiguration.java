@@ -2,8 +2,11 @@ package com.github.soonboylena.myflow.workflow.config;
 
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
 import com.github.soonboylena.myflow.framework.web.FormQueryService;
+import com.github.soonboylena.myflow.workflow.formType.TextFormType;
 import com.github.soonboylena.myflow.workflow.mflConfig.MflFormEngine;
 import org.activiti.engine.*;
+import org.activiti.engine.form.AbstractFormType;
+import org.activiti.engine.form.FormType;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
@@ -66,7 +69,9 @@ public class ActivitiConfiguration {
 //        processEngineConfiguration.setCustomFormEngines(Collections.singletonList(new MflFormEngine(configureHolder, formQueryService)));
 
         // TODO 从这里加自定义的FormType
-//        processEngineConfiguration.setCustomFormTypes();
+        List<AbstractFormType> formTypes = new ArrayList<>();
+        formTypes.add(new TextFormType());
+        processEngineConfiguration.setCustomFormTypes(formTypes);
 
         return processEngineConfiguration;
     }

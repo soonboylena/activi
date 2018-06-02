@@ -8,6 +8,8 @@ public enum MetaInputType {
     // 资源
     resource,
     // 多行文本
-    text
+    text,
+    // 日期
+    date
 
 }

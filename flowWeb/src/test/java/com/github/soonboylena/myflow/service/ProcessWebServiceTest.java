@@ -1,7 +1,6 @@
 package com.github.soonboylena.myflow.service;
 
 import com.github.soonboylena.myflow.springmyflow.config.CommonConfig;
-import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ import java.util.Map;
 @SpringBootTest
 @ComponentScan(basePackages = "com.github.soonboylena")
 @Import(CommonConfig.class)
-public class ProcessServiceTest {
+public class ProcessWebServiceTest {
 
     @Autowired
-    ProcessService service;
+    ProcessWebService service;
 
     @Test
     public void myTask() {

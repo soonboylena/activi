@@ -34,12 +34,12 @@ public class WebFormService {
     private FormSaveService dynamicFormService;
 
 
-    private KeyConflictCollection<Map<String, Object>> putIntoCollection(Map<String, Map<String, Object>> rawMap) {
+    public <T> KeyConflictCollection<Map<String, T>> putIntoCollection(Map<String, Map<String, T>> rawMap) {
 
-        KeyConflictCollection<Map<String, Object>> keyConflictCollection = new KeyConflictCollection<>();
-        for (Map.Entry<String, Map<String, Object>> stringMapEntry : rawMap.entrySet()) {
+        KeyConflictCollection<Map<String, T>> keyConflictCollection = new KeyConflictCollection<>();
+        for (Map.Entry<String, Map<String, T>> stringMapEntry : rawMap.entrySet()) {
             String key = stringMapEntry.getKey();
-            Map<String, Object> value = stringMapEntry.getValue();
+            Map<String, T> value = stringMapEntry.getValue();
             keyConflictCollection.putByIndexedKey(key, value);
         }
         return keyConflictCollection;

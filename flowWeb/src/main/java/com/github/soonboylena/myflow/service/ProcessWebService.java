@@ -8,47 +8,37 @@ import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
-import com.github.soonboylena.myflow.entity.core.FormEntity;
-import com.github.soonboylena.myflow.entity.core.IEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
-import com.github.soonboylena.myflow.workflow.utils.WorkFlowUtil;
-import org.activiti.engine.*;
-import org.activiti.engine.form.FormProperty;
-import org.activiti.engine.form.FormType;
-import org.activiti.engine.form.StartFormData;
-import org.activiti.engine.form.TaskFormData;
-import org.activiti.engine.impl.form.FormEngine;
-import org.activiti.engine.impl.form.StartFormDataImpl;
+import com.github.soonboylena.myflow.workflow.service.DynamicFormService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class ProcessService {
+public class ProcessWebService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProcessService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProcessWebService.class);
 
     @Autowired
-    private FormService formService;
+    private DynamicFormService dynamicFormService;
 
     @Autowired
     private WebFormService webFormSvs;
 
     @Autowired
     private WebLayoutService webLayoutService;
-
-    @Autowired
-    private IdentityService identityService;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -84,33 +74,28 @@ public class ProcessService {
      * @param processDefinition 流程
      */
     public Page generateLayout(ProcessDefinition processDefinition) {
-
-
         String processDefinitionId = processDefinition.getId();
-        StartFormDataImpl startFormData = (StartFormDataImpl) formService.getStartFormData(processDefinitionId);
-        startFormData.setProcessDefinition(null);
+        String name = processDefinition.getName();
+        int version = processDefinition.getVersion();
 
-        List<FormProperty> formProperties = startFormData.getFormProperties();
-        for (FormProperty formProperty : formProperties) {
-            FormType type = formProperty.getType();
+        Page page = new Page();
+        page.setSubTitle(String.format("%s:%s:%s", name, version, processDefinitionId));
 
-
-        }
-
-        return null;
-
+        MetaForm metaForm = dynamicFormService.startProcess(processDefinition);
+        webLayoutService.buildFormLayout(metaForm, page);
+        return page;
     }
 
-    private Page validAndBuild(Object form) {
-
-        // 校验
-        // 如果有问题 看看 MflFormEngine里边的逻辑
-        if (!(form instanceof FormEntity)) {
-            throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
-        }
-        // 生成画面
-        return webLayoutService.buildFormLayout((FormEntity) form);
-    }
+//    private Page validAndBuild(Object form) {
+//
+//        // 校验
+//        // 如果有问题 看看 MflFormEngine里边的逻辑
+//        if (!(form instanceof FormEntity)) {
+//            throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
+//        }
+//        // 生成画面
+//        return webLayoutService.buildFormLayout((FormEntity) form);
+//    }
 
 
     /**
@@ -121,8 +106,10 @@ public class ProcessService {
      * @param taskId
      */
     public Page generateTaskLayout(String taskId) {
-        Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
-        return validAndBuild(renderedTaskForm);
+
+//        Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
+//        return validAndBuild(renderedTaskForm);
+        return null;
     }
 
     /**
@@ -131,34 +118,12 @@ public class ProcessService {
      * @param processDefinitionId
      * @param rawDataMap
      */
-    @Transactional
-    public void startProcess(String processDefinitionId, Map<String, Map<String, Object>> rawDataMap) {
+    public void startProcess(String processDefinitionId, Map<String, Map<String, String>> rawDataMap) {
 
-        // 节点指定的formkey
-        String startFormKey = formService.getStartFormKey(processDefinitionId);
-        String formKey = WorkFlowUtil.noSuffixFormKey(startFormKey);
-        logger.info("启动流程 processDefinitionId: {} ,formKey:{},", processDefinitionId, formKey);
-        // 转成 IEntity接口
-        IEntity entity = webFormSvs.form2Entity(formKey, rawDataMap);
+        String userName = SecurityUtil.currentUserName();
 
-        // ============
-        // 这个地方留定制校验
-//        validService.valid(entity);
-        // =============
-        Long businessKey = webFormSvs.save(entity);
-        logger.debug(" - businessKey(数据id): {}", businessKey);
-
-        ProcessInstance processInstance;
-        try {
-            identityService.setAuthenticatedUserId(SecurityUtil.currentUserId());
-//            processInstance = runtimeService.startProcessInstanceByKey("leave", businessKey.toString(), Collections.emptyMap());
-
-            processInstance = formService.submitStartFormData(processDefinitionId, WorkFlowUtil.formKeyMap(entity, businessKey));
-            logger.info("流程 {} 已经启动。流程id：{}", processDefinitionId, processInstance.getId());
-
-        } finally {
-            identityService.setAuthenticatedUserId(null);
-        }
+        KeyConflictCollection<Map<String, String>> keyConflictCollection = webFormSvs.putIntoCollection(rawDataMap);
+        ProcessInstance processInstance = dynamicFormService.submitStartForm(processDefinitionId, userName, keyConflictCollection);
     }
 
     /**

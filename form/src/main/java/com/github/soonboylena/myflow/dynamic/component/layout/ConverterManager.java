@@ -30,6 +30,7 @@ public class ConverterManager {
         FormConverter formConverter = new FormConverter(this);
         converterList.add(formConverter);
         converterList.add(new StringInputConverter());
+        converterList.add(new DateInputConverter());
         converterList.add(new SelectOneConverter());
         converterList.add(new ListConverter(this));
         converterList.add(new ResourceInputConverter());
