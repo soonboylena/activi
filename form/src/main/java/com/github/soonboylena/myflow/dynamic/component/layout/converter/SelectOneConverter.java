@@ -9,7 +9,7 @@ import com.github.soonboylena.myflow.dynamic.support.WebItemType;
 import java.util.Collections;
 import java.util.Map;
 
-public class SelectOneConverter extends AbstractInputConverter {
+public class SelectOneConverter extends AbstractInputConverter<String, String> {
 
     private final static WebItemType type = WebItemType.SelectType;
 
@@ -25,13 +25,10 @@ public class SelectOneConverter extends AbstractInputConverter {
     }
 
     @Override
-    public FieldEntity pageData2Entity(IMeta meta, Object data) {
+    public FieldEntity<String> pageData2Entity(IMeta meta, String data) {
 
-        if (data != null && !(data instanceof String)) {
-            throw new IllegalArgumentException("类型不匹配。期望：String 实际：" + data.getClass().getName());
-        }
         MetaField _meta = (MetaField) meta;
-        return new FieldEntity<>(_meta, ((String) data));
+        return new FieldEntity<>(_meta, data);
     }
 
 

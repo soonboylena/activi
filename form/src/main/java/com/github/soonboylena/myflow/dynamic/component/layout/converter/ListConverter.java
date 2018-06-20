@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * 一览组件对应的converter
  */
-public class ListConverter implements UIConverter {
+public class ListConverter implements UIConverter<List, List> {
 
 
     private static Logger logger = LoggerFactory.getLogger(ListConverter.class);
@@ -76,7 +76,7 @@ public class ListConverter implements UIConverter {
 
 
     @Override
-    public FormEntity pageData2Entity(IMeta meta, Object map) {
+    public ListEntity pageData2Entity(IMeta meta, List map) {
         return null;
     }
 

@@ -14,7 +14,6 @@ public class MemoryConfigHolder implements ConfigureHolder {
 
     private Map<String, IMetaInput> metaItems = new HashMap<>();
     private Map<String, MetaForm> metaForms = new HashMap<>();
-//    private Map<String, MetaView> metaViews = new HashMap<>();
 
     public void addMetaItems(List<IMetaInput> metaItems) {
         if (metaItems == null) {

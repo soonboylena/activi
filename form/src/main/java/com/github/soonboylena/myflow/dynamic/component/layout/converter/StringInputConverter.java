@@ -8,19 +8,16 @@ import com.github.soonboylena.myflow.dynamic.support.WebItemType;
 import java.util.Collections;
 import java.util.Map;
 
-public class StringInputConverter extends AbstractInputConverter {
+public class StringInputConverter extends AbstractInputConverter<String, String> {
 
     private final transient static WebItemType type = WebItemType.StringType;
 
 //    private final static Logger logger = LoggerFactory.getLogger(StringInputConverter.class);
 
     @Override
-    public FieldEntity pageData2Entity(IMeta meta, Object data) {
-        if (data != null && !(data instanceof String)) {
-            throw new IllegalArgumentException("类型不匹配。期望：String 实际：" + data.getClass().getName());
-        }
+    public FieldEntity<String> pageData2Entity(IMeta meta, String data) {
         MetaField _meta = (MetaField) meta;
-        return new FieldEntity<>(_meta, ((String) data));
+        return new FieldEntity<>(_meta, data);
     }
 
     @Override

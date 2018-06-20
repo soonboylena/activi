@@ -17,7 +17,7 @@
 //    @Autowired
 //    private ConverterManager converterManager;
 //
-//    public UiContainer build(IMeta meta, UiContainer container) {
+//    public UiContainer afterBuild(IMeta meta, UiContainer container) {
 //        return (UiContainer) converterManager.meta2Page(meta, container);
 //    }
 //}

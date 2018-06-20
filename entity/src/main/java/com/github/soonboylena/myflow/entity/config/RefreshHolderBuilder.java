@@ -10,6 +10,7 @@ import org.springframework.core.io.ResourceLoader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -22,10 +23,16 @@ public class RefreshHolderBuilder {
 
     private boolean stop = false;
 
-    public ConfigureHolder register(String location, ConfigureBuilder builder) {
+    public ConfigureHolder register(String location, ConfigureBuilder builder, List<ConfigHolderListener> configHolderListeners) {
 
         Resource resource = defaultResourceLoader.getResource(location);
         ConfigureHolder build = builder.build(location);
+
+        if (configHolderListeners != null) {
+            for (ConfigHolderListener configHolderListener : configHolderListeners) {
+                configHolderListener.afterBuild(build);
+            }
+        }
 
         RefreshableConfigHolder refreshableConfigHolder = new RefreshableConfigHolder(build);
 
@@ -39,15 +46,6 @@ public class RefreshHolderBuilder {
                 logger.trace("监控文件名：{}", fileName);
                 String parent = file.getParent();
                 logger.trace("监控文件所在文件夹：{}", parent);
-                Path path = Paths.get(parent);
-
-
-                WatchKey watchKey = path.register(watchService
-//                        , ENTRY_CREATE
-                        , ENTRY_MODIFY
-                        , OVERFLOW
-//                        , ENTRY_DELETE
-                );
 
                 logger.debug("开始监控文件变更");
                 while (!stop) {
@@ -72,7 +70,7 @@ public class RefreshHolderBuilder {
                             logger.debug("文件 {} overflow", change);
                             Thread.yield();
                             break;
-                        } else if (kind == ENTRY_MODIFY ) {
+                        } else if (kind == ENTRY_MODIFY) {
                             logger.debug("文件 {} 被更改了，重新读取配置", change);
                             try {
                                 ConfigureHolder newHolder = builder.build(location);

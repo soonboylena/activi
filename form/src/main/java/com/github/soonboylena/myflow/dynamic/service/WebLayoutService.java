@@ -68,6 +68,12 @@ public class WebLayoutService {
         KeyConflictCollection<Map<String, Object>> map = new KeyConflictCollection<>();
         converterManager.entityData2PageMap(formEntity, map);
         page.setData(map.noConflictMap());
+
+        page.setCaption(metaForm.getCaption());
+
+        // 可能跳异常
+        page.setSubTitle((String) map.get(metaForm.getKey()).get(metaForm.getBusinessKey()));
+
         return page;
     }
 

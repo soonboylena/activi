@@ -2,6 +2,7 @@ package com.github.soonboylena.myflow.dynamic.service;
 
 import com.github.soonboylena.myflow.dynamic.component.layout.ConverterManager;
 import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
+import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.core.*;
 import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.framework.web.FormQueryService;
@@ -23,6 +24,10 @@ public class WebFormService {
 
     @Autowired
     private ConfigureHolder holder;
+
+    @Autowired(required = false)
+    private MemoryConfigHolder runtimeConfigHolder;
+
 
     @Autowired
     private ConverterManager converterManager;
@@ -66,6 +71,11 @@ public class WebFormService {
     public IEntity form2Entity(String formKey, Map<String, Map<String, Object>> rawData) {
 
         MetaForm metaForm = holder.getMetaForm(formKey);
+        if (metaForm == null && runtimeConfigHolder != null) {
+            // 从runtime里边再找一遍
+            metaForm = runtimeConfigHolder.getMetaForm(formKey);
+        }
+
         if (metaForm == null) {
             logger.error("formKey: {} 没有被定义在配置文件中。", formKey);
             throw new IllegalArgumentException("formKey： [" + formKey + "] 无法找到配置");

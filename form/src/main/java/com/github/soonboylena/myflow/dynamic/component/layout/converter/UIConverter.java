@@ -12,8 +12,9 @@ import java.util.Map;
  * support: 是否支持
  * meta2Page：将IMeta转为画面UI组件
  * pageData2Entity：   把画面提交的数据整理，转成IEntity
+ * 泛型： PD:    PageData, convert接受这个类型的输入，可以构造内部真实的类型
  */
-public interface UIConverter {
+public interface UIConverter<PD, TD> {
 
     DefaultStatusStrategy DEFAULT_STATUS_STRATEGY = new DefaultStatusStrategy();
 
@@ -34,8 +35,8 @@ public interface UIConverter {
     public UiObject meta2Page(IMeta meta, UiContainer container, StatusStrategy strategy);
 
     // 用meta和data构造IEntity
-    public IEntity pageData2Entity(IMeta meta, Object data);
+    public IEntity<TD> pageData2Entity(IMeta meta, PD data);
 
     // 从IEntity里边取数据,放到Map里边给画面用
-    public void entityData2PageMap(IEntity entity, Map topMap);
+    public void entityData2PageMap(IEntity<TD> entity, Map topMap);
 }

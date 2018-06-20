@@ -61,7 +61,7 @@ public class ProcessController {
      * @return
      */
     @PostMapping("/{processDefinitionId}/start")
-    public MessageAction startProcess(@PathVariable("processDefinitionId") String processDefinitionId, @RequestBody Map<String, Map<String, String>> rawDataMap) {
+    public MessageAction startProcess(@PathVariable("processDefinitionId") String processDefinitionId, @RequestBody Map<String, Map<String, Object>> rawDataMap) {
         processWebService.startProcess(processDefinitionId, rawDataMap);
         return MessageAction.message("办理完了");
     }
@@ -96,6 +96,7 @@ public class ProcessController {
      */
     @GetMapping("/task/{taskId}/handle/layout")
     public UiObject handleLayout(@PathVariable("taskId") String taskId) {
+        logger.debug("取taskId：{} 的画面定义");
         return processWebService.generateTaskLayout(taskId);
     }
 

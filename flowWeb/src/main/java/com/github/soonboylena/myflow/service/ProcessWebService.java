@@ -6,8 +6,10 @@ import com.github.soonboylena.myflow.dynamic.service.WebLayoutService;
 import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
 import com.github.soonboylena.myflow.dynamic.support.UrlManager;
 import com.github.soonboylena.myflow.dynamic.vModel.UiContainer;
+import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Form;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.Page;
 import com.github.soonboylena.myflow.dynamic.vModel.uiComponent.UrlSection;
+import com.github.soonboylena.myflow.entity.core.FormEntity;
 import com.github.soonboylena.myflow.entity.core.MetaForm;
 import com.github.soonboylena.myflow.workflow.service.DynamicFormService;
 import org.activiti.engine.IdentityService;
@@ -34,8 +36,6 @@ public class ProcessWebService {
     @Autowired
     private DynamicFormService dynamicFormService;
 
-    @Autowired
-    private WebFormService webFormSvs;
 
     @Autowired
     private WebLayoutService webLayoutService;
@@ -78,7 +78,7 @@ public class ProcessWebService {
         String name = processDefinition.getName();
         int version = processDefinition.getVersion();
 
-        Page page = new Page();
+        Page page = new Page(name);
         page.setSubTitle(String.format("%s:%s:%s", name, version, processDefinitionId));
 
         MetaForm metaForm = dynamicFormService.startProcess(processDefinition);
@@ -86,30 +86,18 @@ public class ProcessWebService {
         return page;
     }
 
-//    private Page validAndBuild(Object form) {
-//
-//        // 校验
-//        // 如果有问题 看看 MflFormEngine里边的逻辑
-//        if (!(form instanceof FormEntity)) {
-//            throw new RuntimeException("返回的结果不是IMeta。请检查是否activiti的流程文件里边，formKey的后缀是否是.mfl");
-//        }
-//        // 生成画面
-//        return webLayoutService.buildFormLayout((FormEntity) form);
-//    }
-
 
     /**
      * 生成布局： 任务
-     * (参考)MflFormEngine
      * 过程结点，考虑数据以及状态
      *
      * @param taskId
      */
     public Page generateTaskLayout(String taskId) {
 
-//        Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
-//        return validAndBuild(renderedTaskForm);
-        return null;
+        FormEntity formEntity = dynamicFormService.findTaskForm(taskId);
+
+        return webLayoutService.buildFormLayout(formEntity);
     }
 
     /**
@@ -118,12 +106,13 @@ public class ProcessWebService {
      * @param processDefinitionId
      * @param rawDataMap
      */
-    public void startProcess(String processDefinitionId, Map<String, Map<String, String>> rawDataMap) {
+    public void startProcess(String processDefinitionId, Map<String, Map<String, Object>> rawDataMap) {
 
         String userName = SecurityUtil.currentUserName();
 
-        KeyConflictCollection<Map<String, String>> keyConflictCollection = webFormSvs.putIntoCollection(rawDataMap);
-        ProcessInstance processInstance = dynamicFormService.submitStartForm(processDefinitionId, userName, keyConflictCollection);
+        // KeyConflictCollection<Map<String, String>> keyConflictCollection = webFormSvs.putIntoCollection(rawDataMap);
+
+        ProcessInstance processInstance = dynamicFormService.submitStartForm(processDefinitionId, userName, rawDataMap);
     }
 
     /**

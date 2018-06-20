@@ -80,6 +80,7 @@ public class ConverterManager {
     }
 
     public void entityData2PageMap(IEntity entity, Map collection) {
+
         for (UIConverter uiConverter : converterList) {
             if (uiConverter.support(entity.acquireMeta())) {
                 uiConverter.entityData2PageMap(entity, collection);

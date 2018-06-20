@@ -1,6 +1,6 @@
 package com.github.soonboylena.myflow.entity.core;
 
-public class FieldEntity<D> implements IEntity {
+public class FieldEntity<D> implements IEntity<D> {
 
     private MetaField metaField;
     private D data;

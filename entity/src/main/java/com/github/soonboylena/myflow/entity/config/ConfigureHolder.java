@@ -15,4 +15,7 @@ public interface ConfigureHolder {
 
     public MetaForm getMetaForm(String formKey);
 
+    public default void addMetaForm(MetaForm o) {
+    }
+
 }

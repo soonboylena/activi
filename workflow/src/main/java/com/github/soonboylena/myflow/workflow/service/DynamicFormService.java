@@ -1,18 +1,24 @@
 package com.github.soonboylena.myflow.workflow.service;
 
+import com.github.soonboylena.myflow.dynamic.component.layout.ConverterManager;
+import com.github.soonboylena.myflow.dynamic.service.WebFormService;
 import com.github.soonboylena.myflow.dynamic.support.KeyConflictCollection;
+import com.github.soonboylena.myflow.entity.config.MemoryConfigHolder;
 import com.github.soonboylena.myflow.entity.core.*;
 import org.activiti.engine.FormService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.impl.form.StartFormDataImpl;
+import org.activiti.engine.impl.form.TaskFormDataImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,15 +28,22 @@ public class DynamicFormService {
 
     private static Logger logger = LoggerFactory.getLogger(DynamicFormService.class);
 
+    @Autowired
     private FormService formService;
 
     @Autowired
     private IdentityService identityService;
 
     @Autowired
-    public DynamicFormService(FormService formService) {
-        this.formService = formService;
-    }
+    private WebFormService webFormSvs;
+
+    // TODO： 放到服务启动去 参考 ActivitiConfigHolderListener
+    @Autowired(required = false)
+    private MemoryConfigHolder runtimeConfigHolder;
+
+    @Autowired
+    private ConverterManager converterManager;
+
 
     /**
      * 启动节点的展示
@@ -51,6 +64,10 @@ public class DynamicFormService {
             form.addMeta(input);
         }
 
+        // TODO： 放到服务启动去
+        if (runtimeConfigHolder != null) {
+            runtimeConfigHolder.addMetaForm(form);
+        }
         return form;
     }
 
@@ -60,18 +77,19 @@ public class DynamicFormService {
      *
      * @param processDefinitionId
      * @param userName
-     * @param keyConflictCollection
      */
-    public ProcessInstance submitStartForm(String processDefinitionId, String userName, KeyConflictCollection<Map<String, String>> keyConflictCollection) {
-        // 流程的启动节点
-        Map<String, String> stringObjectMap = keyConflictCollection.get(processDefinitionId + "_0");
-        logger.trace("启动节点的内容： {}", stringObjectMap);
+    public ProcessInstance submitStartForm(String processDefinitionId, String userName, Map<String, Map<String, Object>> rawMap) {
 
 
-        ProcessInstance processInstance = null;
+        IEntity iEntity = webFormSvs.form2Entity(processDefinitionId + "_0", rawMap);
+
+        Map<String, Object> data = (Map<String, Object>) iEntity.getData();
+        Map<String, String> convertedData = convertStringMap(data);
+
+        ProcessInstance processInstance;
         try {
             identityService.setAuthenticatedUserId(userName);
-            processInstance = formService.submitStartFormData(processDefinitionId, stringObjectMap);
+            processInstance = formService.submitStartFormData(processDefinitionId, convertedData);
             logger.debug("start a processInstance: {}", processInstance);
         } finally {
             identityService.setAuthenticatedUserId(null);
@@ -79,6 +97,56 @@ public class DynamicFormService {
 
         return processInstance;
 
+    }
+
+    private Map<String, String> convertStringMap(Map<String, Object> data) {
+
+        Map<String, String> map = new HashMap<>(data.size());
+        for (Map.Entry<String, Object> stringObjectEntry : data.entrySet()) {
+            Object value = stringObjectEntry.getValue();
+            map.put(stringObjectEntry.getKey(), String.valueOf(value));
+        }
+        return map;
+    }
+
+
+    /**
+     * 任务表单的展示
+     *
+     * @param taskId
+     */
+    public FormEntity findTaskForm(String taskId) {
+
+        TaskFormDataImpl taskFormData = (TaskFormDataImpl) formService.getTaskFormData(taskId);
+
+        List<FormProperty> formProperties = taskFormData.getFormProperties();
+
+        MetaForm form = new MetaForm();
+        // FormEntity entity = new FormEntity(form);
+
+        Task task = taskFormData.getTask();
+        form.setCaption(task.getName());
+
+        String taskDefinitionKey = task.getTaskDefinitionKey();
+        form.setKey(task.getProcessDefinitionId() + "_" + taskDefinitionKey);
+
+        Map<String, String> dataMap = new HashMap<>();
+
+        for (FormProperty formProperty : formProperties) {
+            MetaField input = activitiType2Meta(formProperty);
+            form.addMeta(input);
+            dataMap.put(input.getKey(), formProperty.getValue());
+        }
+
+        if (runtimeConfigHolder != null) {
+            runtimeConfigHolder.addMetaForm(form);
+        }
+
+        KeyConflictCollection<Map<String, String>> keyConflictCollection = new KeyConflictCollection<>();
+        keyConflictCollection.put(form.getKey(), dataMap);
+
+        IEntity read = converterManager.read(form, keyConflictCollection);
+        return (FormEntity) read;
     }
 
     private MetaField activitiType2Meta(FormProperty property) {
@@ -107,8 +175,5 @@ public class DynamicFormService {
         field.setRequired(property.isRequired());
 //        field.setReadonly(property.isWritable());
         return field;
-
-
     }
-
 }

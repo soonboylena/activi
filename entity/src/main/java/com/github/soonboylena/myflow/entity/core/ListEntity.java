@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ListEntity implements IEntity {
+public class ListEntity implements IEntity<List> {
 
     private MetaList meta;
     private List<Map<String, Object>> data = new ArrayList<>();

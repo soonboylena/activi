@@ -3,7 +3,7 @@ package com.github.soonboylena.myflow.entity.core;
 
 import java.util.*;
 
-public class FormEntity implements IEntity {
+public class FormEntity implements IEntity<Map> {
 
     private MetaForm metaCollection;
     private Map<String, Object> data = new HashMap<>(20);

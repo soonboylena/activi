@@ -13,7 +13,7 @@ import com.github.soonboylena.myflow.dynamic.support.WebItemType;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class AbstractInputConverter implements UIConverter {
+public abstract class AbstractInputConverter<PD,TD> implements UIConverter<PD,TD> {
 
     @Override
     public boolean support(IMeta metaItem) {
@@ -54,11 +54,10 @@ public abstract class AbstractInputConverter implements UIConverter {
     protected abstract WebItemType getType();
 
     @Override
-    public void entityData2PageMap(IEntity entity, Map topMap) {
-        FieldEntity fe = (FieldEntity) entity;
-        Object data = fe.getData();
+    public void entityData2PageMap(IEntity<TD> entity, Map topMap) {
+        TD data = entity.getData();
         if (data != null) {
-            topMap.put(fe.acquireMeta().getKey(), data);
+            topMap.put(entity.acquireMeta().getKey(), data);
         }
     }
 }

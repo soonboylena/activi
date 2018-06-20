@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class FormConverter implements UIConverter {
+public class FormConverter implements UIConverter<KeyConflictCollection, Map> {
 
 
     private static Logger logger = LoggerFactory.getLogger(FormConverter.class);
@@ -110,11 +110,8 @@ public class FormConverter implements UIConverter {
     }
 
     @Override
-    public FormEntity pageData2Entity(IMeta meta, Object map) {
+    public FormEntity pageData2Entity(IMeta meta, KeyConflictCollection map) {
 
-        if (!(map instanceof KeyConflictCollection)) {
-            throw new IllegalArgumentException("类型不正确。类型需要是KeyConflictCollection的子类, 传入的类型是 " + map.getClass().getSimpleName() + "");
-        }
 
         MetaForm metaForm = (MetaForm) meta;
         KeyConflictCollection<Map<String, Object>> collection = (KeyConflictCollection<Map<String, Object>>) map;

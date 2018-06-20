@@ -1,16 +1,11 @@
 package com.github.soonboylena.myflow.workflow.config;
 
-import com.github.soonboylena.myflow.entity.config.ConfigureHolder;
-import com.github.soonboylena.myflow.framework.web.FormQueryService;
 import com.github.soonboylena.myflow.workflow.formType.TextFormType;
-import com.github.soonboylena.myflow.workflow.mflConfig.MflFormEngine;
 import org.activiti.engine.*;
 import org.activiti.engine.form.AbstractFormType;
-import org.activiti.engine.form.FormType;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
-import org.activiti.spring.autodeployment.ResourceParentFolderAutoDeploymentStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +22,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -38,11 +32,11 @@ public class ActivitiConfiguration {
     @Autowired
     private ActivitiProperties properties;
 
-    @Autowired
-    private ConfigureHolder configureHolder;
-
-    @Autowired
-    private FormQueryService formQueryService;
+//    @Autowired
+//    private ConfigureHolder configureHolder;
+//
+//    @Autowired
+//    private FormQueryService formQueryService;
 
     private final ResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 
