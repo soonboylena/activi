@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface DynamicFormGraphRepository extends Neo4jRepository<DynamicEntity, Long> {
 
-    @Query("MATCH (n:DynamicEntity) WHERE {0} in labels(n) RETURN n")
+    @Query("MATCH n = (p:DynamicEntity) WHERE {0} in labels(p) RETURN p")
     public List<DynamicEntity> findByLabel(String label);
 }

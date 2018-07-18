@@ -74,7 +74,7 @@ public class FormEntity implements IEntity<Map> {
         data.put("id", id);
     }
 
-    public Object getId() {
-        return data.get("id");
+    public Long getId() {
+        return (Long) data.get("id");
     }
 }

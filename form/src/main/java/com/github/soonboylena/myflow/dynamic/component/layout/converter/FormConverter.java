@@ -140,6 +140,11 @@ public class FormConverter implements UIConverter<KeyConflictCollection, Map> {
             formEntity.addData(key, read.getData());
         }
 
+        Object id = _map.get("id");
+        if (id instanceof Integer) {
+            formEntity.setId(((Integer) id).longValue());
+        }
+
         Collection<Relation> relations = metaForm.getRelations();
         for (Relation relation : relations) {
             List<MetaForm> relatedForms = relation.getRelatedForm();

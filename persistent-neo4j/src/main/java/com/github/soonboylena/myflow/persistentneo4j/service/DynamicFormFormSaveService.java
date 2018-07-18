@@ -60,6 +60,7 @@ public class DynamicFormFormSaveService implements FormSaveService {
             FieldEntity<?> f = (FieldEntity<?>) datum;
             IMeta fieldMeta = f.acquireMeta();
             dynamic.addProperty(fieldMeta.getKey(), f.getData());
+            dynamic.setId(form.getId());
         }
         for (Relation relation : meta.getRelations()) {
             String type = relation.getType();
